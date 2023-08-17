@@ -1,0 +1,5 @@
+{
+  "sort-imports.cache-package-json-config-checks": false,
+  "sort-imports.on-save": false,
+  "autoimport.filesToScan": "**/*.{ts,tsx,js}"
+}

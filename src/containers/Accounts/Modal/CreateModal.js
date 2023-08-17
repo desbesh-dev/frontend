@@ -1,0 +1,314 @@
+import { useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { useDispatch } from 'react-redux';
+import Select from 'react-select';
+import { SaveAcc } from '../../../actions/APIHandler';
+import { DISPLAY_OVERLAY } from '../../../actions/types';
+import errorIcon from '../../../assets/error.png';
+import successIcon from '../../../assets/success.png';
+import warningIcon from '../../../assets/warning.gif';
+
+export const CreateModal = (props) => {
+    const [Error, setError] = useState({});
+
+    let toastProperties = null;
+    const dispatch = useDispatch();
+    const [formData, setFormData] = useState({
+        COA_Title: "",
+        COA_Code: "",
+        TransType: "",
+        AccType: "",
+        Terms: "",
+        GrossProfit: "",
+        MoneyType: "",
+        TreeLevel: "",
+        SectorID: "",
+    });
+
+    let ParentID = props.SubAcc ? `${props.SubAcc.COA_Code}` : props.Acc ? `${props.Acc.COA_Code}` : null;
+    let COA_ID = props.SubAcc ? `${props.SubAcc.COA_ID}` : props.Acc ? `${props.Acc.COA_ID}` : null;
+
+    const { SectorID, COA_Title, COA_Code, TransType, AccType, Terms, GrossProfit, MoneyType, TreeLevel } = formData;
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    const SendAcc = async () => {
+        const result = await SaveAcc(SectorID.value, ParentID, COA_ID, COA_Title, COA_Code, TransType.value, AccType.value, Terms.value, GrossProfit, MoneyType.value, TreeLevel);
+        if (result !== true) {
+            if (result.user_error) {
+                const updatedState = {};
+                for (var pair of result.exception.entries()) {
+                    updatedState[pair[1].field] = pair[1].message;
+                    setError({
+                        ...updatedState,
+                    });
+                }
+                props.setList([...props.list, toastProperties = {
+                    id: 1,
+                    title: 'Invalid props.item',
+                    description: result.message,
+                    backgroundColor: '#f0ad4e',
+                    icon: warningIcon
+                }])
+
+            } else {
+                props.setList([...props.list, toastProperties = {
+                    id: 1,
+                    title: 'Success',
+                    description: result.message,
+                    backgroundColor: '#f0ad4e',
+                    icon: successIcon
+                }])
+                props.onReload();
+                ClearField();
+            }
+        } else {
+            props.setList([...props.list, toastProperties = {
+                id: 1,
+                title: 'Error',
+                description: "Account creation failed. Please try after some moment.",
+                backgroundColor: '#f0ad4e',
+                icon: errorIcon
+            }])
+        }
+        dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    }
+
+    const ClearField = () => {
+        setFormData({
+            COA_Title: "",
+            COA_Code: "",
+            TransType: "",
+            AccType: "",
+            Terms: "",
+            GrossProfit: "",
+            MoneyType: "",
+            TreeLevel: "",
+            SectorID: "",
+        });
+        setError({});
+        props.onHide();
+    }
+
+
+
+    const CScolourStyles = {
+        container: base => ({
+            ...base,
+            flex: 1,
+            fontWeight: "500"
+        }),
+        menuPortal: base => ({ ...base, zIndex: 9999 })
+    }
+
+    return (
+        <Modal
+            {...props}
+            size="md"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            backdrop="static">
+
+            <Modal.Body>
+                <div className="d-flex flex-row-reverse bd-highlight">
+                    <button className="btn-close fs-5" aria-label="Close" Title="Close" onClick={() => ClearField()} />
+                </div>
+                <div className="d-flex justify-content-center bg-white h-100">
+                    <div className="row justify-content-center align-items-center">
+                        <span className="fs-4 fw-bolder text-center px-0 text-uppercase">Opening New Accounts</span>
+                        <small className="text-center px-0">Please fill up the field of account</small>
+                        <form>
+                            <div className="form-group">
+                                <label for="IssueDate" class="col-form-label">Parent Account</label>
+                                <input
+                                    type="Parent Account"
+                                    class="form-control fw-bold"
+                                    value={props.SubAcc ? `${props.SubAcc.COA_Title} [${props.SubAcc.COA_Code}]`
+                                        : props.Acc ? `${props.Acc.COA_Title} [${props.Acc.COA_Code}]`
+                                            : null}
+                                    disabled
+                                />
+                                {Error.ParentID ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.ParentID}</small></p>
+                                    : null}
+                            </div>
+
+                            <div className="form-group">
+                                <label for="IssueDate" class="col-form-label">Sector</label>
+                                <Select
+                                    menuPlacement="auto"
+                                    menuPosition="fixed"
+                                    menuPortalTarget={document.body}
+                                    borderRadius={"0px"}
+                                    options={props.Sectors ? props.Sectors : null}
+                                    defaultValue={{ label: "Select Sect", value: 0 }}
+                                    name="SectorID"
+                                    placeholder={"Select Sector"}
+                                    styles={CScolourStyles}
+                                    value={SectorID ? { label: SectorID.label, value: SectorID.value } : null}
+                                    onChange={e => setFormData({ ...formData, "SectorID": e })}
+                                    required
+                                    id="SectorID"
+                                />
+                                {Error.ParentID ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.ParentID}</small></p>
+                                    : null}
+                            </div>
+
+                            <div className="form-group">
+                                <label for="message-text" class="col-form-label">Account Title</label>
+                                <input
+                                    type="text"
+                                    class="form-control fw-bold"
+                                    id="COA_Title"
+                                    name="COA_Title"
+                                    placeholder='Account Title'
+                                    value={COA_Title}
+                                    onChange={e => onChange(e)}
+                                />
+                                {Error.COA_Title ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.COA_Title}</small></p>
+                                    : null}
+                            </div>
+                            <div className="form-group">
+                                <label for="message-text" class="col-form-label">Short Code</label>
+                                <input
+                                    type="numeric"
+                                    class="form-control fw-bold"
+                                    id="COA_Code"
+                                    name="COA_Code"
+                                    placeholder='Short Code'
+                                    value={COA_Code}
+                                    onChange={e => onChange(e)}
+                                />
+                                {Error.COA_Code ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.COA_Code}</small></p>
+                                    : null}
+                            </div>
+                            <div className="form-group">
+                                <label for="message-text" class="col-form-label">Transaction Type</label>
+                                <Select
+                                    menuPlacement="auto"
+                                    menuPosition="fixed"
+                                    menuPortalTarget={document.body}
+                                    borderRadius={"0px"}
+                                    options={[{ label: "Single", value: 0 }, { label: "Group", value: 1 }]}
+                                    defaultValue={{ label: "Select Dept", value: 0 }}
+                                    name="Cond"
+                                    placeholder={"Select condition"}
+                                    styles={CScolourStyles}
+                                    value={TransType ? { label: TransType.label, value: TransType.value } : null}
+                                    onChange={e => setFormData({ ...formData, "TransType": e })}
+                                    required
+                                    id="Cond"
+                                />
+                                {Error.TransType ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.TransType}</small></p>
+                                    : null}
+                            </div>
+                            <div className="form-group">
+                                <label for="message-text" class="col-form-label">Account Type</label>
+                                <Select
+                                    menuPlacement="auto"
+                                    menuPosition="fixed"
+                                    menuPortalTarget={document.body}
+                                    borderRadius={"0px"}
+                                    options={[
+                                        { label: "Assets", value: 10000 },
+                                        { label: "Liabilities", value: 20000 },
+                                        { label: "Expense", value: 30000 },
+                                        { label: "Revenue", value: 40000 },
+                                        { label: "Equity", value: 50000 },
+                                    ]}
+                                    defaultValue={{ label: "Select Dept", value: 0 }}
+                                    name="Cond"
+                                    placeholder={"Select account type"}
+                                    styles={CScolourStyles}
+                                    value={AccType ? { label: AccType.label, value: AccType.value } : null}
+                                    onChange={e => setFormData({ ...formData, "AccType": e })}
+                                    required
+                                    id="Cond"
+                                />
+                                {Error.TransType ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.TransType}</small></p>
+                                    : null}
+                            </div>
+
+                            <div className="form-group">
+                                <label for="message-text" class="col-form-label">Terms</label>
+                                <Select
+                                    menuPlacement="auto"
+                                    menuPosition="fixed"
+                                    menuPortalTarget={document.body}
+                                    borderRadius={"0px"}
+                                    options={[{ label: "Current/Short Terms", value: 0 }, { label: "Fixed/Long Terms", value: 1 }]}
+                                    placeholder={"Select condition"}
+                                    styles={CScolourStyles}
+                                    value={Terms ? { label: Terms.label, value: Terms.value } : null}
+                                    onChange={e => setFormData({ ...formData, "Terms": e })}
+                                    required
+                                />
+                                {Error.Terms ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.Terms}</small></p>
+                                    : null}
+                            </div>
+
+                            <div className="form-group">
+                                <label for="message-text" class="col-form-label">Money Type</label>
+                                <Select
+                                    menuPlacement="auto"
+                                    menuPosition="fixed"
+                                    menuPortalTarget={document.body}
+                                    borderRadius={"0px"}
+                                    options={[{ label: "Cash", value: 0 }, { label: "Bank", value: 1 }]}
+                                    placeholder={"Select condition"}
+                                    styles={CScolourStyles}
+                                    value={MoneyType ? { label: MoneyType.label, value: MoneyType.value } : null}
+                                    onChange={e => setFormData({ ...formData, "MoneyType": e })}
+                                    required
+                                />
+                                {Error.MoneyType ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.MoneyType}</small></p>
+                                    : null}
+                            </div>
+                            <div className="form-group">
+                                <label for="message-text" class="col-form-label">Tree  Level</label>
+                                <input
+                                    type="numeric"
+                                    class="form-control fw-bold"
+                                    id="TreeLevel"
+                                    name="TreeLevel"
+                                    placeholder='Tree  Level (MAX 3)'
+                                    value={TreeLevel}
+                                    onChange={e => onChange(e)}
+                                />
+                                {Error.TreeLevel ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.TreeLevel}</small></p>
+                                    : null}
+                            </div>
+
+                            <div className="form-check form-switch fw-bold mb-2">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    value={GrossProfit}
+                                    id="GrossProfit"
+                                    name="GrossProfit"
+                                    checked={GrossProfit}
+                                    onChange={(e) => setFormData({ ...formData, [e.target.name]: !GrossProfit ? true : false })}
+                                />
+                                <label class="form-check-label" for="Status">Affect Gross Profit</label>
+                                {Error.GrossProfit ?
+                                    <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.GrossProfit}</small></p>
+                                    : null}
+                            </div>
+                        </form>
+                        <div className="d-flex justify-content-center">
+                            <button className="btn btn-outline-success" onClick={() => ClearField()}><i class="fad fa-times pr-2"></i> Close</button>
+                            <button className="btn btn-outline-success fs-6 fw-bold text-center mx-2" onClick={() => SendAcc()}><i class="fad fa-edit pr-2"></i> Submit </button>
+                        </div>
+                    </div>
+                </div>
+            </Modal.Body>
+        </Modal >
+    );
+}
