@@ -203,7 +203,7 @@ const PurchaseProduct = ({ display, SupplierID, CompanyID, BranchID, user, list,
 
     const getTotal = () => {
         let TotalPrice = 0.00;
-        const price = PurchaseData.map(row => row.Remark !== "Bonus" && row.SubTotal);
+        const price = PurchaseData.map(row => row.Remark !== "Bonus" ? row.SubTotal : 0.00);
         if (price.length > 0) {
             TotalPrice = price.reduce((acc, val) => acc + val);
         }
