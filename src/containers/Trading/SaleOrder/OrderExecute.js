@@ -298,7 +298,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
 
     const getTotal = useMemo(() => {
         if (!Array.isArray(OrderData) || !OrderData.length) return 0.00;
-        return OrderData.reduce((acc, { ShippedQty, Rate }) => acc + ShippedQty * Rate, 0.00);
+        return OrderData.reduce((acc, { SubTotal }) => acc + parseFloat(SubTotal), 0.00);
     }, [OrderData]);
 
     const AddRow = (e) => {

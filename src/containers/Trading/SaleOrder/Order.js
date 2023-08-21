@@ -376,7 +376,7 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
 
     const getTotal = () => {
         if (!Array.isArray(OrderData) || !OrderData.length) return 0.00;
-        return OrderData.reduce((acc, { Quantity, Rate }) => acc + Quantity * Rate, 0.00);
+        return OrderData.reduce((acc, { SubTotal }) => acc + parseFloat(SubTotal), 0.00);
     };
 
     const QuantityTotal = Array.isArray(OrderData) && OrderData.length ? OrderData.reduce((total, { Quantity }) => total + parseInt(Quantity, 10), 0) : 0;
