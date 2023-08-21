@@ -265,7 +265,8 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 								</div>
 							</div>
 
-							{no <= 7 &&
+							{
+							no <= 7 &&
 								<>
 									<div className='d-flex align-items-center py-1'>
 										<button className="btn fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" onClick={(e) => setExpand(Expand === "Staff" ? false : "Staff")}><i className="fad fa-users-crown pr-1 fa-fw"></i> My Staff </button>
@@ -280,6 +281,22 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 										<div className='d-flex border'>
 											<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/'><i className="fad fa-user-cog"></i> Payroll</Link>
 											<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/'><i className="fad fa-user-chart"></i> Activity</Link>
+										</div>
+									</div>
+								</>
+							}
+
+							{
+							no <= 5 &&
+								<>
+									<div className='d-flex align-items-center py-1'>
+										<button className="btn fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" onClick={(e) => setExpand(Expand === "Statement" ? false : "Statement")}><i className="fad fa-file-chart-line pr-1 fa-fw"></i> Statements </button>
+										<i className={`fad ${Expand === "Statement" ? "fa-minus" : "fa-plus"}  text-right mr-2`}></i>
+									</div>
+									<div className={`border ${Expand === "Statement" ? "d-flex flex-column" : "d-none"}`}>
+										<div className='d-flex border'>
+											<Link className="row btn btn-outline-success m-0" id="grid_menu" to="/inc_statement"><i className="fad fa-analytics"></i> Income Statement</Link>
+											<Link className="row btn btn-outline-success m-0" id="grid_menu" to="/bal_sheet"><i className="fad fa-balance-scale"></i> Balance Sheet</Link>
 										</div>
 									</div>
 								</>

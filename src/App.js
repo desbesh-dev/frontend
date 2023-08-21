@@ -169,6 +169,9 @@ import { AuthRoute } from './hocs/AuthRoute';
 import { PublicRoute } from './hocs/PublicRoute';
 import { SalesRepresentativeRoute } from './hocs/SalesRepresentativeRoute';
 
+//Statements
+import IncomeStatement from './containers/Statements/IncomeStatement';
+import BalanceSheet from './containers/Statements/BalanceSheet';
 
 const App = () => {
     const pathname = window.location.pathname
@@ -344,6 +347,10 @@ const App = () => {
                         <PrivateRoute path='/request_exc/:id' render={(props) => <RequestExecute list={list} setList={setList} {...props} />} component={undefined} />
                         <PrivateRoute path='/delivery_notes' render={(props) => <DeliveryNoteList list={list} setList={setList} {...props} />} component={undefined} />
                         <PrivateRoute path='/delivery_note_view/:id' render={(props) => <DeliveryNoteView list={list} setList={setList} {...props} />} component={undefined} />
+
+                        {/* Statements */}
+                        <PrivateRoute path='/inc_statement' render={(props) => <IncomeStatement list={list} setList={setList} {...props} />} component={undefined} />
+                        <PrivateRoute path='/bal_sheet' render={(props) => <BalanceSheet list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Business Preference */}
                         <PrivateRoute path='/acc_settings' render={(props) => <AccountSettings list={list} setList={setList} {...props} />} component={undefined} />
