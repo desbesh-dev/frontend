@@ -968,7 +968,7 @@ const RetailSell = ({ user, list, setList }) => {
                                             <td className="p-1"><span className="d-block text-left fw-bolder">{Count}</span> </td>
                                             <td className="p-1"><span className="d-block text-right fw-bolder">Qty:</span> </td>
                                             <td className="p-1"><span className="d-block text-left fw-bolder">{QuantityTotal}</span> </td>
-                                            <td className="p-1" colSpan="1"><span className="d-block text-right fw-bolder">{Paid !== 0 && Due !== 0 ? "Due: " : RefundAmount !== 0 && Paid !== 0 ? "Change: " : RefundAmount === 0 && Due === 0 ? "Paid: " : "N/A"}</span> </td>
+                                            <td className="p-1" colSpan="1"><span className="d-block text-right fw-bolder">{Paid !== 0 && Due !== 0 ? "Due: " : RefundAmount !== 0 && Paid !== 0 ? "Change: " : RefundAmount === 0 && Due === 0 && Paid !== 0 ? "Paid: " : "N/A"}</span> </td>
                                             <td className="p-1"><span className="d-block fw-bolder text-right">{Paid === 0.00 ? Total === 0.00 ? getTotal().toLocaleString("en", { minimumFractionDigits: 2 }) : Total.toLocaleString("en", { minimumFractionDigits: 2 }) : getTotal() === Paid ? 0.00 : Due === 0.00 ? parseFloat(RefundAmount).toLocaleString("en", { minimumFractionDigits: 2 }) : Due.toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
                                             <td className="px-3 py-0">
                                                 <button ref={SaveFocus}

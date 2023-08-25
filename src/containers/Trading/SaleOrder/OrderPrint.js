@@ -10,9 +10,7 @@ import { inWords } from '../../../hocs/NumberToWord';
 // import { numberToWords } from '../../hocs/Class/InWord';
 
 export const OrderPrint = async (e, item, status) => {
-
     var JsBarcode = require('jsbarcode');
-
     const name = item.SisterName;
     var cmpAd = 'PO Box: 262, Boroko, National Capital District, S#93, L#31, Vani Place, Gordons';
     const Shop = "Shop: " + item.ShortCode + " (" + item.SectorName + ")";
@@ -289,13 +287,9 @@ export const OrderPrint = async (e, item, status) => {
     }
 
     const getTotal = () => {
-        let TotalPrice = 0.00;
-        const price = item.OrderMapData.map(row => parseFloat(row.Qty) * parseFloat(row.Rate));
-        if (price.length > 0) {
-            TotalPrice = price.reduce((acc, val) => acc + val);
-        }
-        return TotalPrice;
-    }
+        if (!Array.isArray(item.OrderMapData) || !item.OrderMapData.length) return 0.00;
+        return item.OrderMapData.reduce((acc, { SubTotal }) => acc + parseFloat(SubTotal), 0.00);
+    };
 
     var body = [
         ["TOTAL", " :", getTotal().toLocaleString("en", { minimumFractionDigits: 2 })],

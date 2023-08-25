@@ -1509,7 +1509,6 @@ export const FetchDesignation = async () => {
     }
 }
 
-
 export const LoadParty = async () => {
 
     const config = {
@@ -1563,7 +1562,6 @@ export const SaveParty = async (Title, Name, Address, Contact, SCMoney, Limit, B
         return true;
     }
 }
-
 
 export const GetParty = async (id) => {
     const config = {
@@ -2001,6 +1999,31 @@ export const VerifyUser = async (id) => {
     try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/verify_me/${id}`, config);
         return res
+    } catch (err) {
+        return true;
+    }
+}
+
+export const LoadIncome = async (date_from, date_to, sis_id, sect_id) => {
+    console.log("sis: ", sis_id);
+    console.log("sect: ", sect_id);
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        },
+        params: {
+            date_from: date_from,
+            date_to: date_to,
+            sis_id: sis_id?.value,
+            sect_id: sect_id?.value
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/statement/income/`, config);
+        return res.data
     } catch (err) {
         return true;
     }

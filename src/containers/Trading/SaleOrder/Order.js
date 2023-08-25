@@ -123,6 +123,10 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
     }, [currentPage]);
 
     useEffect(() => {
+        PaymentCalculation();
+    }, [OrderData]);
+
+    useEffect(() => {
         if (GrantDisc && discFocus.current) {
             discFocus.current.focus();
         }
@@ -296,7 +300,7 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
     };
 
     const left_stock = Available - ((parseFloat(UnitQty || 0) * parseFloat(Quantity || 0)))
-    const availability = left_stock > 0 ? true : false
+    const availability = left_stock >= 0 ? true : false
 
     const AddRow = (e) => {
         const { Quantity, Code } = formData;
@@ -332,8 +336,10 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
         setBank(0.00);
         setCash(0.00);
         setDiscount(0);
+        const subTotal = getTotal();
+        setDue(subTotal)
         setFormData(initialState);
-        setDiscPrct(0)
+        setDiscPrct(0);
         setForceRender(!forceRender);
         document.activeElement.blur();
         if (CodeFocus.current) {
@@ -364,12 +370,14 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
 
             setTotal(0);
             setVat(0);
-            setPaid(0.00)
-            setBank(0.00)
-            setCash(0.00)
+            setPaid(0.00);
+            setBank(0.00);
+            setCash(0.00);
             setDiscount(0);
+            const subTotal = getTotal();
+            setDue(subTotal);
             setFormData(initialState);
-            setDiscPrct(0)
+            setDiscPrct(0);
             setForceRender(!forceRender);
         }
     }
@@ -410,7 +418,29 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
         }
     }
 
-    const validatePaymentValues = () => {
+    const PaymentCalculation = (e = { target: { value: 0 } }) => {
+        const inputValue = e.target.value;
+        setPaid(inputValue);
+
+        const subTotal = getTotal();
+        const totalWithVat = subTotal + (subTotal * Vat) / 100;
+        const disc = totalWithVat - Discount;
+        let left = disc - inputValue;
+        left = left.toFixed(2);
+        if (left > 0) {
+            setRefundAmount(0.00);
+            setDue(left);
+        } else if (left < 0) {
+            setRefundAmount(-left);
+            setDue(0.00);
+        } else {
+            setRefundAmount(0.00);
+            setDue(0.00);
+        }
+    };
+
+    const validatePaymentValues = async () => {
+        await PaymentCalculation()
         let isValid = true;
 
         if ([15, 16, 17, 18].includes(Payment?.value)) {
@@ -955,7 +985,7 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
                                             <td className="p-1"><span className="d-block text-left fw-bolder">{Count}</span> </td>
                                             <td className="p-1"><span className="d-block text-right fw-bolder">Qty:</span> </td>
                                             <td className="p-1"><span className="d-block text-left fw-bolder">{QuantityTotal}</span> </td>
-                                            <td className="p-1"><span className="d-block text-right fw-bolder">{Paid !== 0 && Due !== 0 ? "Due: " : RefundAmount !== 0 && Paid !== 0 ? "Change: " : RefundAmount === 0 && Due === 0 ? "Paid: " : Due ? "Due: " : "N/A"}</span> </td>
+                                            <td className="p-1"><span className="d-block text-right fw-bolder">{Paid !== 0 && Due !== 0 ? "Due: " : RefundAmount !== 0 && Paid !== 0 ? "Change: " : RefundAmount === 0 && Due === 0 && Paid !== 0 ? "Paid: " : Due ? "Due: " : "N/A"}</span> </td>
                                             <td className="p-1"><span className="d-block fw-bolder text-right">{Paid === 0.00 ? Total === 0.00 ? getTotal().toLocaleString("en", { minimumFractionDigits: 2 }) : Total.toLocaleString("en", { minimumFractionDigits: 2 }) : getTotal() === Paid ? 0.00 : Due === 0.00 ? parseFloat(RefundAmount).toLocaleString("en", { minimumFractionDigits: 2 }) : Due.toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
                                             <td className="px-3 py-0" colSpan="2">
                                                 <button

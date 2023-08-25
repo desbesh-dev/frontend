@@ -1,37 +1,79 @@
+import moment from 'moment';
 import { useEffect, useState } from 'react';
+import Datepicker from 'react-datepicker';
 import { connect, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
-import { LoadParty, PartyStatusList, findUnique } from '../../actions/APIHandler';
+import { FetchConcern, FetchSisterSector, LoadIncome, PartyStatusList, findUnique } from '../../actions/APIHandler';
 import { getLabel } from '../../actions/ContractAPI';
 import { load_user, logout } from '../../actions/auth';
 import { DISPLAY_OVERLAY } from '../../actions/types';
+import { customHeader, locales } from "../Suppliers/Class/datepicker";
+let today = new Date();
+let oneMonthAgo = new Date(); // This gives us a new Date object with the current date and time
+oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-const IncomeStatement = ({ display, user, no }) => {
+const IncomeStatement = ({ date_from = oneMonthAgo, date_to = today }) => {
     const [Data, setData] = useState(null)
     const [Widget, setWidget] = useState(false)
     const [View, setView] = useState(false)
     const [SearchKey, setSearchKey] = useState('')
+    const [DateFrom, setDateFrom] = useState(date_from)
+    const [DateTo, setDateTo] = useState(date_to)
+    const [SisterList, setSisterList] = useState(null)
+    const [SectorList, setSectorList] = useState(null)
+    const [SisterFilter, setSisterFilter] = useState(null)
     const [SectorFilter, setSectorFilter] = useState(null)
     const [Status, setStatus] = useState('')
-
+    const [locale, setLocale] = useState('en');
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        FetchParty();
+        LoadIncomeStatement();
+        LoadConcern();
     }, [])
 
-    const FetchParty = async () => {
+    useEffect(() => {
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        var result = await LoadParty();
+        LoadIncomeStatement();
+        dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    }, [SisterFilter, SectorFilter])
 
+    const LoadIncomeStatement = async () => {
+        dispatch({ type: DISPLAY_OVERLAY, payload: true });
+        var from = moment(DateFrom).format("YYYY-MM-DD");
+        var to = moment(DateTo).format("YYYY-MM-DD");
+        var result = await LoadIncome(from, to, SisterFilter, SectorFilter);
         if (result !== true) {
             setData(result)
         } else {
             // history.push('/farm_lists');
         }
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    }
+
+    const LoadConcern = async () => {
+        var result = await FetchConcern();
+        if (result !== true) {
+            setSisterList(result.Data);
+            dispatch({ type: DISPLAY_OVERLAY, payload: false });
+        } else {
+            dispatch({ type: DISPLAY_OVERLAY, payload: false });
+            history.push('/');
+        }
+    }
+
+    const getSector = async (e) => {
+        setSisterFilter(e)
+        var result = await FetchSisterSector(e.value);
+        if (result !== true) {
+            setSectorList(result);
+            dispatch({ type: DISPLAY_OVERLAY, payload: false });
+        } else {
+            dispatch({ type: DISPLAY_OVERLAY, payload: false });
+            history.push('/');
+        }
     }
 
     const history = useHistory();
@@ -60,6 +102,12 @@ const IncomeStatement = ({ display, user, no }) => {
     let unique_status = Array.isArray(FilterParties) && FilterParties.length ? findUnique(FilterParties, d => getLabel(d.Status, PartyStatusList)) : null;
     let unique_search = Array.isArray(FilterParties) && FilterParties.length ? findUnique(FilterParties, d => d.Title) : null;
 
+    const DateHandler = async (e) => {
+        if (e.getTime() >= DateFrom.getTime() && DateFrom.getTime() <= e.getTime())
+            setDateTo(e)
+        else { setDateFrom(e); setDateTo(e) }
+    }
+
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">
 
@@ -84,7 +132,28 @@ const IncomeStatement = ({ display, user, no }) => {
                                 menuPortalTarget={document.body}
                                 borderRadius={"0px"}
                                 // options={Data.map}
-                                options={Array.isArray(unique) && unique.length ? unique.map((item) => ({ label: item.SectorTitle, value: item.SectorNo })) : []}
+                                options={SisterList}
+                                defaultValue={{ label: "Select Dept", value: 0 }}
+                                name="Sister"
+                                placeholder={"Sister"}
+                                styles={CScolourStyles}
+                                value={SisterFilter}
+                                onChange={e => getSector(e)}
+                                required
+                                id="Sister"
+                                isClearable={true}
+                                isSearchable={true}
+                            />
+                        </div>
+
+                        <div className="d-flex justify-content-center mx-2 w-50">
+                            <Select
+                                menuPlacement="auto"
+                                menuPosition="fixed"
+                                menuPortalTarget={document.body}
+                                borderRadius={"0px"}
+                                // options={Data.map}
+                                options={SectorList}
                                 defaultValue={{ label: "Select Dept", value: 0 }}
                                 name="Sector"
                                 placeholder={"Sector"}
@@ -97,7 +166,27 @@ const IncomeStatement = ({ display, user, no }) => {
                                 isSearchable={true}
                             />
                         </div>
-
+                        <div className="d-flex justify-content-end mx-2">
+                            <Datepicker
+                                selected={DateFrom}
+                                className="form-control fs-5 fw-bold round_radius50px text-center"
+                                dateFormat="dd MMM yyyy"
+                                onChange={(e) => setDateFrom(e)}
+                                renderCustomHeader={props => customHeader({ ...props, locale })}
+                                locale={locales[locale]}
+                                placeholderText="Date"
+                            />
+                            <p className='fw-bold text-success my-auto px-1 mx-1' title="Search" type='button'>To</p>
+                            <Datepicker
+                                selected={DateTo}
+                                className="form-control fs-5 fw-bold round_radius50px text-center"
+                                dateFormat="dd MMM yyyy"
+                                onChange={(e) => DateHandler(e)}
+                                renderCustomHeader={props => customHeader({ ...props, locale })}
+                                locale={locales[locale]}
+                                placeholderText="Date"
+                            />
+                        </div>
                     </div>
                 </div>
 

@@ -19,7 +19,7 @@ import { BarcodeList } from '../Suppliers/NationalSuppliers/Profiles/Modal/Barco
 import { CtrRegister, DeleteModal, PushBackModal, UpdateModal, ViewModal } from "./Modals/ModalForm.js";
 let today = new Date();
 
-const ContainerList = ({ user, list, setList, scale, no, cat }) => {
+const ContainerList = ({ user, list, setList, no, cat }) => {
     const [EditItem, setEditItem] = useState(false);
     const [EditItemModalShow, setEditItemModalShow] = useState(false);
     const [ItemID, setItemID] = useState(false);
@@ -330,56 +330,6 @@ const ContainerList = ({ user, list, setList, scale, no, cat }) => {
                     : null
             }
 
-            {/* {
-                StockTraceModal ?
-                    <StockTrace
-                        item={{ id: StockTraceModal.ItemID, Code: StockTraceModal.Code, Title: StockTraceModal.Title, SectorID: StockTraceModal.SectorID }}
-                        show={StockTraceModal}
-                        list={list}
-                        setList={setList}
-                        onHide={() => { setStockTraceModal(false); }}
-                    />
-                    : null
-            }
-
-            {
-                DumpsterModalShow ?
-                    <DumpsterModal
-                        item={{ id: DumpsterModalShow.ItemID, Code: DumpsterModalShow.Code, Title: DumpsterModalShow.Title, SectorID: DumpsterModalShow.SectorID, Cost: parseFloat(DumpsterModalShow.Cost), UnitWeight: parseFloat(DumpsterModalShow.UnitWeight) }}
-                        show={DumpsterModalShow}
-                        list={list}
-                        setList={setList}
-                        onHide={() => { setDumpsterModalShow(false); }}
-                    />
-                    : null
-            } */}
-            {/* 
-            {
-                EditItemModalShow &&
-                <ItemUpdate
-                    item={{ ...EditItem, id: EditItem.ItemID }}
-                    show={EditItemModalShow}
-                    list={list}
-                    setList={setList}
-                    onReload={() => window.location.reload(false)}
-                    onClose={() => { LoadProductItems(); setEditItemModalShow(false); setEditItem(false) }}
-                    onHide={() => { setEditItemModalShow(false); setEditItem(false) }}
-                />
-            } */}
-            {/* {
-                CreatePKGModalShow &&
-                <AddPack
-                    item={{ id: ItemID.ItemID, Code: ItemID.Code, Title: ItemID.Title }}
-                    show={CreatePKGModalShow}
-                    SupplierID={ItemID.SupplierID}
-                    ProductID={ItemID.ProductID}
-                    list={list}
-                    setList={setList}
-                    onReload={() => { LoadProductItems(); window.location.reload(false)() }}
-                    onClose={() => { setCreatePKGModalShow(false) }}
-                    onHide={() => { setCreatePKGModalShow(false); }}
-                />
-            } */}
             {
                 EditItemModalShow &&
                 <UpdateModal

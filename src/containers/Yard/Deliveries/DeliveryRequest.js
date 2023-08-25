@@ -319,7 +319,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
     };
 
     const left_stock = Available - ((parseFloat(UnitQty || 0) * parseFloat(Quantity || 0)))
-    const availability = left_stock > 0 ? true : false
+    const availability = left_stock >= 0 ? true : false
 
     const AddRow = (e) => {
         const { Quantity, Code } = formData;

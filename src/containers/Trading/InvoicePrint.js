@@ -299,15 +299,9 @@ export const InvoicePrint = async (e, item, status) => {
     }
 
     const getTotal = () => {
-        let TotalPrice = 0.00;
-        const price = item.SellMapData.map(row => parseFloat(row.Qty) * parseFloat(row.Rate));
-        if (price.length > 0) {
-            TotalPrice = price.reduce((acc, val) => acc + val);
-        }
-
-        return TotalPrice;
-    }
-
+        if (!Array.isArray(item.SellMapData) || !item.SellMapData.length) return 0.00;
+        return item.SellMapData.reduce((acc, { SubTotal }) => acc + parseFloat(SubTotal), 0.00);
+    };
 
     var body = [
         ["TOTAL", " :", getTotal().toLocaleString("en", { minimumFractionDigits: 2 })],
