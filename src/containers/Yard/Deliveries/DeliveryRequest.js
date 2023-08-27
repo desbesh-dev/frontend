@@ -15,7 +15,7 @@ import errorIcon from '../../../assets/error.png';
 import infoIcon from '../../../assets/info.png';
 import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
-import { CustomMenuList } from '../../../hocs/Class/CustomMenuList';
+import { CustomMenuDeliver } from '../../../hocs/Class/CustomMenuDeliver';
 import '../../../hocs/react-select/dist/react-select.css';
 import { InfoMessage, InvalidDate } from "../../Modals/ModalForm.js";
 import { customHeader, locales } from "../../Suppliers/Class/datepicker";
@@ -34,6 +34,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
     const [PartyData, setPartyData] = useState()
     const [Subscriber, setSubscriber] = useState(false)
     const [SellInfo, setSellInfo] = useState(null)
+    const [ProValue, setProValue] = useState(null)
 
     const [RequestForID, setRequestForID] = useState(null)
     const [RequestToID, setRequestToID] = useState(null)
@@ -196,17 +197,35 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
         }),
     };
 
+    // const CScolourStyles = {
+    //     container: base => ({
+    //         ...base,
+    //         flex: 1,
+    //         fontWeight: "500"
+    //     }),
+    //     menuList: provided => ({
+    //         ...provided,
+    //         backgroundColor: 'white',
+    //     }),
+    // };
+
     const CScolourStyles = {
         container: base => ({
             ...base,
             flex: 1,
             fontWeight: "500"
         }),
-        menuList: provided => ({
+        menuPortal: base => ({ ...base, zIndex: 9999 }),
+        option: (provided, state) => ({
             ...provided,
-            backgroundColor: 'white',
-        }),
-    };
+            color: state.isSelected ? '#000' : '#333',
+            height: '40px',
+            backgroundColor: state.isSelected ? 'whitesmoke' : '#fff',
+            ':hover': {
+                backgroundColor: state.isSelected ? 'lightgray' : '#f8f9fa'
+            }
+        })
+    }
 
     const handleToggleAutoFire = () => {
         setAutoFire((AutoFire) => !AutoFire);
@@ -788,6 +807,16 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
     var h = window.innerHeight - 200;
     const lastRow = OrderData[OrderData.length - 1];
 
+    const formatOptionLabel = ({ label, CtrNo, Qty }) => {
+        console.log(CtrNo);
+        return (
+            <div style={{ lineHeight: '1' }}>
+                <div className='p-0 m-0' style={{ lineHeight: '1' }}>{label}</div>
+                <small className='p-0 m-0 text-muted' style={{ lineHeight: '1' }}>{CtrNo + ", Qty- " + Qty}</small>
+            </div>
+        );
+    }
+
     return (
         <div className="row d-flex m-0">
             <div className="d-flex py-2 m-0 justify-content-between align-items-center" style={{ zIndex: 1, backgroundColor: "#F4DCC1" }}>
@@ -1020,13 +1049,14 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
                                             name="Title"
                                             placeholder={"Please select product"}
                                             styles={CScolourStyles}
-                                            value={Title}
-                                            onChange={(e) => { if (e) { DropdownAction(e); setFormData(e); setCtrNo(e.CtrNo) } }}
+                                            value={ProValue}
+                                            onChange={(e) => { if (e) { DropdownAction(e); setFormData(e); setCtrNo(e.CtrNo); setProValue(e) } }}
                                             required
                                             id="Title"
                                             isClearable={true}
-                                            components={{ MenuList: CustomMenuList }}
-                                            maxMenuHeight={20 * 35}
+                                            components={{ MenuList: CustomMenuDeliver }}
+                                            maxMenuHeight={25 * 45}
+                                            formatOptionLabel={formatOptionLabel}
                                         />
                                     </div>
                                 </div>
