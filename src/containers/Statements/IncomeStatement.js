@@ -9,11 +9,12 @@ import { getLabel } from '../../actions/ContractAPI';
 import { load_user, logout } from '../../actions/auth';
 import { DISPLAY_OVERLAY } from '../../actions/types';
 import { customHeader, locales } from "../Suppliers/Class/datepicker";
+import { IncStatementPDF } from './IncStatementPDF';
 let today = new Date();
 let oneMonthAgo = new Date(); // This gives us a new Date object with the current date and time
 oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-const IncomeStatement = ({ date_from = oneMonthAgo, date_to = today }) => {
+const IncomeStatement = ({ date_from = oneMonthAgo, date_to = today, user }) => {
     const [Data, setData] = useState(null)
     const [Widget, setWidget] = useState(false)
     const [View, setView] = useState(false)
@@ -25,6 +26,10 @@ const IncomeStatement = ({ date_from = oneMonthAgo, date_to = today }) => {
     const [SisterFilter, setSisterFilter] = useState(null)
     const [SectorFilter, setSectorFilter] = useState(null)
     const [Status, setStatus] = useState('')
+    const [NetSale, setNetSale] = useState('')
+    const [COGS, setCOGS] = useState('')
+    const [GrossProfit, setGrossProfit] = useState('')
+    const [NetIncome, setNetIncome] = useState('')
     const [locale, setLocale] = useState('en');
     const dispatch = useDispatch();
 
@@ -45,9 +50,22 @@ const IncomeStatement = ({ date_from = oneMonthAgo, date_to = today }) => {
         var from = moment(DateFrom).format("YYYY-MM-DD");
         var to = moment(DateTo).format("YYYY-MM-DD");
         var result = await LoadIncome(from, to, SisterFilter, SectorFilter);
-        console.log("res: ", result);
         if (result !== true) {
             setData(result)
+            let rev = parseFloat(result.Revenue)
+            let ret = parseFloat(result.Return)
+            let netsale = (rev - ret).toFixed(2)
+            setNetSale(netsale)
+            let init_stock = parseFloat(result.InitStock)
+            let purshase = parseFloat(result.Purchase)
+            let end_stock = parseFloat(result.EndStock)
+            let cog = ((init_stock + purshase) - end_stock).toFixed(2)
+            setCOGS(cog)
+            let gross_profit = (parseFloat(netsale) - parseFloat(cog)).toFixed(2)
+            setGrossProfit(gross_profit)
+            let tax = parseFloat(result.Tax).toFixed(2)
+            let pretax = (parseFloat(gross_profit) - parseFloat(tax)).toFixed(2)
+            setNetIncome(pretax)
         } else {
             // history.push('/farm_lists');
         }
@@ -110,7 +128,7 @@ const IncomeStatement = ({ date_from = oneMonthAgo, date_to = today }) => {
     }
 
     const getTotal = () => {
-        if (!Array.isArray(Data.Expense) || !Data.Expense.length) return 0.00;
+        if (!Array.isArray(Data?.Expense) || !Data?.Expense.length) return 0.00;
         return Data.Expense.reduce((acc, { total_dr }) => acc + parseFloat(total_dr), 0.00);
     };
 
@@ -193,78 +211,85 @@ const IncomeStatement = ({ date_from = oneMonthAgo, date_to = today }) => {
                                 isSearchable={true}
                             />
                         </div>
+                        <button className='btn border-left fs-5' title="Print sale report"
+                            onClick={(e) => IncStatementPDF(e, Data, NetSale, COGS, GrossProfit, NetIncome, DateFrom, DateTo, user, SisterFilter ? SisterFilter.label : '', SectorFilter ? SectorFilter.label : '', '')}
+                        ><i className="fad fa-print"></i></button>
                     </div>
                 </div>
 
-                {
-                    Array.isArray(Data?.Expense) && Data?.Expense.length &&
-                    <table className={`table table-hover table-borderless table-responsive d-table mt-3`}>
-                        <thead>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={3} className="p-1 border-right"><span>Expense</span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                Data?.Expense.map((item, i) => (
-                                    <tr className="border-bottom text-center" key={i}>
-                                        <td className="p-0 border-right"><span className="d-block fw-bold px-1">{i + 1}</span></td>
-                                        <td className="p-0 border-right text-left"><span className="d-block fw-bold px-1 text-left">{item.COA__COA_Title}</span></td>
-                                        <td className="p-0"><span className="d-block fw-bold text-right px-1">{parseFloat(item.total_dr).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                        <thead>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                <table className={`table table-hover table-borderless table-responsive d-table mt-3`}>
+                    {
+                        Array.isArray(Data?.Expense) && Data?.Expense.length &&
+                        <>
+                            <thead>
+                                <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                                    <th colSpan={3} className="p-1 border-right"><span>Expense</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    Data?.Expense.map((item, i) => (
+                                        <tr className="border-bottom text-center" key={i}>
+                                            <td className="p-0 border-right"><span className="d-block fw-bold px-1">{i + 1}</span></td>
+                                            <td className="p-0 border-right text-left"><span className="d-block fw-bold px-1 text-left">{item.COA__COA_Title}</span></td>
+                                            <td className="p-0"><span className="d-block fw-bold text-right px-1">{parseFloat(item.total_dr).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </>
+                    }
+                    <thead className='pt-4 border-4'>
+                        {/* <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
                                 <th colSpan={2} className="p-1 border-right"><span>Total Expense </span></th>
                                 <th className="p-1 border-right text-right"><span>{parseFloat(getTotal()).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
-                            </tr>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right fw-normal"><span>Revenue </span></th>
-                                <th className="p-1 border-right text-right fw-normal"><span>{Data?.Revenue ? parseFloat(Data.Revenue).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
-                            </tr>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right fw-normal"><span>Return </span></th>
-                                <th className="p-1 border-right text-right fw-normal"><span>{Data?.Return ? parseFloat(Data.Return).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
-                            </tr>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right"><span>Net Sales </span></th>
-                                <th className="p-1 border-right text-right"><span>{Data?.Return && Data?.Revenue ? parseFloat(Data.Revenue - Data.Return).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
-                            </tr>
+                            </tr> */}
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right fw-normal"><span>Revenue </span></th>
+                            <th className="p-1 border-right text-right fw-normal"><span>{Data?.Revenue ? parseFloat(Data.Revenue).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
+                        </tr>
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right fw-normal"><span>Return </span></th>
+                            <th className="p-1 border-right text-right fw-normal"><span>{Data?.Return ? parseFloat(Data.Return).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
+                        </tr>
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right"><span>Net Sales </span></th>
+                            <th className="p-1 border-right text-right"><span>{NetSale && parseFloat(NetSale).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
+                        </tr>
 
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right fw-normal"><span>Opening Stock </span></th>
-                                <th className="p-1 border-right text-right fw-normal"><span>{Data?.InitStock ? parseFloat(Data.InitStock).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
-                            </tr>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right fw-normal"><span>Purcahse In this Period </span></th>
-                                <th className="p-1 border-right text-right fw-normal"><span>{Data?.Purchase ? parseFloat(Data.Purchase).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
-                            </tr>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right fw-normal"><span>Current Stock </span></th>
-                                <th className="p-1 border-right text-right fw-normal"><span>{Data?.EndStock ? parseFloat(Data.EndStock).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
-                            </tr>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right fw-normal"><span>COGS </span></th>
-                                <th className="p-1 border-right text-right fw-normal"><span>{Data?.EndStock ? parseFloat(Data.InitStock + Data.Purchase - Data.EndStock).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
-                            </tr>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right"><span>Gross Profit </span></th>
-                                <th className="p-1 border-right text-right"><span>{Data ? parseFloat((Data.Revenue - Data.Return) - (Data.InitStock + Data.Purchase - Data.EndStock)).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
-                            </tr>
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right fw-normal"><span>Opening Stock </span></th>
+                            <th className="p-1 border-right text-right fw-normal"><span>{Data?.InitStock ? parseFloat(Data.InitStock).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
+                        </tr>
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right fw-normal"><span>Purcahse In this Period </span></th>
+                            <th className="p-1 border-right text-right fw-normal"><span>{Data?.Purchase ? parseFloat(Data.Purchase).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
+                        </tr>
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right fw-normal"><span>Current Stock </span></th>
+                            <th className="p-1 border-right text-right fw-normal"><span>{Data?.EndStock ? parseFloat(Data.EndStock).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00} </span></th>
+                        </tr>
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right fw-normal"><span>COGS </span></th>
+                            <th className="p-1 border-right text-right fw-normal"><span>{COGS && parseFloat(COGS).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
+                        </tr>
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right"><span>Gross Profit </span></th>
+                            <th className="p-1 border-right text-right"><span>{GrossProfit && parseFloat(GrossProfit).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
+                        </tr>
 
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right"><span>Operating Expense </span></th>
-                                <th className="p-1 border-right text-right"><span>{parseFloat(getTotal()).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
-                            </tr>
-                            <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
-                                <th colSpan={2} className="p-1 border-right"><span>Net Income </span></th>
-                                <th className="p-1 border-right text-right"><span>{parseFloat(0).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
-                            </tr>
-                        </thead>
-                    </table>
-                }
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right"><span>Operating Expense </span></th>
+                            <th className="p-1 border-right text-right"><span>{parseFloat(getTotal()).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
+                        </tr>
+                        <tr className="text-center text-uppercase" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                            <th colSpan={2} className="p-1 border-right"><span>Net Income </span></th>
+                            <th className="p-1 border-right text-right"><span>{parseFloat(parseFloat(GrossProfit) - parseFloat(getTotal())).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
+                        </tr>
+                    </thead>
+
+                </table>
+
             </div>
         </div>
 

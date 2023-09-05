@@ -79,6 +79,7 @@ import Return from './containers/Contract/Return/Return';
 import AccountJournal from './containers/Accounts/AccountJournal';
 import COA from './containers/Accounts/COA';
 import PaymentList from './containers/Accounts/Farmer Payment/PaymentList';
+import Ledger from './containers/Accounts/Ledger/Ledger';
 import Voucher from './containers/Accounts/Voucher/Voucher';
 
 // Business Preference
@@ -170,8 +171,8 @@ import { PublicRoute } from './hocs/PublicRoute';
 import { SalesRepresentativeRoute } from './hocs/SalesRepresentativeRoute';
 
 //Statements
-import IncomeStatement from './containers/Statements/IncomeStatement';
 import BalanceSheet from './containers/Statements/BalanceSheet';
+import IncomeStatement from './containers/Statements/IncomeStatement';
 
 const App = () => {
     const pathname = window.location.pathname
@@ -246,6 +247,7 @@ const App = () => {
                         <PrivateRoute path='/acc_journal' render={(props) => <AccountJournal list={list} setList={setList} {...props} />} component={undefined} />
                         <PrivateRoute path='/farmer_payment_list' render={(props) => <PaymentList list={list} setList={setList} {...props} />} component={undefined} />
                         <PrivateRoute path='/farmer_payment_release/:id' render={(props) => <PaymentProcedure list={list} setList={setList} {...props} />} component={undefined} />
+                        <PrivateRoute path='/ledger' render={(props) => <Ledger list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Profiles */}
                         <PrivateRoute exact path='/my_user_lists' component={MyUserLists} render={undefined} />

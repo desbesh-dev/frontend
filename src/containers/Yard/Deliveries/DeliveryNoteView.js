@@ -267,7 +267,14 @@ const DeliveryNoteView = ({ user, list, setList, DeliveryNoteID, cat }) => {
                                             <tr className="border-bottom text-center" key={i}>
                                                 <td className="p-0 border-right"><span className="d-block fw-bold px-1">{item.SLNo}</span></td>
                                                 <td className="p-0 border-right"><span className="d-block fw-bold px-1">{item.Code}</span></td>
-                                                <td className="p-0 border-right"><span className="d-block fw-bold text-left px-1">{item.Title}</span></td>
+                                                <td className="p-0 border-right">
+                                                    <span className="d-block fw-bold text-left px-1">
+                                                        {item.Title}
+                                                    </span>
+                                                    <small className="d-block fw-bold text-warning text-left px-1">
+                                                        {item.CtrNo}
+                                                    </small>
+                                                </td>
                                                 <td className="p-0 border-right"><span className="d-block fw-bold text-center px-1">{item.UnitName === "Retail" ? "L/S" : item.UnitName}</span></td>
                                                 <td className="p-0 border-right"><span className="d-block fw-bold text-center px-1">{parseFloat(item.UnitQty).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
                                                 <td className="p-0 border-right"><span className="d-block fw-bold text-right px-1">{parseFloat(item.UnitWeight).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>

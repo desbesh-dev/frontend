@@ -189,7 +189,7 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 										<div className='d-flex border'>
 											<Link className="row btn btn-outline-success m-0" id="grid_menu"><i className="fad fa-calculator"></i> A/C-Summary</Link>
 											<Link className="row btn btn-outline-success m-0" to='/acc_journal' id="grid_menu"><i className="fad fa-book"></i> Journal</Link>
-											<Link className="row btn btn-outline-success m-0" id="grid_menu"><i className="fab fa-wpforms"></i> Ledger</Link>
+											<Link className="row btn btn-outline-success m-0" to='/ledger' id="grid_menu"><i className="fab fa-wpforms"></i> Ledger</Link>
 										</div>
 										<div className='d-flex border'>
 											<Link className="row btn btn-outline-success m-0" id="grid_menu"><i className="fad fa-file-invoice-dollar"></i> Remit. Advice</Link>
@@ -266,7 +266,7 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 							</div>
 
 							{
-							no <= 7 &&
+								no <= 7 &&
 								<>
 									<div className='d-flex align-items-center py-1'>
 										<button className="btn fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" onClick={(e) => setExpand(Expand === "Staff" ? false : "Staff")}><i className="fad fa-users-crown pr-1 fa-fw"></i> My Staff </button>
@@ -287,7 +287,7 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 							}
 
 							{
-							no <= 5 &&
+								no <= 5 &&
 								<>
 									<div className='d-flex align-items-center py-1'>
 										<button className="btn fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" onClick={(e) => setExpand(Expand === "Statement" ? false : "Statement")}><i className="fad fa-file-chart-line pr-1 fa-fw"></i> Statements </button>

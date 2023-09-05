@@ -405,7 +405,6 @@ export const InvoicePrint = async (e, item, status) => {
             doc.line(550, pageHeight - 70, doc.internal.pageSize.getWidth() - 165, pageHeight - 70);
             doc.setFillColor(97, 97, 97);
             doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Recipient", doc.internal.pageSize.getWidth() - 100, pageHeight - 60, { align: "center" })
-
         }
 
         // Footer line

@@ -564,8 +564,8 @@ const OrderExecute = ({ RequestID, user, list, setList }) => {
                                                         <td className="py-0 border-right"><span className="d-block fw-bold">{reversedIndex + 1}</span></td>
                                                         <td className="py-0 px-1 border-right">
                                                             <span className="d-block fw-bold text-left text-nowrap" style={{ lineHeight: "1" }}>{item.label ? item.label : item.Title}</span>
-                                                            {item.Remark !== "N/A" ?
-                                                                <small className="d-block text-muted text-left" style={{ fontSize: '11px', lineHeight: "1" }}>{item.Remark}</small> : null}
+
+                                                            <small className="d-block text-muted text-left" style={{ fontSize: '11px', lineHeight: "1" }}>{item.CtrNo + (item.Remark !== "N/A" ? " | " + item.Remark : '')}</small>
                                                         </td>
                                                         <td className="py-0 border-right"><span className="d-block fw-bold">{(item.Qty).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
                                                         <td className="py-0 border-right" style={{ width: "100px" }}>

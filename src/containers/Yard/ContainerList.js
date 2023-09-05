@@ -12,9 +12,9 @@ import { DISPLAY_OVERLAY } from '../../actions/types';
 import '../../hocs/react-select/dist/react-select.css';
 import { customHeader, locales } from "../Suppliers/Class/datepicker";
 
+import moment, { locale } from 'moment';
 import { FetchPurchaseInvoice } from '../../actions/SuppliersAPI';
 import { InvoicePrint } from '../Suppliers/MySuppliers/Profiles/ViewInvoice/InvoicePrint';
-import moment, { locale } from 'moment';
 import { BarcodeList } from '../Suppliers/NationalSuppliers/Profiles/Modal/BarcodePrintModal';
 import { CtrRegister, DeleteModal, PushBackModal, UpdateModal, ViewModal } from "./Modals/ModalForm.js";
 let today = new Date();
@@ -28,7 +28,7 @@ const ContainerList = ({ user, list, setList, no, cat }) => {
     const [BarcodeItem, setBarcodeItem] = useState(false);
     const [BarcodeModalShow, setBarcodeModalShow] = useState(false);
 
-    const [Date, setDate] = useState(today);
+    const [Date, setDate] = useState(null);
     const [CreateModalShow, setCreateModalShow] = useState(false);
     const [PushModalShow, setPushModalShow] = useState(false);
     const [DeleteModalShow, setDeleteModalShow] = useState(false);

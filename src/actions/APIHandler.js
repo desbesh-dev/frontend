@@ -2005,8 +2005,6 @@ export const VerifyUser = async (id) => {
 }
 
 export const LoadIncome = async (date_from, date_to, sis_id, sect_id) => {
-    console.log("sis: ", sis_id);
-    console.log("sect: ", sect_id);
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -2024,6 +2022,46 @@ export const LoadIncome = async (date_from, date_to, sis_id, sect_id) => {
     try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/statement/income/`, config);
         return res.data
+    } catch (err) {
+        return true;
+    }
+}
+
+export const LoadBalance = async (date_from, date_to, sis_id, sect_id) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        },
+        params: {
+            date_from: date_from,
+            date_to: date_to,
+            sis_id: sis_id?.value,
+            sect_id: sect_id?.value
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/statement/balance/`, config);
+        return res.data
+    } catch (err) {
+        return true;
+    }
+}
+
+export const FetchLedger = async (COA_ID, date_from, date_to) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/ladger/${COA_ID}/${date_from}/${date_to}`, config);
+        return res
     } catch (err) {
         return true;
     }

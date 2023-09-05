@@ -149,7 +149,7 @@ export const RequestPrint = async (e, item, status) => {
         ...item.OrderMapData.map((item, i) => [
             item.SLNo,
             item.Code,
-            item.Title + (item.Remark && item.Remark !== 'N/A' && item.Remark !== "" ? "\n" + item.Remark : ''),
+            item.Title + "\n" + item.CtrNo + (item.Remark && item.Remark !== 'N/A' && item.Remark !== "" ? " | " + item.Remark : ''),
             item.UnitName,
             item.Qty,
             item.OrderQty,

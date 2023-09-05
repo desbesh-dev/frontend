@@ -25,7 +25,7 @@ export const DeliveryNotePrint = async (e, item, status, type) => {
     let pageHeight = null;
     const headers = [["ITEMS", "UOM", "QTY"]];
     var data = [...item.DeliveryMapData.map((pro, i) => [
-        pro.Title,
+        pro.Title + "\n [" + pro.CtrNo + "]",
         pro.UnitName,
         pro.Qty
     ]),
@@ -43,7 +43,7 @@ export const DeliveryNotePrint = async (e, item, status, type) => {
 
     let options = {
         theme: 'plain',
-        startY: 55,
+        startY: 57,
         margin: { horizontal: 2 },
         head: headers,
         body: data,
@@ -101,7 +101,7 @@ export const DeliveryNotePrint = async (e, item, status, type) => {
     var for_ht = doc.getTextDimensions(for_address).h;
     doc.setFontSize(9).setTextColor(0, 0, 0).setFont("courier", 'normal').text(for_address, pageWidth / 2, to_ht + 37, { align: "center" })
     doc.setFontSize(9).setTextColor(0, 0, 0).setFont('Helvetica', 'bold').text(Dates, pageWidth / 2, to_ht + for_ht + 39, { align: "center" })
-    doc.setFontSize(9).setTextColor(0, 0, 0).setFont('Helvetica', 'normal').text(Sender, pageWidth / 2, to_ht + for_ht + 42, { align: "center" })
+    doc.setFontSize(9).setTextColor(0, 0, 0).setFont('Helvetica', 'normal').text(Sender, pageWidth / 2, to_ht + for_ht + 43, { align: "center" })
 
     doc.autoTable(options);
     LastY = doc.lastAutoTable.finalY + 15;
