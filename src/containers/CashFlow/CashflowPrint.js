@@ -6,12 +6,9 @@ import logo from './../../assets/logo.png';
 import watermark from './../../assets/watermark.png';
 // import { numberToWords } from '../../hocs/Class/InWord';
 
-export const CashflowPrint = async (e, item, status, date, user) => {
+export const CashflowPrint = async (e, item, status, date, user, account_type) => {
     const name = "DESH BESH GROUP OF COMPANY LTD.";
     var cmpAd = 'PO Box: 262, Boroko, National Capital District, S#93, L#31, Vani Place, Gordons';
-    const Sister = "Sister Name: " + item.Sister;
-    const Sector = "Sector Name: " + item.Sector;
-    const Short = "Short Code: " + item.ShortCode;
     const imgData = await convertImgToBase64URL(logo)
     const watermarkData = await convertImgToBase64URL(watermark)
     let column0Has1 = false;
@@ -65,46 +62,33 @@ export const CashflowPrint = async (e, item, status, date, user) => {
 
     doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 38)
 
-    const contact = [
-        item.Phone && `Phone: ${item.Phone}`,
-        item.Contact && `Contact: ${item.Contact}`,
-        item.Fax && `Fax: ${item.Fax}`,
-        item.Whatsapp && `Whatsapp: ${item.Whatsapp}`,
-        item.Imo && `Imo: ${item.Imo}`,
-        item.Wechat && `Wechat: ${item.Wechat}`
-    ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text(contact, marginLeft + 94, marginTop + 38)
-
-    const online_contact = [
-        item.Email && `Email: ${item.Email}`,
-        item.Website && `Website: ${item.Website}`
-    ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text(online_contact, marginLeft + 94, marginTop + 48)
-
     doc.setDrawColor(220, 220, 220);
     doc.setLineWidth(2);
-    doc.line(marginLeft, 98, 570, 98);
+    doc.line(marginLeft, 86, 570, 86);
     doc.setFillColor(119, 136, 153);
 
     let x = doc.internal.pageSize.getWidth() / 2;
     let width = 120;
     let height = 20;
 
-    doc.setFillColor(255, 255, 255).rect(x - 60, 88, width, height, 'F');
-    doc.setFontSize(16).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("CASH FLOW", doc.internal.pageSize.getWidth() / 2, 102, { align: "center" });
+    doc.setFillColor(255, 255, 255).rect(x - 60, 76, width, height, 'F');
+    doc.setFontSize(16).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("CASH FLOW", x, 90, { align: "center" });
 
-    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(Sister, marginLeft, marginTop + 110)
-    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(Sector, marginLeft, marginTop + 128)
-    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(Short, marginLeft, marginTop + 146)
+    var site = `${item.Sister}${item.Sector?.trim() ? ` (${item.Sector})` : ''}`;
+    doc.setFontSize(13).setTextColor(51, 51, 51).setFont("helvetica", 'bold').text(site, doc.internal.pageSize.getWidth() / 2, marginTop + 90, { align: "center" })
+
+    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text("STATEMENT FOR: ", marginLeft, marginTop + 141)
+    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'bold').text(account_type, marginLeft + 110, marginTop + 141)
+
     var d = moment(date).format("DD MMM YYYY")
-    doc.setFontSize(18).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(d, 400, marginTop + 110);
+    doc.setFontSize(18).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(d, 400, marginTop + 120);
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(380, marginTop + 118, 520, marginTop + 118);
+    doc.line(380, marginTop + 128, 520, marginTop + 128);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(18).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("DATE", 430, marginTop + 138);
+    doc.setFontSize(18).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("DATE", 430, marginTop + 144);
 
     doc.setFontSize(10).setTextColor(119, 136, 153).setFont("helvetica", 'italic').text("All transaction histories following the date are in the below table", marginLeft, marginTop + 170);
     const headers = [["S/N", "TIMESTAMP", "TYPE", "TITLE", "REFERENCE", "DEBIT", "CREDIT", "BALANCE"]];

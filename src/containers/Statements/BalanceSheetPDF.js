@@ -54,75 +54,85 @@ export const BalanceSheetPDF = async (e, item, CurrentAssets, Assets, TotalAsset
 
     doc.setFillColor(255, 255, 255).rect(x - 85, 95, width, height, 'F');
     doc.setFontSize(16).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("BALANCE SHEET", doc.internal.pageSize.getWidth() / 2, 102, { align: "center" });
-
-    doc.setFontSize(13).setTextColor(51, 51, 51).setFont("helvetica", 'bold').text(Sister + " (" + Sector + ")", doc.internal.pageSize.getWidth() / 2, marginTop + 100, { align: "center" })
+    var site = `${Sister}${Sector?.trim() ? ` (${Sector})` : ''}`;
+    doc.setFontSize(13).setTextColor(51, 51, 51).setFont("helvetica", 'bold').text(site, doc.internal.pageSize.getWidth() / 2, marginTop + 100, { align: "center" })
 
     var F = moment(DateFrom).format("DD MMM YYYY")
     var T = moment(DateTo).format("DD MMM YYYY")
-    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("From " + F + " To " + T, doc.internal.pageSize.getWidth() / 2, marginTop + 115, { align: "center" });
+    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("As at " + T, doc.internal.pageSize.getWidth() / 2, marginTop + 115, { align: "center" });
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("CURRENT ASSETS", 90, marginTop + 200);
+    let assetMargin = marginTop + 30
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("ASSETS", x, assetMargin + 145, { align: "center" });
+
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("CURRENT ASSETS", 90, assetMargin + 214);
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(75, marginTop + 155, 520, marginTop + 155);
+    doc.line(75, assetMargin + 155, 520, assetMargin + 155);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Cash ", 300, marginTop + 170);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Cash).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 170, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Cash ", 300, assetMargin + 170);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Cash).toLocaleString("en", { minimumFractionDigits: 2 }), 510, assetMargin + 170, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(295, marginTop + 177, 520, marginTop + 177);
+    doc.line(295, assetMargin + 177, 520, assetMargin + 177);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Bank ", 300, marginTop + 192);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Bank).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 192, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Bank ", 300, assetMargin + 192);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Bank).toLocaleString("en", { minimumFractionDigits: 2 }), 510, assetMargin + 192, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(295, marginTop + 199, 520, marginTop + 199);
+    doc.line(295, assetMargin + 199, 520, assetMargin + 199);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Warehouse ", 300, marginTop + 214);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Stock || 0.00).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 214, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Warehouse ", 300, assetMargin + 214);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat((item.Stock || 0.00).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 }), 510, assetMargin + 214, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(295, marginTop + 221, 520, marginTop + 221);
+    doc.line(295, assetMargin + 221, 520, assetMargin + 221);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Yard Stock ", 300, marginTop + 236);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.YardStock || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 236, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Yard Stock ", 300, assetMargin + 236);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat((item.YardStock || 0).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 }), 510, assetMargin + 236, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(75, marginTop + 243, 520, marginTop + 243);
+    doc.line(295, assetMargin + 243, 520, assetMargin + 243);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("TOTAL CURRENT ASSETS ", 90, marginTop + 258);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(CurrentAssets || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 258, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Receivable ", 300, assetMargin + 258);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat((item.Receivable || 0).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 }), 510, assetMargin + 258, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(75, marginTop + 265, 520, marginTop + 265);
+    doc.line(75, assetMargin + 265, 520, assetMargin + 265);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("FIXED ASSETS ", 90, marginTop + 280);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.FixedAssets || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 280, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("TOTAL CURRENT ASSETS ", 90, assetMargin + 280);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(parseFloat((CurrentAssets || 0).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 }), 510, assetMargin + 280, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(75, marginTop + 287, 520, marginTop + 287);
+    doc.line(75, assetMargin + 287, 520, assetMargin + 287);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("TOTAL ASSETS ", 90, marginTop + 302);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(parseFloat(TotalAssets || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 302, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("FIXED ASSETS ", 90, assetMargin + 302);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.FixedAssets || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, assetMargin + 302, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(295, marginTop + 155, 295, marginTop + 243);
+    doc.line(75, assetMargin + 309, 520, assetMargin + 309);
+    doc.setFillColor(97, 97, 97);
 
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("TOTAL ", 90, assetMargin + 324);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(parseFloat((Assets || 0).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 }), 510, assetMargin + 324, { align: "right" });
+
+    doc.setDrawColor(97, 97, 97);
+    doc.setLineWidth(0.5);
+    doc.line(295, assetMargin + 155, 295, assetMargin + 265);
 
     // doc.setDrawColor(97, 97, 97);
     // doc.setLineWidth(0.5);
@@ -133,56 +143,68 @@ export const BalanceSheetPDF = async (e, item, CurrentAssets, Assets, TotalAsset
     // var startY = 50;  // Y-coordinate of the starting point
     // var endY = 150;   // Y-coordinate of the ending point
 
-
-
+    let liabilityMargin = marginTop + 80
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("LIABILITIES & EQUITY", x, liabilityMargin + 340, { align: "center" });
 
     // Liability
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(75, marginTop + 350, 520, marginTop + 350);
+    doc.line(75, liabilityMargin + 350, 520, liabilityMargin + 350);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("ACCOUNT PAYABLE ", 90, marginTop + 365);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Payable || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 365, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("ACCOUNT PAYABLE ", 90, liabilityMargin + 365);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Payable || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, liabilityMargin + 365, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(75, marginTop + 372, 520, marginTop + 372);
+    doc.line(75, liabilityMargin + 372, 520, liabilityMargin + 372);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Capital ", 300, marginTop + 387);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Capital || 0.00).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 387, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Capital ", 300, liabilityMargin + 387);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Capital || 0.00).toLocaleString("en", { minimumFractionDigits: 2 }), 510, liabilityMargin + 387, { align: "right" });
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("EQUITY", 90, marginTop + 394);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("EQUITY", 90, liabilityMargin + 394);
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(295, marginTop + 394, 520, marginTop + 394);
+    doc.line(295, liabilityMargin + 394, 520, liabilityMargin + 394);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("(—) Drawings ", 300, marginTop + 409);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Drawings || 0.00).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 409, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("(—) Drawings ", 300, liabilityMargin + 409);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(item.Drawings || 0.00).toLocaleString("en", { minimumFractionDigits: 2 }), 510, liabilityMargin + 409, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(75, marginTop + 414, 520, marginTop + 414);
+    doc.line(75, liabilityMargin + 414, 520, liabilityMargin + 414);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("TOTAL EQUITY ", 90, marginTop + 429);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(TotalEquity || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 429, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("TOTAL EQUITY ", 90, liabilityMargin + 429);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(parseFloat(TotalEquity || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, liabilityMargin + 429, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(75, marginTop + 436, 520, marginTop + 436);
+    doc.line(75, liabilityMargin + 436, 520, liabilityMargin + 436);
     doc.setFillColor(97, 97, 97);
 
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("TOTAL LIABILITY ", 90, marginTop + 451);
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(parseFloat(Liability || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, marginTop + 451, { align: "right" });
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("TOTAL ", 90, liabilityMargin + 451);
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(parseFloat(Liability || 0).toLocaleString("en", { minimumFractionDigits: 2 }), 510, liabilityMargin + 451, { align: "right" });
 
     doc.setDrawColor(97, 97, 97);
     doc.setLineWidth(0.5);
-    doc.line(295, marginTop + 372, 295, marginTop + 414);
+    doc.line(295, liabilityMargin + 372, 295, liabilityMargin + 414);
 
+    // Total
+    if (TotalAssets > 0) {
+        doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("TOTAL ASSETS ", 145, liabilityMargin + 550);
+        doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text("(TOTAL ASSETS = TOTAL LIABILITIES + OWNERS EQUITY) ", x, liabilityMargin + 565, { align: "center" });
+        doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(parseFloat((TotalAssets || 0).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 }), 450, liabilityMargin + 550, { align: "right" });
+    } else if (TotalAssets < 0) {
+        doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("TOTAL LIABILITY ", 145, liabilityMargin + 550);
+        doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text("(TOTAL ASSETS = TOTAL LIABILITIES + OWNERS EQUITY) ", x, liabilityMargin + 565, { align: "center" });
+        doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(parseFloat((TotalAssets || 0).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 }), 450, liabilityMargin + 550, { align: "right" });
+    } else if (TotalAssets === 0) {
+        doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("TOTAL ASSETS = TOTAL LIABILITIES + OWNERS EQUITY ", x, liabilityMargin + 550, { align: "right" });
+    }
 
     let pageCount = doc.internal.getNumberOfPages()
     // Add the image to each page
@@ -205,23 +227,7 @@ export const BalanceSheetPDF = async (e, item, CurrentAssets, Assets, TotalAsset
         doc.setFontSize(10).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text('Page ' + String(i) + ' of ' + String(pageCount), 500, pageHeight - 20);
     }
 
-
-    // var body = [
-    //     ["Revenue", " :", parseFloat(item.Revenue).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["  (—) Return", " :", parseFloat(item.Return).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["NET SALES", " :", parseFloat(NetSale).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["      Opening Stock", " :", parseFloat(item.InitStock).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["      Purchase In This Period", " :", parseFloat(item.Purchase).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["      Current Stock", " :", parseFloat(item.EndStock).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["(—) COGS", " :", parseFloat(COGS).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["GROSS PROFIT", " :", parseFloat(GrossProfit).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["(—) OPERATING EXPENSE", " :", parseFloat(getTotal()).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["PRE-TAX INCOME", " :", parseFloat(GrossProfit - getTotal()).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["(—) TAX", " :", parseFloat(item.Tax).toLocaleString("en", { minimumFractionDigits: 2 })],
-    //     ["NET INCOME", " :", parseFloat(NetIncome - getTotal()).toLocaleString("en", { minimumFractionDigits: 2 })],
-    // ];
-
-    const fileName = "Income Statement Date-" + moment(item.Date).format("DD MMM YYYY")
+    const fileName = "Balance Sheet Date-" + moment(item.Date).format("DD MMM YYYY")
 
     doc.setProperties({
         title: fileName,

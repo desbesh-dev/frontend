@@ -54,23 +54,14 @@ export const IncStatementPDF = async (e, item, NetSale, COGS, GrossProfit, NetIn
 
     doc.setFillColor(255, 255, 255).rect(x - 85, 95, width, height, 'F');
     doc.setFontSize(16).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("INCOME STATEMENT", doc.internal.pageSize.getWidth() / 2, 102, { align: "center" });
+    var site = `${Sister}${Sector?.trim() ? ` (${Sector})` : ''}`;
+    doc.setFontSize(13).setTextColor(51, 51, 51).setFont("helvetica", 'bold').text(site, doc.internal.pageSize.getWidth() / 2, marginTop + 100, { align: "center" })
 
-    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(Sister, marginLeft, marginTop + 110)
-    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(Sector, marginLeft, marginTop + 128)
-    // doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(Short, marginLeft, marginTop + 146)
     var F = moment(DateFrom).format("DD MMM YYYY")
     var T = moment(DateTo).format("DD MMM YYYY")
-    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("From " + F + " To " + T, 350, marginTop + 110);
+    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("From " + F + " to " + T, doc.internal.pageSize.getWidth() / 2, marginTop + 115, { align: "center" });
 
-    // doc.setDrawColor(97, 97, 97);
-    // doc.setLineWidth(0.5);
-    // doc.line(380, marginTop + 118, 520, marginTop + 118);
-    // doc.setFillColor(97, 97, 97);
-
-    // doc.setFontSize(18).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("DATE", 430, marginTop + 138);
-
-    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("courier", 'normal').text("Operating Expenses", x, marginTop + 170, { align: "center" });
-
+    doc.setFontSize(13).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("EXPENSE", x, marginTop + 170, { align: "center" });
 
     const getTotal = () => {
         if (!Array.isArray(item?.Expense) || !item?.Expense.length) return 0.00;
@@ -103,13 +94,14 @@ export const IncStatementPDF = async (e, item, NetSale, COGS, GrossProfit, NetIn
             lineColor: [26, 189, 156],
             textColor: [0, 0, 0],
             fontStyle: 'normal',
-            fontSize: 10
+            fontSize: 12
         },
         headStyles: {
             valign: 'middle',
             halign: 'center',
             textColor: [0, 0, 0],
             lineColor: [26, 189, 156], // Setting line color to black
+            fontSize: 12
         },
         columnStyles: {
             0: {
@@ -178,25 +170,48 @@ export const IncStatementPDF = async (e, item, NetSale, COGS, GrossProfit, NetIn
         doc.setFontSize(10).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text('Page ' + String(i) + ' of ' + String(pageCount), 500, pageHeight - 20);
     }
 
-
     var body = [
-        ["Revenue", " :", parseFloat(item.Revenue).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["  (—) Return", " :", parseFloat(item.Return).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["NET SALES", " :", parseFloat(NetSale).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["      Opening Stock", " :", parseFloat(item.InitStock).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["      Purchase In This Period", " :", parseFloat(item.Purchase).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["      Current Stock", " :", parseFloat(item.EndStock).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["(—) COGS", " :", parseFloat(COGS).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["GROSS PROFIT", " :", parseFloat(GrossProfit).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["(—) OPERATING EXPENSE", " :", parseFloat(getTotal()).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["PRE-TAX INCOME", " :", parseFloat(GrossProfit - getTotal()).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["(—) TAX", " :", parseFloat(item.Tax).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["NET INCOME", " :", parseFloat(NetIncome - getTotal()).toLocaleString("en", { minimumFractionDigits: 2 })],
+        ["REVENUE", " :", formatNumber(item.Revenue)],
+        ["  (—) Return", " :", formatNumber(item.Return)],
+        ["NET SALES", " :", formatNumber(NetSale)],
+        ["      Opening Stock", " :", formatNumber((item.InitStock).toFixed(2))],
+        ["      Purchase In This Period", " :", formatNumber((item.Purchase).toFixed(2))],
+        ["      Current Stock", " :", formatNumber((item.EndStock).toFixed(2))],
+        ["(—) COGS", " :", formatNumber(COGS)],
+        ["GROSS PROFIT", " :", formatNumber(GrossProfit)],
+        ["(—) OPERATING EXPENSE", " :", formatNumber(getTotal())],
+        ["PRE-TAX INCOME", " :", formatNumber(GrossProfit - getTotal())],
+        ["(—) TAX", " :", formatNumber(item.Tax)],
+        [formatNetIncome(NetIncome - getTotal()), " :", formatNumber(NetIncome - getTotal())],
     ];
+
+    function formatNumber(value) {
+        // Check if the value is negative
+        if (value < 0) {
+            // If negative, replace the minus sign with the first bracket
+            return ["(", parseFloat(Math.abs(value)).toLocaleString("en", { minimumFractionDigits: 2 }), ")"].join("");
+        } else {
+            // If positive or zero, display as is
+            return parseFloat(value).toLocaleString("en", { minimumFractionDigits: 2 });
+        }
+    }
+
+    function formatNetIncome(value) {
+        console.log("v: ", value);
+        // Check if the value is non-negative (including zero)
+        if (value >= 0) {
+            // If non-negative, display "NET INCOME"
+            return "NET INCOME";
+        } else {
+            // For negative values, you can optionally handle them differently
+            // For now, it simply returns "NET INCOME" for all cases
+            return "NET LOSS";
+        }
+    }
 
     doc.autoTable({
         body: body,
-        startY: LastY + 50,
+        startY: LastY + 80,
         bodyStyles: {
             lineColor: [220, 220, 220],
             textColor: [0, 0, 0],
@@ -216,11 +231,15 @@ export const IncStatementPDF = async (e, item, NetSale, COGS, GrossProfit, NetIn
                 halign: 'right',
             },
         },
-        styles: { fontSize: 11, leading: 15, textColor: [0, 0, 0], cellPadding: 1 },
+        headStyles: {
+            valign: 'middle',
+            halign: 'center',
+            textColor: [0, 0, 0],
+            lineColor: [26, 189, 156], // Setting line color to black
+            fontSize: 12
+        },
+        styles: { fontSize: 12, leading: 15, textColor: [0, 0, 0], cellPadding: 1.1 },
         minCellHeight: 25, // specify the line height here
-        // didParseCell: function (cell, data) {
-        //     alignColCalc(cell, data);
-        // },
         willDrawCell: function (data) {
             const boldRows = [2, 7, 9, 11]; // Rows where text should be bolder
 
@@ -243,9 +262,6 @@ export const IncStatementPDF = async (e, item, NetSale, COGS, GrossProfit, NetIn
 
         },
     });
-
-    let summery_table_y = doc.lastAutoTable.finalY + 4;
-
     const fileName = "Income Statement Date-" + moment(item.Date).format("DD MMM YYYY")
 
     doc.setProperties({
@@ -255,7 +271,6 @@ export const IncStatementPDF = async (e, item, NetSale, COGS, GrossProfit, NetIn
         keywords: 'generated by DESH BESH ERP v1.00 web-version beta',
         creator: "DESH BESH ERP"
     });
-
 
     window.open(doc.output('bloburl'), { "filename": fileName });
 

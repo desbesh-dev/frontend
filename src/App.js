@@ -173,6 +173,7 @@ import { SalesRepresentativeRoute } from './hocs/SalesRepresentativeRoute';
 //Statements
 import BalanceSheet from './containers/Statements/BalanceSheet';
 import IncomeStatement from './containers/Statements/IncomeStatement';
+import TrialBalance from './containers/Statements/TrialBalance';
 
 const App = () => {
     const pathname = window.location.pathname
@@ -353,6 +354,7 @@ const App = () => {
                         {/* Statements */}
                         <PrivateRoute path='/inc_statement' render={(props) => <IncomeStatement list={list} setList={setList} {...props} />} component={undefined} />
                         <PrivateRoute path='/bal_sheet' render={(props) => <BalanceSheet list={list} setList={setList} {...props} />} component={undefined} />
+                        <PrivateRoute path='/trial_balance' render={(props) => <TrialBalance list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Business Preference */}
                         <PrivateRoute path='/acc_settings' render={(props) => <AccountSettings list={list} setList={setList} {...props} />} component={undefined} />

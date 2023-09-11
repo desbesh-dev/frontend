@@ -808,7 +808,6 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
     const lastRow = OrderData[OrderData.length - 1];
 
     const formatOptionLabel = ({ label, CtrNo, Qty }) => {
-        console.log(CtrNo);
         return (
             <div style={{ lineHeight: '1' }}>
                 <div className='p-0 m-0' style={{ lineHeight: '1' }}>{label}</div>

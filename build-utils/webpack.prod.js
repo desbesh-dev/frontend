@@ -77,8 +77,8 @@ const config = {
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production'),
-        'REACT_APP_API_URL': JSON.stringify('http://10.10.60.2:1000')
-        // 'REACT_APP_API_URL': JSON.stringify('http://10.10.30.2:1000')
+        // 'REACT_APP_API_URL': JSON.stringify('http://10.10.60.2:1000')
+        'REACT_APP_API_URL': JSON.stringify('http://10.10.30.2:1000')
         // 'REACT_APP_API_URL': JSON.stringify('http://169.254.70.13:1000')
         // 'REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL)
       }

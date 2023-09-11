@@ -1117,7 +1117,7 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
                                             placeholder="0.00"
                                             value={Rate ? Rate : ""}
                                             onChange={(e) => CS_Rate(e)}
-                                            disabled={Percent ? Percent.operation === 13 ? false : true : true}
+                                            disabled={DiscPrct !== 4}
                                             required
                                         />
                                     </div>
@@ -1145,7 +1145,7 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
                                                 menuPosition="fixed"
                                                 menuPortalTarget={document.body}
                                                 borderRadius={"0px"}
-                                                options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, ...(PartyData?.IsDispatchable ? [{ label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }] : [])]}
+                                                options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, ...(PartyData?.IsDispatchable ? [{ label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }, { label: "Custom", value: 4 }] : [])]}
                                                 name="Remark"
                                                 placeholder={"Please select product"}
                                                 styles={CScolourStyles}

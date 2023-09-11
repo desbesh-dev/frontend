@@ -866,7 +866,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
 
     const lastRow = OrderData[OrderData.length - 1];
     var h = window.innerHeight - 200;
-
+    
     return (
         <div className="row d-flex m-0">
             <div className="d-flex py-2 m-0 justify-content-between align-items-center" style={{ zIndex: 1, backgroundColor: "#F4DCC1" }}>
@@ -1166,7 +1166,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                             placeholder="0.00"
                                             value={Rate ? Rate : ""}
                                             onChange={(e) => CS_Rate(e)}
-                                            disabled={Percent ? Percent.operation === 13 ? false : true : true}
+                                            disabled={DiscPrct !== 4}
                                             required
                                         />
                                     </div>
@@ -1194,13 +1194,13 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                                 menuPosition="fixed"
                                                 menuPortalTarget={document.body}
                                                 borderRadius={"0px"}
-                                                options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, ...(PartyData?.IsDispatchable ? [{ label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }] : [])]}
+                                                options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, ...(PartyData?.PartyID.IsDispatchable ? [{ label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }, { label: "Custom", value: 4 }] : [])]}
                                                 name="Remark"
                                                 placeholder={"Please select product"}
                                                 styles={CScolourStyles}
                                                 value={{ label: Remark, value: 0 }}
                                                 onChange={(e) => RemarkToggle(e)}
-                                                isDisabled={!PartyData?.IsDispatchable}
+                                                isDisabled={!PartyData?.PartyID.IsDispatchable}
                                                 id="Remark"
                                             />
 

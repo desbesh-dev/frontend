@@ -23,7 +23,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
     const dispatch = useDispatch();
     const [SectorFilter, setSectorFilter] = useState(null);
     const [SisterFilter, setSisterFilter] = useState(null);
-    const [ModeFilter, setModeFilter] = useState({ label: "Walk-in", value: 1 });
+    const [ModeFilter, setModeFilter] = useState({ label: "Both (Walk-in & Party)", value: 3 });
     const [SearchKey, setSearchKey] = useState({ min: 0, max: 50 })
     const [DateTo, setDateTo] = useState(today);
     const [DateFrom, setDateFrom] = useState(today);

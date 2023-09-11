@@ -4,8 +4,7 @@ import Datepicker from 'react-datepicker';
 import { connect, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
-import { FetchConcern, FetchSisterSector, LoadBalance, PartyStatusList, findUnique } from '../../actions/APIHandler';
-import { getLabel } from '../../actions/ContractAPI';
+import { FetchConcern, FetchSisterSector, LoadBalance } from '../../actions/APIHandler';
 import { load_user, logout } from '../../actions/auth';
 import { DISPLAY_OVERLAY } from '../../actions/types';
 import { customHeader, locales } from "../Suppliers/Class/datepicker";
@@ -16,16 +15,12 @@ oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
 const BalanceSheet = ({ date_from = oneMonthAgo, date_to = today, user }) => {
     const [Data, setData] = useState(null)
-    const [Widget, setWidget] = useState(false)
-    const [View, setView] = useState(false)
-    const [SearchKey, setSearchKey] = useState('')
     const [DateFrom, setDateFrom] = useState(date_from)
     const [DateTo, setDateTo] = useState(date_to)
     const [SisterList, setSisterList] = useState(null)
     const [SectorList, setSectorList] = useState(null)
     const [SisterFilter, setSisterFilter] = useState(null)
     const [SectorFilter, setSectorFilter] = useState(null)
-    const [Status, setStatus] = useState('')
     const [CurrentAssets, setCurrentAssets] = useState(0.00)
     const [Assets, setAssets] = useState(0.00)
     const [TotalAssets, setTotalAssets] = useState(0.00)
@@ -51,7 +46,6 @@ const BalanceSheet = ({ date_from = oneMonthAgo, date_to = today, user }) => {
         var from = moment(DateFrom).format("YYYY-MM-DD");
         var to = moment(DateTo).format("YYYY-MM-DD");
         var result = await LoadBalance(from, to, SisterFilter, SectorFilter);
-        console.log("result: ", result);
         if (result !== true) {
             setData(result)
             let cash = parseFloat(result.Cash || 0)
@@ -61,6 +55,7 @@ const BalanceSheet = ({ date_from = oneMonthAgo, date_to = today, user }) => {
             let stock = parseFloat(result.Stock || 0)
             let yard_stock = parseFloat(result.YardStock || 0)
             let curent_asset = cash + bank + receivable + stock + yard_stock
+            curent_asset.toFixed(2);
             setCurrentAssets(curent_asset)
 
             let fixed_asset = parseFloat(result.FixedAssets || 0)
@@ -116,33 +111,12 @@ const BalanceSheet = ({ date_from = oneMonthAgo, date_to = today, user }) => {
             flex: 1,
         }),
     }
-    // let unique_search = Array.isArray(Data) && Data.length ? findUnique(Data, d => d.Title) : null;
-
-    let unique = Array.isArray(Data) && Data.length ? findUnique(Data, d => d.SectorNo) : null;
-    let unique_data = Array.isArray(Data) && Data.length ? findUnique(Data, d => d.PartyID) : null;
-
-
-    const FilterParties = unique_data && unique_data.length ? unique_data
-        .filter(item => (!SectorFilter || item.SectorNo === SectorFilter.value) &&
-            (!Status || item.Status === Status.value) &&
-            (!SearchKey || item.id === SearchKey.value))
-        .map(({ id, PartyID, Title, Name, Contact, Address, SectorTitle, SectorNo, Status }) => ({
-            id, PartyID, Title, Name, Contact, Address, SectorTitle, SectorNo, Status
-        })) : null;
-
-    let unique_status = Array.isArray(FilterParties) && FilterParties.length ? findUnique(FilterParties, d => getLabel(d.Status, PartyStatusList)) : null;
-    let unique_search = Array.isArray(FilterParties) && FilterParties.length ? findUnique(FilterParties, d => d.Title) : null;
 
     const DateHandler = async (e) => {
         if (e.getTime() >= DateFrom.getTime() && DateFrom.getTime() <= e.getTime())
             setDateTo(e)
         else { setDateFrom(e); setDateTo(e) }
     }
-
-    const getTotal = () => {
-        if (!Array.isArray(Data?.Expense) || !Data?.Expense.length) return 0.00;
-        return Data.Expense.reduce((acc, { total_dr }) => acc + parseFloat(total_dr), 0.00);
-    };
 
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">
@@ -246,18 +220,22 @@ const BalanceSheet = ({ date_from = oneMonthAgo, date_to = today, user }) => {
                                     </tr>
                                     <tr>
                                         <td className='border'>Stock </td>
-                                        <td className='border'><span>{Data?.Stock ? parseFloat(Data.Stock).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00}</span></td>
+                                        <td className='border'><span>{Data?.Stock ? parseFloat((Data.Stock).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00}</span></td>
                                     </tr>
                                     <tr>
                                         <td className='border'>Yard Stock </td>
-                                        <td className='border'><span>{Data?.YardStock ? parseFloat(Data.YardStock).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00}</span></td>
+                                        <td className='border'><span>{Data?.YardStock ? parseFloat((Data.YardStock).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td className='border'>Receivable </td>
+                                        <td className='border'><span>{Data?.Receivable ? parseFloat(Data.Receivable).toLocaleString("en", { minimumFractionDigits: 2 }) : 0.00}</span></td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr className="text-center text-uppercase border">
                             <th colSpan={2} className="p-1 border-right fw-bolder"><span>Total Current Assets </span></th>
-                            <th className="p-1 border-right text-right fw-bolder"><span>{CurrentAssets && CurrentAssets.toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
+                            <th className="p-1 border-right text-right fw-bolder"><span>{CurrentAssets && parseFloat(CurrentAssets.toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
                         </tr>
                         <tr className="text-center text-uppercase border">
                             <th colSpan={2} className="p-1 border-right fw-bolder"><span>Fixed Assets </span></th>
@@ -265,7 +243,7 @@ const BalanceSheet = ({ date_from = oneMonthAgo, date_to = today, user }) => {
                         </tr>
                         <tr className="text-center text-uppercase border">
                             <th colSpan={2} className="p-1 border-right fw-bolder"><span>Assets </span></th>
-                            <th className="p-1 border-right text-right fw-bolder"><span>{Assets && Assets.toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
+                            <th className="p-1 border-right text-right fw-bolder"><span>{Assets && parseFloat(Assets.toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
                         </tr>
 
                         <tr className="text-center text-uppercase border">
@@ -301,8 +279,8 @@ const BalanceSheet = ({ date_from = oneMonthAgo, date_to = today, user }) => {
                         </tr>
 
                         <tr className="text-center text-uppercase border">
-                            <th colSpan={2} className="p-1 border-right fw-bolder"><span>Total Assets </span></th>
-                            <th className="p-1 border-right text-right fw-bolder"><span>{TotalAssets && TotalAssets.toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
+                            <th colSpan={2} className="p-1 border-right fw-bolder"><span>Total </span></th>
+                            <th className="p-1 border-right text-right fw-bolder"><span>{TotalAssets && (TotalAssets.toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 })} </span></th>
                         </tr>
 
                     </thead>

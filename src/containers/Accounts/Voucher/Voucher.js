@@ -14,40 +14,37 @@ import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
 import { InfoMessage } from "../../Modals/ModalForm.js";
 import { customHeader, locales } from "../../Suppliers/Class/datepicker";
-
-// import required css from library
 import "react-datepicker/dist/react-datepicker.css";
-
 let today = new Date();
 
 const Voucher = ({ list, setList }) => {
     const [InfoModalShow, setInfoModalShow] = useState(false);
     const [Error, setError] = useState({});
-    const [Sister, setSister] = useState(false)
-    const [Sector, setSector] = useState(false)
-    const [ConsType, setConsType] = useState(false)
-    const [Transact, setTransact] = useState(false)
+    const [Sister, setSister] = useState(false);
+    const [Sector, setSector] = useState(false);
+    const [ConsType, setConsType] = useState(false);
+    const [Transact, setTransact] = useState(false);
 
-    const [Reference, setReference] = useState("")
-    const [VoucherType, setVoucherType] = useState(null)
-    const [Date, setDate] = useState(today)
-    const [Name, setName] = useState('')
-    const [PaymentMethod, setPaymentMethod] = useState('')
-    const [Narration, setNarration] = useState('')
+    const [Reference, setReference] = useState("");
+    const [VoucherType, setVoucherType] = useState(null);
+    const [Date, setDate] = useState(today);
+    const [Name, setName] = useState('');
+    const [PaymentMethod, setPaymentMethod] = useState('');
+    const [Narration, setNarration] = useState('');
 
     const initialValue = { value: 0, label: "" };
-    const [BankLists, setBankLists] = useState(initialValue)
-    const [Bank, setBank] = useState(false)
-    const [ACName, setACName] = useState('')
-    const [ACNumber, setACNumber] = useState('')
-    const [ChequeNo, setChequeNo] = useState('')
-    const [TrxNo, setTrxNo] = useState('')
+    const [BankLists, setBankLists] = useState(initialValue);
+    const [Bank, setBank] = useState(false);
+    const [ACName, setACName] = useState('');
+    const [ACNumber, setACNumber] = useState('');
+    const [ChequeNo, setChequeNo] = useState('');
+    const [TrxNo, setTrxNo] = useState('');
     const [locale, setLocale] = useState('en');
-    let [AccData, setAccData] = useState([])
-    const [AccLists, setAccLists] = useState(null)
-    const [ConsigneeList, setConsigneeList] = useState(null)
-    const [SisterList, setSisterList] = useState(null)
-    const [SectorList, setSectorList] = useState(null)
+    let [AccData, setAccData] = useState([]);
+    const [AccLists, setAccLists] = useState(null);
+    const [ConsigneeList, setConsigneeList] = useState(null);
+    const [SisterList, setSisterList] = useState(null);
+    const [SectorList, setSectorList] = useState(null);
 
     let Count = AccData.length;
     let toastProperties = null;
@@ -89,6 +86,7 @@ const Voucher = ({ list, setList }) => {
             }
         })
     }
+
     const LoadConcern = async () => {
         var result = await FetchConcern();
         if (result !== true) {
@@ -711,6 +709,7 @@ const Voucher = ({ list, setList }) => {
         </div >
     )
 }
+
 const mapStateToProps = (state, props) => ({
     display: state.OverlayDisplay,
     BisID: props.match.params.id

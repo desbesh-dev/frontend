@@ -557,31 +557,17 @@ const RetailSell = ({ user, list, setList }) => {
             if (result !== true) {
                 if (result.error) {
                     const updatedState = {};
-                    for (var pair of result.exception.entries()) {
-                        updatedState[pair[1].field] = pair[1].message;
+                    if (result.exception && typeof result.exception === 'object') {
+                        for (const field in result.exception) {
+                            if (result.exception.hasOwnProperty(field)) {
+                                updatedState[field] = result.exception[field].message;
+                            }
+                        }
                         setError({ ...updatedState });
                     }
-                    setList([
-                        ...list,
-                        toastProperties = {
-                            id: 1,
-                            title: "Invalid Data",
-                            description: result.message,
-                            backgroundColor: "#f0ad4e",
-                            icon: warningIcon
-                        }
-                    ]);
+                    setList([...list, { id: 1, title: "Invalid", description: result.message, backgroundColor: "#f0ad4e", icon: warningIcon }]);
                 } else {
-                    setList([
-                        ...list,
-                        toastProperties = {
-                            id: 1,
-                            title: result.Title,
-                            description: result.message,
-                            backgroundColor: "#f0ad4e",
-                            icon: result.ico === 1 ? infoIcon : successIcon
-                        }
-                    ]);
+                    setList([...list, toastProperties = { id: 1, title: result.Title, description: result.message, backgroundColor: "#f0ad4e", icon: result.ico === 1 ? infoIcon : successIcon }]);
                     setSaveGrandTotal(result.CallBack.GrandTotal)
                     setSavePaidAmount(result.CallBack.PaidAmount)
                     setSaveChangeAmt(result.CallBack.RefundAmount)
@@ -593,15 +579,14 @@ const RetailSell = ({ user, list, setList }) => {
                     setCash(0.00)
                 }
             } else {
-                setList([
-                    ...list,
-                    toastProperties = {
-                        id: 1,
-                        title: "Error",
-                        description: "Failed to save invoice. Please try after some moment.",
-                        backgroundColor: "#f0ad4e",
-                        icon: errorIcon
-                    }
+                setList([...list,
+                toastProperties = {
+                    id: 1,
+                    title: "Error",
+                    description: "Failed to save invoice. Please try after some moment.",
+                    backgroundColor: "#f0ad4e",
+                    icon: errorIcon
+                }
                 ]);
                 setPaid(0.00)
                 setBank(0.00)

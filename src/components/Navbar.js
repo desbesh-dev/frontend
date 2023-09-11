@@ -166,14 +166,26 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 								</div>
 							</div>
 
-
 							<div className='d-flex align-items-center py-1'>
 								<Link className="fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" to="/counter_list"><i className="fs-5 fal fa-desktop fa-fw pr-1"></i> Counters </Link>
 							</div>
 							{no === 8 &&
-								<div className='d-flex align-items-center py-1'>
-									<Link className="fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" to="/cash_flow"><i className="fs-5 fad fa-repeat-alt fa-fw"></i> Cash Flow </Link>
-								</div>
+								<>
+									<div className='d-flex align-items-center py-1'>
+										<Link className="fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" to="/cash_flow"><i className="fs-5 fad fa-repeat-alt fa-fw"></i> Cash Flow </Link>
+									</div>
+									<div className='d-flex align-items-center py-1'>
+										<button className="btn fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" onClick={(e) => setExpand(Expand === "Accounts" ? false : "Accounts")}><i className="fad fa-calculator-alt pr-1"></i> Accounts </button>
+										<i className={`fad ${Expand === "Accounts" ? "fa-minus" : "fa-plus"}  text-right mr-2`}></i>
+									</div>
+									<div className={`border ${Expand === "Accounts" ? "d-flex flex-column" : "d-none"}`}>
+										<div className='d-flex border'>
+											<Link className="row btn btn-outline-success m-0" id="grid_menu"><i className="fad fa-calculator"></i> A/C-Summary</Link>
+											<Link className="row btn btn-outline-success m-0" id="grid_menu" to='#'><i className="fad fa-project-diagram"></i> Voucher</Link>
+											<Link className="row btn btn-outline-success m-0" to='/ledger' id="grid_menu"><i className="fab fa-wpforms"></i> Ledger</Link>
+										</div>
+									</div>
+								</>
 							}
 
 							{no <= 7 &&
@@ -294,6 +306,9 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 										<i className={`fad ${Expand === "Statement" ? "fa-minus" : "fa-plus"}  text-right mr-2`}></i>
 									</div>
 									<div className={`border ${Expand === "Statement" ? "d-flex flex-column" : "d-none"}`}>
+										<div className='d-flex border'>
+											<Link className="row btn btn-outline-success m-0 w-100" id="grid_menu" to="/trial_balance"><i class="fad fa-balance-scale"></i> Trial Balance</Link>
+										</div>
 										<div className='d-flex border'>
 											<Link className="row btn btn-outline-success m-0" id="grid_menu" to="/inc_statement"><i className="fad fa-analytics"></i> Income Statement</Link>
 											<Link className="row btn btn-outline-success m-0" id="grid_menu" to="/bal_sheet"><i className="fad fa-balance-scale"></i> Balance Sheet</Link>

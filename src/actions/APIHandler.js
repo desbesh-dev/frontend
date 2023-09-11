@@ -1411,17 +1411,40 @@ export const FetchSupplierLadger = async (SupplierID, date_from, date_to) => {
     }
 }
 
-export const FetchCashFlow = async (COA_ID, Date) => {
+// export const FetchCashFlow = async (COA_ID, Date) => {
+//     const config = {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': `Bearer ${localStorage.getItem('access')}`
+//             // 'Accept': 'application/json'
+//         }
+//     };
+
+//     try {
+//         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/cash_flow/${COA_ID}/${Date}`, config);
+//         return res
+//     } catch (err) {
+//         return true;
+//     }
+// }
+
+export const FetchCashFlow = async (sis_id, sect_id, account_type, date) => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('access')}`
             // 'Accept': 'application/json'
-        }
+        },
+        params: {
+            account_type: account_type ? account_type.value : 3,
+            sis_id: sis_id?.value,
+            sect_id: sect_id?.value,
+            date_from: date
+        },
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/cash_flow/${COA_ID}/${Date}`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/cash/cash_flow/`, config);
         return res
     } catch (err) {
         return true;
@@ -2061,6 +2084,75 @@ export const FetchLedger = async (COA_ID, date_from, date_to) => {
 
     try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/ladger/${COA_ID}/${date_from}/${date_to}`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
+export const FetchTrialBalance = async (date_from, date_to, sis_id, sect_id) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        },
+        params: {
+            date_from: date_from,
+            date_to: date_to,
+            sis_id: sis_id?.value,
+            sect_id: sect_id?.value
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/statement/trial_balance/`, config);
+        return res.data
+    } catch (err) {
+        return true;
+    }
+}
+
+export const FetchPartyOus = async (date_from, date_to, sis_id, sect_id) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        },
+        params: {
+            date_from: date_from,
+            date_to: date_to,
+            sis_id: sis_id?.value,
+            sect_id: sect_id?.value
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/statement/party_ous/`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
+export const FetchSupplierOus = async (date_from, date_to, sis_id, sect_id) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        },
+        params: {
+            date_from: date_from,
+            date_to: date_to,
+            sis_id: sis_id?.value,
+            sect_id: sect_id?.value
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/statement/supplier_ous/`, config);
         return res
     } catch (err) {
         return true;
