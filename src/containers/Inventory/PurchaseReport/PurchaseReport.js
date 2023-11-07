@@ -260,8 +260,8 @@ const PurchaseReport = ({ list, setList, no }) => {
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Qty</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Weight</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Amount</span></th>
-                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Vat</span></th>
-                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Discount</span></th>
+                                        {/* <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Vat</span></th> */}
+                                        {/* <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Discount</span></th> */}
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Paid</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Due</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Credit</span></th>
@@ -277,22 +277,22 @@ const PurchaseReport = ({ list, setList, no }) => {
                                         Data.results.map((item, i) => (
                                             <tr className="border-bottom text-center" key={i}>
                                                 <td className="border-right p-1" style={{ whiteSpace: 'nowrap' }}><span className="d-block fs-6 fw-bold text-center text-dark p-0">{moment(item.RcvDate).format('DD MMM YYYY')}</span></td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-left text-dark p-0">{item.SupplierTitle}</span></td>
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-left text-dark text-nowrap p-0">{item.SupplierTitle}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-left text-dark p-0">{item.PurchaseNo}</span> </td>
 
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-left text-dark p-0">{item.InvoiceNo}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.Qty).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.Weight).toLocaleString("en", { minimumFractionDigits: 3 })}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.Vat).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
+                                                {/* <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.Vat).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td> */}
+                                                {/* <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td> */}
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.PaidAmount).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.Due).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.RefundAmount).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0">{getLabel(parseInt(item.Payment), PaymentTerms)}</span></td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0">{item.Receiver}</span></td>
-                                                {no <= 7 && <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0">{item.SectorNo + ". " + item.SectorTitle}</span></td>}
-                                                <td className="p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0">
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark text-nowrap p-0">{getLabel(parseInt(item.Payment), PaymentTerms)}</span></td>
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark text-nowrap p-0">{item.Receiver}</span></td>
+                                                {no <= 7 && <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark text-nowrap p-0">{item.SectorNo + ". " + item.SectorTitle}</span></td>}
+                                                <td className="p-1"><span className="d-block fs-6 fw-bold text-center text-dark text-nowrap p-0">
                                                     <button title="Delete Invoice" className="btn fs-5 px-2 py-0 fad fa-trash-alt text-dark" onClick={() => { setDeleteData(item); setDeleteModalShow(true) }} />
                                                     <button title="Print Invoice" className="btn fs-5 px-2 py-0 fad fa-print text-dark" onClick={(e) => GetInvoiceData(e, item)} />
                                                     <Link title="Show Invoice" className="btn fs-5 px-2 py-0 fad fa-eye text-dark" id="view" to={`/purs_invoice_preview/${item.id}`} />

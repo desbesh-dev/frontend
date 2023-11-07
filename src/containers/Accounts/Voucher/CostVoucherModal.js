@@ -6,6 +6,7 @@ import errorIcon from '../../../assets/error.png';
 import infoIcon from '../../../assets/info.png';
 import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 
 let today = new Date();
 
@@ -121,23 +122,6 @@ export const CostVoucherModal = (props) => {
         }
     }
 
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuPortal: base => ({ ...base, zIndex: 9999 }),
-        option: (provided, state) => ({
-            ...provided,
-            color: state.isSelected ? '#000' : '#333',
-            backgroundColor: state.isSelected ? 'whitesmoke' : '#fff',
-            ':hover': {
-                backgroundColor: state.isSelected ? 'whitesmoke' : '#f8f9fa'
-            }
-        })
-    }
-
     const Clearfiled = () => {
         setAccount(null)
         setAmount('')
@@ -200,7 +184,7 @@ export const CostVoucherModal = (props) => {
                                         options={AccLists}
                                         name="Account"
                                         placeholder={"Select account"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Account}
                                         onChange={(e) => setAccount(e)}
                                         required
@@ -238,7 +222,7 @@ export const CostVoucherModal = (props) => {
                                         options={[{ label: "Cash", value: 1 }, { label: "Bank", value: 2 }]}
                                         name="PaymentMethod"
                                         placeholder={"Select Payment"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         // value={SectorID ? { label: SectorID.label, value: SectorID.value } : null}
                                         onChange={e => setPaymentMethod(e)}
                                         required
@@ -258,7 +242,7 @@ export const CostVoucherModal = (props) => {
                                         options={ConsigneeList}
                                         name="Staff"
                                         placeholder={"Select staff"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Staff}
                                         onChange={e => setStaff(e)}
                                         required

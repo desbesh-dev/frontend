@@ -1,20 +1,14 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
-import Select from 'react-select';
-import { checkToken } from '../../../../../../actions/auth';
-import { ReturnPursItem, ReturnSellItem, UpdateStock } from '../../../../../../actions/InventoryAPI';
 import moment from "moment";
-import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
-import { DISPLAY_OVERLAY } from '../../../../../../actions/types';
+import { useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { AddNote } from "../../../../../../actions/APIHandler";
+import { ReturnPursItem } from '../../../../../../actions/InventoryAPI';
 import errorIcon from '../../../../../../assets/error.png';
 import infoIcon from '../../../../../../assets/info.png';
 import successIcon from '../../../../../../assets/success.png';
 import warningIcon from '../../../../../../assets/warning.gif';
-import { AddNote } from "../../../../../../actions/APIHandler";
 
 export const EditModal = (props) => {
-
     const UnitWt = (parseFloat(props.EditData.Weight) / parseFloat(props.EditData.UnitQty)).toFixed(2)
     const [id, setID] = useState(props.EditData.id ? props.EditData.id : null)
     const [ItemID, setItemID] = useState(props.EditData.ItemID ? props.EditData.ItemID : null)
@@ -32,7 +26,6 @@ export const EditModal = (props) => {
     const [Error, setError] = useState({});
 
     let toastProperties = null;
-    const dispatch = useDispatch();
 
     const PropLoadSet = (e) => {
         e.preventDefault();
@@ -99,6 +92,7 @@ export const EditModal = (props) => {
         if (e.target.value <= props.EditData.Qty) {
             setError({});
             let weight = props.EditData.UnitWeight * e.target.value
+            weight = parseFloat(weight).toFixed(2)
             let Total = e.target.value * props.EditData.Rate
             setWeight(weight)
             setQty(e.target.value)
@@ -114,7 +108,6 @@ export const EditModal = (props) => {
             setError({ Qty: "Quantity can not large then " + props.EditData.Qty })
         }
     }
-
 
     return (
         <Modal
@@ -134,7 +127,7 @@ export const EditModal = (props) => {
                         <small className="fs-5 fw-bold text-center text-success px-0">{props.EditData.Title}</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Quantity</label>
+                                <label htmlFor="message-text" class="col-form-label">Quantity</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -143,7 +136,6 @@ export const EditModal = (props) => {
                                     placeholder='Quantity'
                                     value={Qty}
                                     onChange={(e) => QuantityCalc(e)}
-                                // onBlur={(e) => QtyValidate(e)}
                                 />
                                 {Error.Qty ?
                                     <p className='mx-auto d-table text-center text-warning m-0'><small>{Error.Qty}</small></p>
@@ -151,7 +143,7 @@ export const EditModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Weight</label>
+                                <label htmlFor="message-text" class="col-form-label">Weight</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -167,7 +159,7 @@ export const EditModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Reason for Return</label>
+                                <label htmlFor="message-text" class="col-form-label">Reason for Return</label>
                                 <textarea
                                     rows="5"
                                     class="form-control fw-bold"
@@ -195,6 +187,8 @@ export const EditModal = (props) => {
         </Modal >
     );
 }
+
+
 
 export const DeleteModal = (props) => {
     return (
@@ -355,7 +349,7 @@ export const CreateNote = (props) => {
                         <p className="fs-6 text-center fw-bold text-dark m-0">Amount: <span className="fw-bolder"> {parseFloat(props.item.Amount).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span></p>
                     </div>
                     <div className="form-group">
-                        <label for="Details" class="col-form-label">Details</label>
+                        <label htmlFor="Details" class="col-form-label">Details</label>
                         <textarea
                             rows="2"
                             class="form-control"
@@ -371,7 +365,7 @@ export const CreateNote = (props) => {
                     </div>
 
                     <div className="form-group">
-                        <label for="Advice" class="col-form-label">Request</label>
+                        <label htmlFor="Advice" class="col-form-label">Request</label>
                         <textarea
                             rows="2"
                             class="form-control"

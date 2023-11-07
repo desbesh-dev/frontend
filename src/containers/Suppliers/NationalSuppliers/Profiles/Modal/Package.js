@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Modal } from "react-bootstrap";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CreatePackage, FetchPack, FetchPackNPrice, SavePackage } from "../../../../../actions/SuppliersAPI";
 import { DISPLAY_OVERLAY } from '../../../../../actions/types';
 import errorIcon from '../../../../../assets/error.png';
@@ -8,6 +8,7 @@ import successIcon from '../../../../../assets/success.png';
 import warningIcon from '../../../../../assets/warning.gif';
 
 export const ViewPack = (props) => {
+    const { no, sub_scale } = useSelector((state) => state.auth);
 
     const [Error, setError] = useState({});
     const [Exist, setExist] = useState(false);
@@ -75,7 +76,7 @@ export const ViewPack = (props) => {
             setExist(true)
             setFormData({
                 ItemID: pack.ItemID,
-                PurchasePrice: pack.PurchasePrice,
+                PurchasePrice: no < 11 ? pack.PurchasePrice : 'N/A',
                 MRP: pack.MRP,
                 RetailPrice: pack.RetailPrice,
 

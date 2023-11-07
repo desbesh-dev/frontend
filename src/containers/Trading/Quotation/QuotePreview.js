@@ -1,9 +1,9 @@
-import { FetchPrintOrder, FetchPrintQuote } from '../../../actions/PartyAPI';
 import * as moment from 'moment';
 import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { DispatchInvoiceDelete } from '../../../actions/ContractAPI';
+import { FetchPrintOrder, FetchPrintQuote } from '../../../actions/PartyAPI';
 import { logout } from '../../../actions/auth';
 import { DISPLAY_OVERLAY } from '../../../actions/types';
 import errorIcon from '../../../assets/error.png';
@@ -21,38 +21,15 @@ import { DeleteModal } from "./Modals/ModalForm.js";
 const QuotePreview = ({ user, list, setList, QuoteID }) => {
     const [NoteItem, setNoteItem] = useState(false);
     const [NoteModalShow, setNoteModalShow] = useState(false);
-
     const [DeleteModalShow, setDeleteModalShow] = useState(false);
-    const [EditModalShow, setEditModalShow] = useState(false);
-    const [InfoModalShow, setInfoModalShow] = useState(false);
-
-    const [RemoveModalShow, setRemoveModalShow] = useState(false);
-    const [ItemID, setItemID] = useState(false);
 
     const [showFullAddress, setShowFullAddress] = useState(false);
     const initialValue = { value: 0, label: "" };
     const [Data, setData] = useState(false)
     const [Item, setItem] = useState(false)
     const [DeleteData, setDeleteData] = useState(false)
-    const [StockItem, setStockItem] = useState(false)
     const [SellMapData, setSellMapData] = useState([])
-    const [Count, setCount] = useState(null)
-    const [Error, setError] = useState({});
 
-
-    const [SellMapReturn, setSellMapReturn] = useState([])
-    const [InvoiceNo, setInvoiceNo] = useState(0)
-    const [Receiver, setReceiver] = useState(null)
-    const [Payment, setPayment] = useState({ label: "Cash", value: 14 })
-    const [Percent, setPercent] = useState(null)
-    const [Vat, setVat] = useState(null)
-    const [Discount, setDiscount] = useState(null)
-    const [Total, setTotal] = useState(0.00)
-    const [Paid, setPaid] = useState(0.00)
-    const [Due, setDue] = useState(0.00)
-    const [RefundAmount, setRefundAmount] = useState(0.00)
-
-    const [SearchKey, setSearchKey] = useState(false)
     let toastProperties = null;
 
     const dispatch = useDispatch();
@@ -152,7 +129,7 @@ const QuotePreview = ({ user, list, setList, QuoteID }) => {
                         Data.OrderID &&
                         <button title="View Order" className="btn fs-3 px-3 py-0 fad fa-file-alt text-dark border-right" id="View Order" onClick={(e) => PrintOrder(e, Data.OrderID)} />
                     }
-                    {Data.PartyID &&
+                    {(Data.PartyID || (Data.Name && Data.Address)) &&
                         <>
                             <button title="Save PDF" className="btn fs-3 px-3 py-0 fad fa-file-pdf text-dark border-right" id="Save PDF" onClick={(e) => InvoicePrint(e, Data, true)} />
                             <button title="Print" className="btn fs-3 px-3 py-0 fad fa-print text-dark" id="Print" onClick={(e) => InvoicePrint(e, Data, false)} />

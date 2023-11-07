@@ -4,7 +4,7 @@ import { Modal } from "react-bootstrap";
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
-import { getBranch, LoadBanks, SaveBisBank } from '../../../../actions/APIHandler';
+import { LoadBanks, SaveBisBank, getBranch } from '../../../../actions/APIHandler';
 import { DISPLAY_OVERLAY } from '../../../../actions/types';
 import errorIcon from '../../../../assets/error.png';
 import successIcon from '../../../../assets/success.png';
@@ -134,7 +134,7 @@ export const AddBankModal = (props) => {
                         <small className="text-center px-0">(*) Mark field are mandatory</small>
                         <form>
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">Bank Name</label>
+                                <label htmlFor="IssueDate" class="col-form-label">Bank Name</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -154,7 +154,7 @@ export const AddBankModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">Branch Name</label>
+                                <label htmlFor="IssueDate" class="col-form-label">Branch Name</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -174,7 +174,7 @@ export const AddBankModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Account Name</label>
+                                <label htmlFor="message-text" class="col-form-label">Account Name</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -189,7 +189,7 @@ export const AddBankModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Account Number</label>
+                                <label htmlFor="message-text" class="col-form-label">Account Number</label>
                                 <input
                                     type="number"
                                     class="form-control fw-bold"

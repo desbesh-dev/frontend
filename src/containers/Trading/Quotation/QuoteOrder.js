@@ -24,6 +24,7 @@ import { DiscountModal } from './../ViewInvoice/Modals/ModalForm';
 import 'react-virtualized-select/styles.css';
 import { FetchPrintQuote } from '../../../actions/PartyAPI';
 import '../../../hocs/react-select/dist/react-select.css';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 
 let today = new Date();
 
@@ -31,7 +32,6 @@ const QuoteOrder = ({ PartyID, QuoteID, user, list, setList }) => {
     const [NotPayed, setNotPayed] = useState(false);
     const [InvalidModalShow, setInvalidModalShow] = useState(false);
     const [InfoModalShow, setInfoModalShow] = useState(false);
-    const [Supplier, setSupplier] = useState(null)
     const [Error, setError] = useState({});
     const [MyProList, setMyProList] = useState([])
     const [PartyData, setPartyData] = useState()
@@ -42,7 +42,6 @@ const QuoteOrder = ({ PartyID, QuoteID, user, list, setList }) => {
     const [OrderDate, setOrderDate] = useState(today)
     const [DeliveryDate, setDeliveryDate] = useState(today)
     const [OrderNo, setInvoiceNo] = useState(0)
-    const [Receiver, setReceiver] = useState(null)
     const [Payment, setPayment] = useState({ label: "COD (Cash on delivery)", value: 12 })
     const [Percent, setPercent] = useState(null)
     const [Vat, setVat] = useState(null)
@@ -55,7 +54,6 @@ const QuoteOrder = ({ PartyID, QuoteID, user, list, setList }) => {
     const [Available, setAvailable] = useState(0)
     const [DiscPrct, setDiscPrct] = useState(0)
     const [SpecialValue, setSpecialValue] = useState(0)
-    const [SellWeight, setSellWeight] = useState(0)
     const [AutoFire, setAutoFire] = useState(0)
     const [WalkIN, setWalkIN] = useState(false)
     const [kode, setCode] = useState('')
@@ -167,18 +165,6 @@ const QuoteOrder = ({ PartyID, QuoteID, user, list, setList }) => {
         }
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
-
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuList: provided => ({
-            ...provided,
-            backgroundColor: 'white',
-        }),
-    };
 
     const handleKeyDown = (e) => {
         if (e.keyCode === 13) {
@@ -861,7 +847,7 @@ const QuoteOrder = ({ PartyID, QuoteID, user, list, setList }) => {
                                         </tr>
                                         <tr className="text-center border-success bg-white">
                                             <td className="py-0 px-1 border-right" colSpan="5"><span className="d-block text-right">10% GST Included </span> </td>
-                                            <td className="py-0 d-flex justify-content-end border-right" style={{ width: "160px" }}><input style={{ width: "140px" }} disabled type="text" autocomplete="off" className="d-block text-right border-0" id="Vat" value={Vat} onChange={(e) => VatCalc(e)} /></td>
+                                            <td className="py-0 d-flex justify-content-end border-right" style={{ width: "160px" }}><input style={{ width: "140px" }} disabled type="text" autocomplete="off" className="d-block text-right border-0" id="Vat" value={(parseFloat(getTotal()) * 0.10).toFixed(2)} onChange={(e) => VatCalc(e)} /></td>
                                         </tr>
                                         <tr className="text-center border-success bg-white">
                                             <td className="py-0 px-1 border-right" colSpan="5"><span className="d-block text-right ">Discount (K) </span> </td>
@@ -974,7 +960,7 @@ const QuoteOrder = ({ PartyID, QuoteID, user, list, setList }) => {
                                             options={MyProList}
                                             name="Title"
                                             placeholder={"Please select product"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={Title}
                                             onChange={(e) => { if (e) { DropdownAction(e.value); setFormData(e); } }}
                                             required
@@ -1074,7 +1060,7 @@ const QuoteOrder = ({ PartyID, QuoteID, user, list, setList }) => {
                                                 options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, ...(PartyData?.IsDispatchable ? [{ label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }] : [])]}
                                                 name="Remark"
                                                 placeholder={"Please select product"}
-                                                styles={CScolourStyles}
+                                                styles={GeneralColourStyles}
                                                 value={{ label: Remark, value: 0 }}
                                                 onChange={(e) => RemarkToggle(e)}
                                                 isDisabled={!PartyData?.IsDispatchable}
@@ -1187,7 +1173,7 @@ const QuoteOrder = ({ PartyID, QuoteID, user, list, setList }) => {
                                                     options={PaymentTerms}
                                                     name="Payment"
                                                     placeholder={"Payment Type"}
-                                                    styles={CScolourStyles}
+                                                    styles={GeneralColourStyles}
                                                     value={Payment}
                                                     onChange={(e) => setPayment(e)}
                                                     required

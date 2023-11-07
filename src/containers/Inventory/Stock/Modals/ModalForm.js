@@ -4,7 +4,6 @@ import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
-import VirtualizedSelect from "react-virtualized-select";
 import 'react-virtualized-select/styles.css';
 import { FetchSector, InitProductList, fetchServerTimestamp } from "../../../../actions/APIHandler";
 import { FetchProductInit, ProductInit, UpdateStock } from '../../../../actions/InventoryAPI';
@@ -12,6 +11,7 @@ import { DISPLAY_OVERLAY } from '../../../../actions/types';
 import errorIcon from '../../../../assets/error.png';
 import successIcon from '../../../../assets/success.png';
 import warningIcon from '../../../../assets/warning.gif';
+import { CustomMenuList } from '../../../../hocs/Class/CustomMenuList';
 import '../../../../hocs/react-select/dist/react-select.css';
 
 export const InitProductModal = (props) => {
@@ -97,6 +97,55 @@ export const InitProductModal = (props) => {
             }
         }
     }
+
+    const CScolourStyles = {
+        container: base => ({
+            ...base,
+            flex: 1,
+            fontWeight: "500"
+        }),
+        menuList: provided => ({
+            ...provided,
+            backgroundColor: 'white',
+        }),
+        option: (provided, state) => {
+            let backgroundColor = state.isSelected ? '#6495ED' : 'transparent';
+            let color = state.isSelected ? 'whitesmoke' : '#333';
+            let scale = state.isSelected ? 'scale(1)' : 'scale(1.01)';
+
+            if (state.isFocused) {
+                backgroundColor = '#6495ED';
+                color = 'whitesmoke';
+                scale = 'scale(1.01)';
+            }
+
+            return {
+                ...provided,
+                color,
+                backgroundColor,
+                paddingTop: "5px",
+                paddingBottom: "5px",
+                cursor: 'pointer',
+                ':focus': {
+                    backgroundColor: '#6495ED',
+                    color: '#fff',
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                },
+                ':hover': {
+                    backgroundColor: '#6495ED',
+                    color: '#fff',
+                    paddingTop: "5px",
+                    paddingBottom: "5px"
+                },
+            };
+        },
+        control: styles => ({ ...styles, backgroundColor: "#F4F7FC", border: 0, boxShadow: 'none', fontWeight: "bold", minHeight: "fit-content", minWidth: "30vh", borderRadius: '20px' }),
+        indicatorsContainer: (provided) => ({
+            ...provided,
+            cursor: 'pointer',
+        }),
+    };
 
     const QuantityCalc = (e) => {
         let weight = UnitWeight * e.target.value
@@ -218,6 +267,10 @@ export const InitProductModal = (props) => {
     const handleFocusSelect = (e) => {
         e.target.select();
     };
+    MyProList.forEach(option => {
+        option.combinedLabel = `${option.label} (${option.value})`;
+    });
+    const sortedOptions = SectorList?.sort((a, b) => a.label.localeCompare(b.label));
 
     return (
         <Modal
@@ -242,7 +295,7 @@ export const InitProductModal = (props) => {
                                         <Select
                                             menuPortalTarget={document.body}
                                             borderRadius={'0px'}
-                                            options={SectorList}
+                                            options={sortedOptions}
                                             name='Site'
                                             placeholder={"Select site"}
                                             styles={colourStyles}
@@ -252,36 +305,28 @@ export const InitProductModal = (props) => {
                                     </div>
                                 </div>
                                 <div className="col-md-7">
-                                    <div className="form-group">
-                                        <VirtualizedSelect
-                                            style={{
-                                                borderRadius: '25px',
-                                                border: '1px solid #fff', // optional border styling
-                                                backgroundColor: '#F4F7FC'
-                                            }}
-
-                                            menuContainerStyle={{
-                                                borderRadius: '10px',
-                                                maxHeight: 'none', // removes the maximum height
-                                                overflowY: 'visible' // allows the dropdown to expand beyond the visible area
-                                            }}
-                                            options={MyProList}
-                                            name="Title"
-                                            menuBuffer={100}
-                                            required
-                                            id="Title"
-                                            value={Title}
-                                            optionLabel="combinedLabel"
-                                            onChange={e => LoadItem(e.value)}
-                                        />
-                                    </div>
+                                    <Select
+                                        options={MyProList}
+                                        name="Title"
+                                        placeholder={"Please select product"}
+                                        styles={CScolourStyles}
+                                        value={Title}
+                                        onChange={e => LoadItem(e && e.value)}
+                                        required
+                                        id="Title"
+                                        isClearable={true}
+                                        isSearchable={true}
+                                        components={{ MenuList: CustomMenuList }}
+                                        optionLabel="combinedLabel"
+                                        maxMenuHeight={40 * 35}
+                                    />
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center">Item Code</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center">Item Code</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -302,7 +347,7 @@ export const InitProductModal = (props) => {
 
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Unit Weight</label>
+                                        <label htmlFor="message-text" className="col-form-label">Unit Weight</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -320,7 +365,7 @@ export const InitProductModal = (props) => {
 
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Unit Price</label>
+                                        <label htmlFor="message-text" className="col-form-label">Unit Price</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -340,7 +385,7 @@ export const InitProductModal = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Quantity</label>
+                                        <label htmlFor="message-text" className="col-form-label">Quantity</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -358,7 +403,7 @@ export const InitProductModal = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Weight</label>
+                                        <label htmlFor="message-text" className="col-form-label">Weight</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -375,7 +420,7 @@ export const InitProductModal = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">SubTotal</label>
+                                        <label htmlFor="message-text" className="col-form-label">SubTotal</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -392,7 +437,7 @@ export const InitProductModal = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Minimum Quantity</label>
+                                        <label htmlFor="message-text" className="col-form-label">Minimum Quantity</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -409,18 +454,18 @@ export const InitProductModal = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Initial Stock</label>
+                                        <label htmlFor="message-text" className="col-form-label">Initial Stock</label>
                                         <p className='m-0 p-0 fw-bold text-dark'>{InitStock ?? parseFloat(InitStock).toLocaleString("en", { minimumFractionDigits: 2 })}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
-                                    <label for="message-text" className="col-form-label text-center mx-auto">Updated At</label>
+                                    <label htmlFor="message-text" className="col-form-label text-center mx-auto">Updated At</label>
                                     <p className='m-0 p-0 fw-bold text-dark'>{moment(UpdatedAt).format("hh:mm:ss A, DD MMM YYYY")}</p>
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Active Status</label>
+                                <label htmlFor="message-text" className="col-form-label">Active Status</label>
                                 <div className="form-check form-switch">
                                     <input
                                         className="form-check-input"
@@ -542,7 +587,7 @@ export const UpdateModal = (props) => {
                         <small className="text-center px-0">(Please fill up the desired field to update)</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Unit Price</label>
+                                <label htmlFor="message-text" class="col-form-label">Unit Price</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -558,7 +603,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Quantity</label>
+                                <label htmlFor="message-text" class="col-form-label">Quantity</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -574,7 +619,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Weight</label>
+                                <label htmlFor="message-text" class="col-form-label">Weight</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -591,7 +636,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Minimum Quantity</label>
+                                <label htmlFor="message-text" class="col-form-label">Minimum Quantity</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -607,7 +652,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Initial Stock</label>
+                                <label htmlFor="message-text" class="col-form-label">Initial Stock</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -623,7 +668,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Active Status</label>
+                                <label htmlFor="message-text" class="col-form-label">Active Status</label>
                                 <div className="form-check form-switch">
                                     <input
                                         class="form-check-input"

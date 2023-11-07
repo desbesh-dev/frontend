@@ -22,6 +22,7 @@ import { DiscountModal } from '../ViewInvoice/Modals/ModalForm';
 
 import 'react-virtualized-select/styles.css';
 import { FetchPrintPO } from '../../../actions/PartyAPI';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 import '../../../hocs/react-select/dist/react-select.css';
 
 let today = new Date();
@@ -35,7 +36,6 @@ const EditPursOrder = ({ user, list, setList, POID }) => {
     const [SupplierList, setSupplierList] = useState(false)
     const [Supplier, setSupplier] = useState('')
     const [WalkIN, setWalkIN] = useState(false)
-    const [PartyData, setPartyData] = useState()
     const [Subscriber, setSubscriber] = useState(false)
     const [SellInfo, setSellInfo] = useState(null)
 
@@ -52,7 +52,6 @@ const EditPursOrder = ({ user, list, setList, POID }) => {
     const [Due, setDue] = useState(0.00)
     const [Available, setAvailable] = useState(0)
     const [DiscPrct, setDiscPrct] = useState(0)
-    const [SpecialValue, setSpecialValue] = useState(0)
     const [AutoFire, setAutoFire] = useState(0)
     const [kode, setCode] = useState('')
 
@@ -61,7 +60,6 @@ const EditPursOrder = ({ user, list, setList, POID }) => {
     const [Name, setName] = useState('')
     const [Address, setAddress] = useState('')
 
-    const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
 
     let [PursData, setPursData] = useState([]);
@@ -70,12 +68,9 @@ const EditPursOrder = ({ user, list, setList, POID }) => {
     let toastProperties = null;
 
     const dispatch = useDispatch();
-    const NameFocus = useRef(null);
-    const AddressFocus = useRef(null);
     const QtyFocus = useRef(null);
     const PaidFocus = useRef(null);
     const CodeFocus = useRef(null);
-    const BarcodeFocus = useRef(null);
     const ProductFocus = useRef(null);
     const WalkInFocus = useRef(null);
     const AddRowFocus = useRef(null);
@@ -191,18 +186,6 @@ const EditPursOrder = ({ user, list, setList, POID }) => {
         }
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
-
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuList: provided => ({
-            ...provided,
-            backgroundColor: 'white',
-        }),
-    };
 
     const handleToggleAutoFire = () => {
         setAutoFire((AutoFire) => !AutoFire);
@@ -687,7 +670,7 @@ const EditPursOrder = ({ user, list, setList, POID }) => {
                                         options={MyProList}
                                         name="Title"
                                         placeholder={"Please select product"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Title}
                                         onChange={(e) => { if (e) { BarcodeAction(e.value); setFormData(e); } }}
                                         required
@@ -711,7 +694,7 @@ const EditPursOrder = ({ user, list, setList, POID }) => {
                                             options={PackageList ? PackageList : []}
                                             name="Title"
                                             placeholder={"Please select product"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={{ label: UnitName, value: UnitQty }}
                                             onChange={(e) => setFormData({ ...formData, "UnitQty": e.UnitQty, "UnitName": e.label, "UnitPrice": e.UnitPrice, "UnitWeight": e.UnitWeight, "Weight": e.UnitWeight * e.UnitQty, "SubTotal": e.UnitPrice * Qty })}
                                             required
@@ -807,7 +790,7 @@ const EditPursOrder = ({ user, list, setList, POID }) => {
                                         options={SupplierList && SupplierList.map((item) => ({ label: item.SupplierTitle, value: item.id, ...item }))}
                                         name="Supplier"
                                         placeholder={"Please select supplier"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Supplier}
                                         onChange={(e) => setSupplier(e)}
                                         required

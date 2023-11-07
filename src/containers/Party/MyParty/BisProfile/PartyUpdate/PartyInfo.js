@@ -1,16 +1,11 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
-import Select from 'react-select';
-import { checkToken } from '../../../../../actions/auth';
-import { UpdateContract, LoadCondList } from '../../../../../actions/ContractAPI';
-import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { useDispatch } from 'react-redux';
+import { UpdatePartyInfo } from "../../../../../actions/APIHandler";
 import { DISPLAY_OVERLAY } from '../../../../../actions/types';
 import errorIcon from '../../../../../assets/error.png';
-import infoIcon from '../../../../../assets/info.png';
 import successIcon from '../../../../../assets/success.png';
 import warningIcon from '../../../../../assets/warning.gif';
-import { UpdatePartyInfo } from "../../../../../actions/APIHandler";
 
 export const PartyInfo = (props) => {
 
@@ -101,7 +96,7 @@ export const PartyInfo = (props) => {
             <Modal.Body>
                 <form>
                     <div className="form-group">
-                        <label for="Title" class="col-form-label">Title</label>
+                        <label htmlFor="Title" class="col-form-label">Title</label>
                         <input
                             type="text"
                             class="form-control"
@@ -116,7 +111,7 @@ export const PartyInfo = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="Name" class="col-form-label">Name</label>
+                        <label htmlFor="Name" class="col-form-label">Name</label>
                         <input
                             type="text"
                             class="form-control"

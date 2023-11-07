@@ -6,7 +6,7 @@ import { connect, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import 'react-virtualized-select/styles.css';
-import { FetchInvoiceNo, Invoice, fetchServerTimestamp } from '../../../actions/APIHandler';
+import { Invoice, fetchServerTimestamp } from '../../../actions/APIHandler';
 import { FetchProduct, PaymentTerms } from '../../../actions/InventoryAPI';
 import { MyProductList } from '../../../actions/SuppliersAPI';
 import { logout } from '../../../actions/auth';
@@ -23,6 +23,7 @@ import { DiscountModal } from './../ViewInvoice/Modals/ModalForm';
 import { getLabel } from '../../../actions/ContractAPI';
 import { FetchOrderData } from '../../../actions/PartyAPI';
 import { CustomMenuList } from '../../../hocs/Class/CustomMenuList';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 import '../../../hocs/react-select/dist/react-select.css';
 import { InvoicePrint } from './../InvoicePrint';
 
@@ -106,7 +107,6 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
     let Count = Array.isArray(OrderData) && OrderData.length;
 
     useEffect(() => {
-        LoadInvoiceNo();
         document.addEventListener("keydown", handleShortKey);
         return () => {
             document.removeEventListener("keydown", handleShortKey);
@@ -114,7 +114,6 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
     }, [])
 
     useEffect(() => {
-        LoadInvoiceNo();
         GetOrderData();
     }, [])
 
@@ -127,6 +126,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
         DiscountCalc();
         ShipmentCalc();
     }, [OrderData]);
+
 
     useEffect(() => {
         if (GrantDisc && discFocus.current) {
@@ -160,29 +160,17 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
 
-    const LoadInvoiceNo = async () => {
-        dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        var result = await FetchInvoiceNo();
-        if (result !== true) {
-            setOrderNo(result.OrderNo)
-            setSellInfo(result)
-        } else {
-            // history.push('/farm_lists');
-        }
-        dispatch({ type: DISPLAY_OVERLAY, payload: false });
-    }
-
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuList: provided => ({
-            ...provided,
-            backgroundColor: 'white',
-        }),
-    };
+    // const LoadInvoiceNo = async () => {
+    //     dispatch({ type: DISPLAY_OVERLAY, payload: true });
+    //     var result = await FetchInvoiceNo();
+    //     if (result !== true) {
+    //         setOrderNo(result.OrderNo)
+    //         setSellInfo(result)
+    //     } else {
+    //         // history.push('/farm_lists');
+    //     }
+    //     dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    // }
 
     const handleFocusSelect = (e) => {
         e.target.select();
@@ -480,19 +468,20 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
         for (var i = 0; i < OrderData.length; i++) {
             SellData.push(OrderData[i]);
             SellData[i].SLNo = i + 1;
-            SellData[i].Quantity = SellData[i].ShippedQty;
+            SellData[i].Qty = SellData[i].ShippedQty;
         }
+
         var data = moment(Date).format('YYYY-MM-DD')
         if (validatePaymentValues()) {
             dispatch({ type: DISPLAY_OVERLAY, payload: true });
-
             var result = await Invoice(user.Collocation.CounterID, { value: PartyData.PartyID.id }, OrderID, data, Vat, VatTotal, Discount, Shipment, Payment, GrandTotal, Cash, Bank, Paid, Due, RefundAmount, Count, SellData);
             if (result !== true) {
                 if (result.error) {
-                    const updatedState = {};
-                    if (result.exception && result.exception.entries) {
+                    if (result.exception) {
+                        const updatedState = {};
                         for (var pair of result.exception.entries()) {
                             updatedState[pair[1].field] = pair[1].message;
+                            setError({ ...updatedState });
                         }
                     }
                     setList([...list, toastProperties = {
@@ -561,8 +550,8 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
             const subTotal = getTotal;
             const totalWithVat = subTotal + (subTotal * Vat) / 100;
             let disc = (totalWithVat + parseFloat(Shipment)) - discount;
-            disc = disc.toFixed(2);
             let left = disc - Paid;
+            disc = disc.toFixed(2);
             left = left.toFixed(2);
             setTotal(disc);
             setDue(left);
@@ -578,8 +567,8 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
             const subTotal = getTotal;
             const totalWithVat = subTotal + (subTotal * Vat) / 100;
             let disc = (totalWithVat - parseFloat(Discount)) + parseFloat(shipment);
-            disc = disc.toFixed(2);
             let left = disc - Paid;
+            disc = disc.toFixed(2);
             left = left.toFixed(2);
             setTotal(disc);
             setDue(left);
@@ -587,7 +576,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
     };
 
     const PaidCalcOnUpdate = () => {
-        const paid = Cash + Bank;
+        const paid = parseFloat(Cash || 0) + parseFloat(Bank || 0);
         setPaid(paid);
 
         let payment;
@@ -600,7 +589,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
 
         const subTotal = getTotal;
         const totalWithVat = subTotal + (subTotal * Vat) / 100;
-        const disc = totalWithVat - Discount;
+        const disc = (totalWithVat + parseFloat(Shipment)) - Discount;
         let left = disc - paid;
         left = left.toFixed(2);
         if (left > 0) {
@@ -615,7 +604,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
         }
     };
 
-    const PaidCalc = (e = { target: { value: Paid } }) => {
+    const PaidCalc = (e) => {
         const inputId = e.target.id;
         const inputValue = e.target.value;
 
@@ -624,7 +613,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
         } else if (inputId === "Bank") {
             setBank(inputValue);
         } else {
-            alert(`Unexpected input id: ${inputId}`);
+            console.warn(`Unexpected input id: ${inputId}`);
             return;
         }
 
@@ -644,7 +633,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
 
         const subTotal = getTotal;
         const totalWithVat = subTotal + (subTotal * Vat) / 100;
-        const disc = totalWithVat - Discount;
+        const disc = (totalWithVat + parseFloat(Shipment)) - Discount;
         let left = disc - paid;
         left = left.toFixed(2);
         if (left > 0) {
@@ -866,7 +855,14 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
 
     const lastRow = OrderData[OrderData.length - 1];
     var h = window.innerHeight - 200;
-    
+
+    const getErrorMessage = (itemID) => {
+        return Error.ItemID === itemID ? Error.message : null;
+    };
+
+    const rem = (parseFloat(PartyData?.Limit || 0) + parseFloat(Paid)) - ((parseFloat(getTotal) - parseFloat(Discount)) + parseFloat(Shipment))
+    const formattedRem = rem < 0 ? `(${parseFloat(Math.abs(rem)).toLocaleString("en", { minimumFractionDigits: 2 })})` : parseFloat(rem).toLocaleString("en", { minimumFractionDigits: 2 });
+
     return (
         <div className="row d-flex m-0">
             <div className="d-flex py-2 m-0 justify-content-between align-items-center" style={{ zIndex: 1, backgroundColor: "#F4DCC1" }}>
@@ -878,10 +874,10 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                 <div className="d-flex justify-content-center align-items-center border border-2 border-white w-25 shadow-lg" style={{ borderRadius: "25px" }}>
                     <i className="display-4 fad fa-sort-numeric-up"></i>
                     <div className='row px-2'>
-                        <p className="display-4 fw-bolder m-0 text-left text-primary" style={{ fontFamily: "MyriadPro_bold" }}>
+                        <p className="display-4 fw-bolder m-0 text-left text-primary text-uppercase" style={{ fontFamily: "MyriadPro_bold" }}>
                             {parseFloat(PartyData?.Limit || 0).toLocaleString('en-PG', { style: 'currency', currency: 'PGK' })}
                         </p>
-                        <p className="fw-bold text-dark text-left align-self-center m-0" style={{ fontFamily: "MyriadPro_bold" }}> {"CREDIT LIMIT"}</p>
+                        <p className="fw-bold text-dark text-uppercase text-left align-self-center m-0" style={{ fontFamily: "MyriadPro_bold" }}> {`${PartyData?.LimitTitle} LIMIT`}</p>
                     </div>
                 </div>
 
@@ -904,15 +900,15 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                 <div className="d-flex justify-content-center align-items-center border border-2 border-white w-25 shadow-lg" style={{ borderRadius: "25px" }}>
                     <i className="display-5 fad fa-percent"></i>
                     <div className='row px-2'>
-                        <p className="display-4 fw-bolder m-0 text-left text-primary" style={{ fontFamily: "MyriadPro_bold" }}>{parseFloat(Paid || 0.00).toLocaleString("en", { minimumFractionDigits: 2 })}</p>
-                        <p className="fw-bold text-dark text-left align-self-center m-0" style={{ fontFamily: "MyriadPro_bold" }}> {"REMAINING CREDIT"}</p>
+                        <p className="display-4 fw-bolder m-0 text-left text-primary" style={{ fontFamily: "MyriadPro_bold" }}>{formattedRem}</p>
+                        <p className="fw-bold text-dark text-left align-self-center text-uppercase m-0" style={{ fontFamily: "MyriadPro_bold" }}> {`REMAINING ${PartyData?.LimitTitle}`}</p>
                     </div>
                 </div>
 
                 <Link className="d-flex justify-content-end align-items-center w-25" to={`/my_party/${PartyData?.PartyID?.PartyID}/${PartyData?.PartyID?.id}`}>
                     <div className='row px-2'>
                         <p className={`fs-4 fw-bold m-0 text-right ${!OrderData && "text-muted"}`} style={{ fontFamily: "MyriadPro" }}>{PartyData?.PartyID?.Title || "N/A"}</p>
-                        <p className="fw-bold text-muted text-right align-self-center m-0" style={{ fontFamily: "MyriadPro" }}>{PartyData?.PartyID?.Address || "N/A"}</p>
+                        <p className="fw-bold text-muted text-right align-self-center text-uppercase m-0" style={{ fontFamily: "MyriadPro" }}>{PartyData?.PartyID?.Address || "N/A"}</p>
                     </div>
                 </Link>
             </div>
@@ -950,12 +946,13 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                     <tbody>
                                         {
                                             OrderData.slice().reverse().map((item, i) => {
+                                                const errorMessage = getErrorMessage(item.ItemID);
                                                 const reversedIndex = OrderData.length - i - 1;
                                                 return (
                                                     <tr className="border-bottom text-center" key={reversedIndex}>
                                                         <td className="py-0 border-right"><span className="d-block fw-bold">{reversedIndex + 1}</span></td>
                                                         <td className="py-0 px-1 border-right">
-                                                            <span className="d-block fw-bold text-left text-nowrap" style={{ lineHeight: "1" }}>{item.label ? item.label : item.Title}</span>
+                                                            <span className="d-block fw-bold text-left text-nowrap" style={{ lineHeight: "1" }}>{item.label ? item.label : item.Title} <small className='text-warning text-left ml-0'>{errorMessage && errorMessage}</small></span>
                                                             {item.Remark !== "N/A" ?
                                                                 <small className="d-block text-muted text-left" style={{ fontSize: '11px', lineHeight: "1" }}>{item.Remark}</small> : null}
                                                         </td>
@@ -1033,7 +1030,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                             <td className="p-1"><span className="d-block text-left fw-bold">{ShippedQT}</span> </td>
                                             <td className="p-1"><span className="d-block text-right fw-bold">{Paid !== 0 && Due !== 0 ? "Due: " : RefundAmount > 0 && Paid > 0 ? "Change: " : RefundAmount === 0 && Due === 0 && Paid !== 0 ? "Paid: " : Due ? "Due: " : "N/A"}</span> </td>
                                             {/* <td className="p-1"><span className="d-block fw-bold text-right">{Paid === 0.00 ? Total === 0.00 ? getTotal.toLocaleString("en", { minimumFractionDigits: 2 }) : Total.toLocaleString("en", { minimumFractionDigits: 2 }) : getTotal === Paid ? 0.00 : Due === 0.00 ? parseFloat(RefundAmount).toLocaleString("en", { minimumFractionDigits: 2 }) : (parseFloat(getTotal) - Paid + parseFloat(Shipment || 0)).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td> */}
-                                            <td className="p-1"><span className="d-block fw-bolder text-right">{Paid === 0.00 ? Total === 0.00 ? getTotal.toLocaleString("en", { minimumFractionDigits: 2 }) : Total.toLocaleString("en", { minimumFractionDigits: 2 }) : getTotal === Paid ? 0.00 : Due === 0.00 ? parseFloat(RefundAmount).toLocaleString("en", { minimumFractionDigits: 2 }) : Due.toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                            <td className="p-1"><span className="d-block fw-bolder text-right">{parseFloat(Paid) === 0.00 ? parseFloat(Total) === 0.00 ? parseFloat(getTotal).toLocaleString("en", { minimumFractionDigits: 2 }) : parseFloat(Total).toLocaleString("en", { minimumFractionDigits: 2 }) : parseFloat(getTotal) === parseFloat(Paid) ? 0.00 : parseFloat(Due) === 0.00 ? parseFloat(RefundAmount || 0).toLocaleString("en", { minimumFractionDigits: 2 }) : parseFloat(Due || 0).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
                                             <td className="px-3 py-0" colSpan="3">
                                                 {Status === 1 ?
                                                     <button className="btn fs-3 py-1 fad fa-paper-plane text-success"
@@ -1100,7 +1097,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                             options={MyProList}
                                             name="Title"
                                             placeholder={"Please select product"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={Title}
                                             onChange={(e) => { if (e) { DropdownAction(e.value); setFormData(e); } }}
                                             required
@@ -1197,7 +1194,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                                 options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, ...(PartyData?.PartyID.IsDispatchable ? [{ label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }, { label: "Custom", value: 4 }] : [])]}
                                                 name="Remark"
                                                 placeholder={"Please select product"}
-                                                styles={CScolourStyles}
+                                                styles={GeneralColourStyles}
                                                 value={{ label: Remark, value: 0 }}
                                                 onChange={(e) => RemarkToggle(e)}
                                                 isDisabled={!PartyData?.PartyID.IsDispatchable}
@@ -1332,7 +1329,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                                     options={PaymentTerms}
                                                     name="Payment"
                                                     placeholder={"Payment Type"}
-                                                    styles={CScolourStyles}
+                                                    styles={GeneralColourStyles}
                                                     value={Payment}
                                                     onChange={(e) => setPayment(e)}
                                                     required

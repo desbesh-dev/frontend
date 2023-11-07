@@ -948,8 +948,8 @@ export const VoucherSave = async (SectorID, Date, VoucherType, Name, PaymentMeth
         formData.append(`VMapData[${e}]PartyID`, AccData[e].PartyID === undefined ? "" : AccData[e].PartyID);
         formData.append(`VMapData[${e}]COA_Code`, AccData[e].COA_Code);
         formData.append(`VMapData[${e}]COA`, AccData[e].COA_ID);
-        formData.append(`VMapData[${e}]DR`, AccData[e].Debit);
-        formData.append(`VMapData[${e}]CR`, AccData[e].Credit);
+        formData.append(`VMapData[${e}]DR`, parseFloat(AccData[e].Debit).toFixed(2));
+        formData.append(`VMapData[${e}]CR`, parseFloat(AccData[e].Credit).toFixed(2));
     });
 
     for (var pair of formData.entries()) {

@@ -18,8 +18,7 @@ let today = new Date();
 const oneMonthAgo = new Date();
 oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-const Invoices = ({ user, PartyID, MyPartyID, id, list, setList }) => {
-
+const Invoices = ({ PartyID, list, setList }) => {
     const initialValue = { value: 0, label: "" };
     const [Data, setData] = useState(false);
     const [DateTo, setDateTo] = useState(today);
@@ -51,7 +50,7 @@ const Invoices = ({ user, PartyID, MyPartyID, id, list, setList }) => {
             setData(result.data);
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
-    
+
     const DateHandler = async (e) => {
         let date_from = moment(DateFrom).format("YYYY-MM-DD");
         let date_to = moment(e).format("YYYY-MM-DD");
@@ -129,7 +128,6 @@ const Invoices = ({ user, PartyID, MyPartyID, id, list, setList }) => {
     };
 
     var h = window.innerHeight - 290;
-
     return (
         <div className="col-md-12 justify-content-center align-items-center px-2">
             <div className={`d-flex justify-content-between bg-white py-1 px-0`}>
@@ -234,13 +232,13 @@ const Invoices = ({ user, PartyID, MyPartyID, id, list, setList }) => {
                                             <td className="py-0 px-1 border-right text-nowrap">{moment(item.Date).format("DD MMM YY")}</td>
                                             <td className="py-0 px-1 border-right">{item.InvoiceNo}</td>
                                             <td className="py-0 px-1 border-right">{item.ItemCount}</td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.Shipping).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{parseFloat(item.Cash).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{parseFloat(item.Bank).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.PaidAmount).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.Due).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Shipping).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Cash).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Bank).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.PaidAmount).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Due).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
                                             <td className="py-0 border-right"><small className="d-block fw-bold">{getLabel(item.Payment, PaymentTerms)}</small> </td>
                                             <td className="py-0 border-right"><span className="d-block fw-bold ">{item.Status === 1 ? "Delivered" : item.Status === 2 ? "Modified" : item.Status === 3 ? "Deleted" : item.Status === 4 ? "Postpond" : "N/A"}</span> </td>
                                             <td className="p-0 text-nowrap text-left">

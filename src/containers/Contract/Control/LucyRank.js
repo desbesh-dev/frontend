@@ -1,18 +1,12 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
-import { logout } from '../../../actions/auth';
-import { FetchInvoice, RecallProduct, DispatchInvoiceDelete } from '../../../actions/ContractAPI';
+import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { DISPLAY_OVERLAY } from '../../../actions/types';
-import * as moment from 'moment'
+import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
-import errorIcon from '../../../assets/error.png';
-import infoIcon from '../../../assets/info.png';
-import successIcon from '../../../assets/success.png';
-import warningIcon from '../../../assets/warning.gif';
+import { logout } from '../../../actions/auth';
+import { DISPLAY_OVERLAY } from '../../../actions/types';
 
-import { exportPDF } from './InvoicePDF';
 import { FetchLucyRank } from '../../../actions/BoardAPI';
+import { exportPDF } from './InvoicePDF';
 
 const LucyRank = ({ CompanyID, BranchID, SupplierID, user, list, setList }) => {
     const initialValue = { value: 0, label: "" };
@@ -76,7 +70,7 @@ const LucyRank = ({ CompanyID, BranchID, SupplierID, user, list, setList }) => {
 
                     <div className="d-flex justify-content-around my-0 py-1 w-75 border" style={{ borderRadius: "30px" }}>
                         <div className='d-flex text-center align-items-center'>
-                            <label for="message-text" class="col-form-label fw-bold px-2">Batch</label>
+                            <label htmlFor="message-text" class="col-form-label fw-bold px-2">Batch</label>
                             <input
                                 type="numeric"
                                 class="form-control border"

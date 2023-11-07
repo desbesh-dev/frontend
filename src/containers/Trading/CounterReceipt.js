@@ -6,8 +6,8 @@ import { PaymentTerms } from '../../actions/InventoryAPI';
 
 export const Receipt = async (e, item, status, type) => {
     var JsBarcode = require('jsbarcode');
-    const name = 'DESH BESH ENTERPRISE LTD.';
-    var cmpAd = 'PO Box: 262, Boroko, National Capital District, S#93, L#31, Vani Place, Gordons';
+    const name = 'DESH BESH ENTERPRISE LTD';
+    const sis_name = "——(" + item.SisterName + ")——"
     const ReceiptNo = "RECEIPT# " + item.InvoiceNo;
     const Dates = "Date: " + moment(item.CreatedAt).format("DD MMM YYYY");
     const Time = "Time: " + moment(item.CreatedAt).format("hh:mm:ss A");
@@ -38,16 +38,18 @@ export const Receipt = async (e, item, status, type) => {
         var col = data.column.index;
         if (col === 1) {
             data.cell.styles.halign = 'center';
+            data.cell.styles.valign = 'middle';
         }
         if (col === 2 || col === 3 || col === 4) {
             data.cell.styles.halign = 'right';
+            data.cell.styles.valign = 'middle';
         }
     }
 
     let options = {
         theme: 'grid',
         startY: 40,
-        margin: { horizontal: 2 },
+        margin: { left: 4 },
         head: headers,
         body: data,
         headStyles: {
@@ -62,9 +64,11 @@ export const Receipt = async (e, item, status, type) => {
             fontSize: 8,
             textColor: [0, 0, 0],
             lineWidth: 0.1,
-            lineColor: [128, 128, 128]
+            lineColor: [128, 128, 128],
+            cellPadding: 1,  // Set cellPadding to 0 to remove padding
+            rowHeight: 5    // Set the rowHeight as desired to control the margin
         },
-        tableWidth: 72,
+        tableWidth: 68,
         didParseCell: function (cell, data) {
             alignCol(cell, data);
         },
@@ -76,6 +80,7 @@ export const Receipt = async (e, item, status, type) => {
 
     // Create the actual document with the correct pageHeight
     const doc = new jsPDF({ orientation, unit, format: [79, pageHeight] });
+
     doc.autoTable(options);
 
     const getTotal = () => {
@@ -90,7 +95,7 @@ export const Receipt = async (e, item, status, type) => {
     const QuantityTotal = item.SellMapData.reduce((TotalQuantity, myvalue) => TotalQuantity + parseInt(myvalue.Qty, 10), 0);
     let canvas = document.createElement('CANVAS')
 
-    const pageWidth = 79;
+    const pageWidth = 76;
     // pageHeight = doc.internal.pageSize.getHeight();
     const widthRatio = pageWidth / canvas.width;
     const heightRatio = pageHeight / canvas.height;
@@ -100,21 +105,23 @@ export const Receipt = async (e, item, status, type) => {
     const canvasHeight = canvas.height * ratio;
 
     doc.setFontSize(13).setFont(undefined, 'bold').text(name, pageWidth / 2, 6, { align: "center" })
-    var splitTitle = doc.splitTextToSize(cmpAd, 90); //Text wrap after char
-    doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(splitTitle, pageWidth / 2, 10, { align: "center" })
+    doc.setFontSize(11).setFont(undefined, 'normal').text(sis_name, pageWidth / 2, 10, { align: "center" })
+
+    var splitTitle = doc.splitTextToSize(item.Location, 90); //Text wrap after char
+    doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(splitTitle, pageWidth / 2, 14, { align: "center" })
 
     doc.setFontSize(10).setFont(undefined, 'bold').text(ReceiptNo, pageWidth / 2, 23, { align: "center" })
 
     doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'bold').text(Dates, marginLeft, 28)
-    doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(Time, 47, 28)
+    doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(Time, 44, 28)
 
     doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(Shop, marginLeft, 32)
-    doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(Counter, 47, 32)
+    doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(Counter, 44, 32)
 
     const customerText = item.PartyID !== null ? `Subs: ${item.PartyTitle}` : 'Walk-in Customer';
-    const CustomerWrap = doc.splitTextToSize(customerText, 45);
+    const CustomerWrap = doc.splitTextToSize(customerText, 30);
     doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(CustomerWrap, marginLeft, 36)
-    doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(agent, 47, 36)
+    doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(agent, 44, 36)
 
     doc.autoTable(options);
     LastY = doc.lastAutoTable.finalY + 2;
@@ -134,6 +141,7 @@ export const Receipt = async (e, item, status, type) => {
         var s = data.cell.styles;
         if (data.row.index === 0 || data.row.index === 3) {
             s.fontStyle = 'bold';
+            s.fontSize = 10
         }
     }
 
@@ -151,8 +159,8 @@ export const Receipt = async (e, item, status, type) => {
         body: body,
         startY: LastY,
         theme: "plain",
-        margin: { left: 13 },
-        tableWidth: 70,
+        margin: { left: 10 },
+        tableWidth: 68,
         columnStyles: {
             0: { cellWidth: 35 },
             1: { cellWidth: 5 },
@@ -195,21 +203,21 @@ export const Receipt = async (e, item, status, type) => {
 
     var date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: "2-digit", second: "2-digit", hour12: true }).replace(/ /g, ' ')
     doc.setFontSize(8).setTextColor(128, 128, 128).setFont(undefined, 'normal').text('DESH BESH ERP', 4, pageHeight - 17);
-    doc.setFontSize(8).setTextColor(128, 128, 128).setFont(undefined, 'normal').text("Print: " + date.toString(), 55, pageHeight - 17, { align: "center" })
+    doc.setFontSize(8).setTextColor(128, 128, 128).setFont(undefined, 'normal').text("Print: " + date.toString(), 52, pageHeight - 17, { align: "center" })
 
     // Footer line
     doc.setDrawColor(211, 211, 211);
     doc.setLineWidth(0.5);
-    doc.line(4, pageHeight - 16, pageWidth - 4, pageHeight - 16);
+    doc.line(3.5, pageHeight - 16, pageWidth - 3.5, pageHeight - 16);
     doc.setFillColor(128, 128, 128);
 
     // Footer line
     doc.setDrawColor(211, 211, 211);
     doc.setLineWidth(0.5);
-    doc.line(4, pageHeight - 8, pageWidth - 4, pageHeight - 8);
+    doc.line(3.5, pageHeight - 8, pageWidth - 3.5, pageHeight - 8);
     doc.setFillColor(128, 128, 128);
 
-    doc.setFontSize(8).setTextColor(0, 0, 0).setFont(undefined, 'normal').text("THANKS FOR CHOOSING US", pageWidth / 2, pageHeight - 4, { align: "center" })
+    doc.setFontSize(8).setTextColor(0, 0, 0).setFont(undefined, 'normal').text("THANKS FOR CHOOSING US", pageWidth / 2, pageHeight - 3.5, { align: "center" })
 
     const fileName = "Recipt No- " + item.InvoiceNo + " (" + new Date(item.CreatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).replace(/ /g, ' ') + ").pdf"
     // doc.autoTable(options);

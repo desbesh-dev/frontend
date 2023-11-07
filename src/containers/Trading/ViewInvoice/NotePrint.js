@@ -447,7 +447,7 @@ export const NotePrint = async (e, item, status) => {
 
 export const CashNotePrint = async (e, item, status, type) => {
     var JsBarcode = require('jsbarcode');
-    const name = 'DESH BESH ENTERPRISE LTD.';
+    const name = 'DESH BESH ENTERPRISE LTD';
     var cmpAd = 'PO Box: 262, Boroko, National Capital District, S#93, L#31, Vani Place, Gordons';
     const title = "RETURN PRODUCT";
     const InvoiceNo = "INVOICE#" + item.InvoiceNo;

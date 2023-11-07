@@ -1,13 +1,11 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
+import { useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { useDispatch } from 'react-redux';
 import Select from 'react-select';
-import { checkToken } from '../../../../actions/auth';
-import { CurrencyList, getLabel } from '../../../../actions/ContractAPI';
-import { SaveMargin, UpdateProfitMargin, MarginOperation } from '../../../../actions/APIHandler';
-import { connect, useDispatch } from 'react-redux';
+import { MarginOperation, SaveMargin, UpdateProfitMargin } from '../../../../actions/APIHandler';
+import { getLabel } from '../../../../actions/ContractAPI';
 import { DISPLAY_OVERLAY } from '../../../../actions/types';
 import errorIcon from '../../../../assets/error.png';
-import infoIcon from '../../../../assets/info.png';
 import successIcon from '../../../../assets/success.png';
 import warningIcon from '../../../../assets/warning.gif';
 
@@ -102,7 +100,7 @@ export const CreateModal = (props) => {
                         <small className="text-center px-0">All fields are mendatory</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Title</label>
+                                <label htmlFor="message-text" class="col-form-label">Title</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -116,7 +114,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Profit Margin</label>
+                                <label htmlFor="message-text" class="col-form-label">Profit Margin</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -131,7 +129,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Currency</label>
+                                <label htmlFor="message-text" class="col-form-label">Currency</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -152,7 +150,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Margin Operation</label>
+                                <label htmlFor="message-text" class="col-form-label">Margin Operation</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -173,7 +171,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Active Status</label>
+                                <label htmlFor="message-text" class="col-form-label">Active Status</label>
                                 <div className="form-check form-switch">
                                     <input
                                         class="form-check-input"
@@ -297,7 +295,7 @@ export const UpdateModal = (props) => {
                         <small className="text-center px-0">Change required field</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Title</label>
+                                <label htmlFor="message-text" class="col-form-label">Title</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -312,7 +310,7 @@ export const UpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Profit Margin</label>
+                                <label htmlFor="message-text" class="col-form-label">Profit Margin</label>
                                 <input
                                     type="number"
                                     class="form-control fw-bold"
@@ -328,7 +326,7 @@ export const UpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Currency</label>
+                                <label htmlFor="message-text" class="col-form-label">Currency</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -349,7 +347,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Margin Operation</label>
+                                <label htmlFor="message-text" class="col-form-label">Margin Operation</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -370,7 +368,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Active Status</label>
+                                <label htmlFor="message-text" class="col-form-label">Active Status</label>
                                 <div className="form-check form-switch">
 
                                     <input

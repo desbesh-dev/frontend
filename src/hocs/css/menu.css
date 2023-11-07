@@ -442,7 +442,7 @@ label {
 }
 .hexagon-item:hover .hex-item div::before,
 .hexagon-item:hover .hex-item div::after {
-  background-color: #ff0037;
+  background-color: #ffc98c;
 }
 .hexagon-item:hover .hex-content svg {
   -webkit-transform: scale(0.97);
@@ -633,7 +633,7 @@ label {
 }
 
 .hexagon-item:hover .icon_dash i {
-  color: #ff0037;
+  color: #2b2b2b;
   transition: 0.6s;
 }
 

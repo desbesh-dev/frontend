@@ -1,20 +1,11 @@
-import { SaveSupplier } from '../../actions/SuppliersAPI';
-import { IoCloudUploadOutline, IoImagesOutline, IoRemoveCircleOutline } from "react-icons/io5";
-import { Link, useHistory } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { CreateMessage } from "../Modals/ModalForm.js";
-import { DISPLAY_OVERLAY } from '../../actions/types';
-import { Fragment } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
-import axios from 'axios';
-import { checkToken } from '../../actions/auth';
 import { logout } from '../../actions/auth';
-import errorIcon from '../../assets/error.png';
+import { DISPLAY_OVERLAY } from '../../actions/types';
+import { CreateMessage } from "../Modals/ModalForm.js";
 
-import infoIcon from '../../assets/info.png';
-import successIcon from '../../assets/success.png';
-import warningIcon from '../../assets/warning.gif';
 import { PartyStatusList, SaveParty } from '../../actions/APIHandler';
 
 const PartyReg = ({ list, setList, scale, sub_scale, user }) => {

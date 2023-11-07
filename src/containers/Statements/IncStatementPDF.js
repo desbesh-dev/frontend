@@ -186,25 +186,17 @@ export const IncStatementPDF = async (e, item, NetSale, COGS, GrossProfit, NetIn
     ];
 
     function formatNumber(value) {
-        // Check if the value is negative
         if (value < 0) {
-            // If negative, replace the minus sign with the first bracket
             return ["(", parseFloat(Math.abs(value)).toLocaleString("en", { minimumFractionDigits: 2 }), ")"].join("");
         } else {
-            // If positive or zero, display as is
             return parseFloat(value).toLocaleString("en", { minimumFractionDigits: 2 });
         }
     }
 
     function formatNetIncome(value) {
-        console.log("v: ", value);
-        // Check if the value is non-negative (including zero)
         if (value >= 0) {
-            // If non-negative, display "NET INCOME"
             return "NET INCOME";
         } else {
-            // For negative values, you can optionally handle them differently
-            // For now, it simply returns "NET INCOME" for all cases
             return "NET LOSS";
         }
     }

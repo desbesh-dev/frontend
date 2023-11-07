@@ -1,15 +1,14 @@
-import React, { useEffect, useRef, useState, Fragment } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
-import * as moment from 'moment'
-import { Button, Modal, Spinner } from "react-bootstrap";
+import * as moment from 'moment';
+import { useEffect, useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
-import { connect, useDispatch } from 'react-redux';
+import { LoadBanks, SaveBisBank, getBranch } from '../../actions/APIHandler';
 import { DISPLAY_OVERLAY } from '../../actions/types';
 import errorIcon from '../../assets/error.png';
-import infoIcon from '../../assets/info.png';
 import successIcon from '../../assets/success.png';
 import warningIcon from '../../assets/warning.gif';
-import { getBranch, LoadBanks, SaveBisBank } from '../../actions/APIHandler';
 
 export const AddBankModal = (props) => {
     const [Error, setError] = useState({});
@@ -141,7 +140,7 @@ export const AddBankModal = (props) => {
                         <small className="text-center px-0">(*) Mark field are mandatory</small>
                         <form>
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">Bank Name</label>
+                                <label htmlFor="IssueDate" class="col-form-label">Bank Name</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -161,7 +160,7 @@ export const AddBankModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">Branch Name</label>
+                                <label htmlFor="IssueDate" class="col-form-label">Branch Name</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -181,7 +180,7 @@ export const AddBankModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Account Name</label>
+                                <label htmlFor="message-text" class="col-form-label">Account Name</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -196,7 +195,7 @@ export const AddBankModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Account Number</label>
+                                <label htmlFor="message-text" class="col-form-label">Account Number</label>
                                 <input
                                     type="number"
                                     class="form-control fw-bold"
@@ -212,7 +211,7 @@ export const AddBankModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Cheque Number</label>
+                                <label htmlFor="message-text" class="col-form-label">Cheque Number</label>
                                 <input
                                     type="number"
                                     class="form-control fw-bold"

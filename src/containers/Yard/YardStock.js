@@ -249,9 +249,9 @@ const YardStock = ({ user, list, setList, cat, no }) => {
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Title</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Unit (Wt)</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Unit Price</span></th>
-                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Stock (Wt)</span></th>
-                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Stock (Qt)</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Stock (Ctn)</span></th>
+                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Stock (Qt)</span></th>
+                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Stock (Wt)</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Status</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Supplier</span></th>
                                         {(no <= 7 || (no === 8 && cat === 4)) && <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Sector</span></th>}
@@ -268,9 +268,9 @@ const YardStock = ({ user, list, setList, cat, no }) => {
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-left text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.Title}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.UnitWeight.toLocaleString("en", { minimumFractionDigits: 3 })}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{item.Cost.toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bolder text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{parseFloat(item.Ctn).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{parseFloat(item.Qty).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{item.Weight.toLocaleString("en", { minimumFractionDigits: 3 })}</span></td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{parseFloat(item.Qty).toLocaleString("en", { minimumFractionDigits: 2 })} PCS</span> </td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{parseFloat(item.Ctn).toLocaleString("en", { minimumFractionDigits: 2 })} Ctn</span> </td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.Status ? "Available" : "Unavailable"}</span> </td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-left text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.Supplier}</span> </td>
 

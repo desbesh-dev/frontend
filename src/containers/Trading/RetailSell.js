@@ -26,8 +26,8 @@ import '../../hocs/react-select/dist/react-select.css';
 // import 'react-virtualized-select/styles.css';
 // // import 'react-virtualized/styles.css';
 import Select from 'react-select';
+import { GeneralColourStyles } from '../../hocs/Class/SelectStyle';
 import { useTbody } from './Class/RetailTableBody.js';
-
 let today = new Date();
 
 const RetailSell = ({ user, list, setList }) => {
@@ -168,18 +168,6 @@ const RetailSell = ({ user, list, setList }) => {
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
 
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuList: provided => ({
-            ...provided,
-            backgroundColor: 'white',
-        })
-    };
-
     const handleToggleAutoFire = () => {
         setAutoFire((AutoFire) => !AutoFire);
     };
@@ -262,8 +250,6 @@ const RetailSell = ({ user, list, setList }) => {
             zEvent.preventDefault();
             LoadProductItems();
         } else if (zEvent.key === 'Enter') {
-            setInfoModalShow(false)
-            setNotPayed(false)
             setInvalidModalShow(false)
 
             const currentTime = new window.Date().getTime();
@@ -277,6 +263,8 @@ const RetailSell = ({ user, list, setList }) => {
                 }
             }
             lastEnterPressTime.current = currentTime;
+            setInfoModalShow(false)
+            setNotPayed(false)
         } else if ((zEvent.ctrlKey && zEvent.key.toLowerCase() === "d") || zEvent.key === 'Escape') {
             zEvent.preventDefault();
             zEvent.stopImmediatePropagation();
@@ -556,18 +544,26 @@ const RetailSell = ({ user, list, setList }) => {
             var result = await Invoice(user.Collocation.CounterID, PartyID, '', data, Vat, VatTotal, Discount, 0, Payment, GrandTotal, Cash, Bank, Paid, Due, RefundAmount, Count, SellData);
             if (result !== true) {
                 if (result.error) {
-                    const updatedState = {};
-                    if (result.exception && typeof result.exception === 'object') {
-                        for (const field in result.exception) {
-                            if (result.exception.hasOwnProperty(field)) {
-                                updatedState[field] = result.exception[field].message;
-                            }
+                    if (result.exception) {
+                        const updatedState = {};
+                        for (var pair of result.exception.entries()) {
+                            updatedState[pair[1].field] = pair[1].message;
+                            setError({ ...updatedState });
                         }
-                        setError({ ...updatedState });
                     }
-                    setList([...list, { id: 1, title: "Invalid", description: result.message, backgroundColor: "#f0ad4e", icon: warningIcon }]);
+                    setList([...list, toastProperties = { id: 1, title: "Invalid Data", description: result.message, backgroundColor: "#f0ad4e", icon: warningIcon }]);
+                    dispatch({ type: DISPLAY_OVERLAY, payload: false });
                 } else {
-                    setList([...list, toastProperties = { id: 1, title: result.Title, description: result.message, backgroundColor: "#f0ad4e", icon: result.ico === 1 ? infoIcon : successIcon }]);
+                    setList([
+                        ...list,
+                        toastProperties = {
+                            id: 1,
+                            title: result.Title,
+                            description: result.message,
+                            backgroundColor: "#f0ad4e",
+                            icon: result.ico === 1 ? infoIcon : successIcon
+                        }
+                    ]);
                     setSaveGrandTotal(result.CallBack.GrandTotal)
                     setSavePaidAmount(result.CallBack.PaidAmount)
                     setSaveChangeAmt(result.CallBack.RefundAmount)
@@ -579,14 +575,15 @@ const RetailSell = ({ user, list, setList }) => {
                     setCash(0.00)
                 }
             } else {
-                setList([...list,
-                toastProperties = {
-                    id: 1,
-                    title: "Error",
-                    description: "Failed to save invoice. Please try after some moment.",
-                    backgroundColor: "#f0ad4e",
-                    icon: errorIcon
-                }
+                setList([
+                    ...list,
+                    toastProperties = {
+                        id: 1,
+                        title: "Error",
+                        description: "Failed to save invoice. Please try after some moment.",
+                        backgroundColor: "#f0ad4e",
+                        icon: errorIcon
+                    }
                 ]);
                 setPaid(0.00)
                 setBank(0.00)
@@ -596,7 +593,6 @@ const RetailSell = ({ user, list, setList }) => {
         }
         if (CodeFocus.current)
             CodeFocus.current.focus();
-
         if (SaveFocus.current)
             SaveFocus.current.disabled = false;
     };
@@ -742,6 +738,7 @@ const RetailSell = ({ user, list, setList }) => {
         setWalkIN(false);
         setForceRender(!forceRender);
         setGrantDisc(false);
+        setError({});
         if (SaveFocus.current)
             SaveFocus.current.disabled = false;
     }
@@ -911,7 +908,7 @@ const RetailSell = ({ user, list, setList }) => {
                                         </tr>
                                         <tr className="text-center border-success bg-white">
                                             <td className="py-0 px-1 border-right" colSpan="5"><span className="d-block text-right">10% GST Included </span> </td>
-                                            <td className="py-0 d-flex justify-content-end border-right" style={{ width: "160px" }}><input style={{ width: "140px" }} disabled type="text" autocomplete="off" className="d-block text-right border-0" id="Vat" value={Vat} onChange={(e) => VatCalc(e)} /></td>
+                                            <td className="py-0 d-flex justify-content-end border-right" style={{ width: "160px" }}><input style={{ width: "140px" }} disabled type="text" autocomplete="off" className="d-block text-right border-0" id="Vat" value={(parseFloat(getTotal()) * 0.10).toFixed(2)} onChange={(e) => VatCalc(e)} /></td>
                                         </tr>
                                         <tr className="text-center border-success bg-white">
                                             <td className="py-0 px-1 border-right" colSpan="5"><span className="d-block text-right ">Discount (K) </span> </td>
@@ -1014,10 +1011,11 @@ const RetailSell = ({ user, list, setList }) => {
                                     <div className="input-group fs-3 fw-bold p-0">
                                         <Select
                                             ref={ProductFocus}
+                                            tabIndex={0}
                                             options={MyProList}
                                             name="Title"
                                             placeholder={"Please select product"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={Title}
                                             onChange={(e) => { if (e) { DropdownAction(e.value); setFormData(e); } }}
                                             required
@@ -1204,7 +1202,7 @@ const RetailSell = ({ user, list, setList }) => {
                                                         options={PartyList}
                                                         name="Party"
                                                         placeholder={"Please select party"}
-                                                        styles={CScolourStyles}
+                                                        styles={GeneralColourStyles}
                                                         value={PartyID}
                                                         onChange={(e) => setPartyID(e)}
                                                         required
@@ -1212,7 +1210,7 @@ const RetailSell = ({ user, list, setList }) => {
                                                         onKeyDown={handleKeyDown}
                                                     />
                                                 </div>
-                                                <p className='fs-6 fw-bold'>Credit: <span className='fw-bolder'> {PartyID ? PartyID.Limit : "N/A"}</span></p>
+                                                <p className='fs-6 fw-bold'>Credit: <span className='fw-bolder'> {PartyID ? parseFloat(PartyID.TotBalance || 0).toLocaleString("en", { minimumFractionDigits: 2 }) : "N/A"}</span></p>
                                             </div>
                                             : null}
 
@@ -1228,7 +1226,8 @@ const RetailSell = ({ user, list, setList }) => {
                             show={InfoModalShow}
                             onHide={() => setInfoModalShow(false)}
                         />
-                        {NotPayed &&
+                        {
+                            NotPayed &&
                             <InfoMessage
                                 header="Invoice Not Paid"
                                 body_header={`There is total price and payment amount is not equal`}

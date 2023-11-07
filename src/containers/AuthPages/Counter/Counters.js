@@ -15,6 +15,7 @@ import { customHeader, locales } from "../../../hocs/Class/datepicker";
 import { CreateMessage } from '../ModalForm';
 import RangeSlider from './RangeSlider';
 import { SaleReportPDF } from './SaleReportPDF';
+import { SaleReportReceipt } from './SaleReportReceipt';
 let today = new Date();
 
 const Counters = ({ list, setList, user, scale, no }) => {
@@ -90,7 +91,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
         value: SectorID
     })) ?? [];
 
-    const { Count = 0, Sub = 0, Cost = 0, GrandTotal = 0, Vat = 0, Discount = 0, Shipping = 0, PaidAmount = 0, Due = 0, RefundAmount = 0, Revenue = GrandTotal - Cost, Bank = 0, Cash = 0 } = Array.isArray(FilterCounter)
+    const { Count = 0, Sub = 0, Cost = 0, GrandTotal = 0, Vat = 0, Discount = 0, Shipping = 0, PaidAmount = 0, Due = 0, RefundAmount = 0, RefundCost = 0, Revenue = (GrandTotal - RefundAmount) - (Cost - RefundCost), Bank = 0, Cash = 0 } = Array.isArray(FilterCounter)
         ? FilterCounter.reduce((acc, cur) => {
             return {
                 Count: acc.Count + cur.total_grand.Count,
@@ -104,9 +105,10 @@ const Counters = ({ list, setList, user, scale, no }) => {
                 Bank: acc.Bank + (cur.total_grand.Bank || 0),
                 Cash: acc.Cash + (cur.total_grand.Cash || 0),
                 Due: acc.Due + (cur.total_grand.Due || 0),
-                RefundAmount: acc.RefundAmount + (cur.total_grand.RefundAmount || 0)
+                RefundAmount: acc.RefundAmount + (cur.total_grand.RefundAmount || 0),
+                RefundCost: acc.RefundCost + (cur.total_grand.ReturnAmountCost || 0)
             };
-        }, { Count: 0, Sub: 0, Cost: 0, GrandTotal: 0, Vat: 0, Discount: 0, Shipping: 0, PaidAmount: 0, Due: 0, RefundAmount: 0, Bank: 0, Cash: 0 }) : { Count: 0, Sub: 0, Cost: 0, GrandTotal: 0, Vat: 0, Discount: 0, Shipping: 0, PaidAmount: 0, Due: 0, RefundAmount: 0, Revenue: 0, Bank: 0, Cash: 0 };
+        }, { Count: 0, Sub: 0, Cost: 0, GrandTotal: 0, Vat: 0, Discount: 0, Shipping: 0, PaidAmount: 0, Due: 0, RefundAmount: 0, RefundCost: 0, Bank: 0, Cash: 0 }) : { Count: 0, Sub: 0, Cost: 0, GrandTotal: 0, Vat: 0, Discount: 0, Shipping: 0, PaidAmount: 0, Due: 0, RefundAmount: 0, RefundCost: 0, Revenue: 0, Bank: 0, Cash: 0 };
 
     var h = window.innerHeight - 230;
 
@@ -170,7 +172,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
         }
     }
 
-    const extra = { FromDate: DateFrom, ToDate: DateTo, SisterFilter, SectorFilter, SearchKey, ModeFilter, Counter: FilterCounter?.length, Count, Sub, Cost, GrandTotal, Vat, Discount, Shipping, PaidAmount, Due, RefundAmount, Revenue, Bank, Cash }
+    const extra = { FromDate: DateFrom, ToDate: DateTo, SisterFilter, SectorFilter, SearchKey, ModeFilter, Counter: FilterCounter?.length, Count, Sub, Cost, GrandTotal, Vat, Discount, Shipping, PaidAmount, Due, RefundAmount, RefundCost, Revenue, Bank, Cash }
 
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">
@@ -268,7 +270,8 @@ const Counters = ({ list, setList, user, scale, no }) => {
                                 placeholderText="Date"
                             />
                         </div>
-                        <button className='btn border-left fs-5' title="Print sale report" onClick={(e) => SaleReportPDF(e, FilterCounter, user, extra)}><i className="fad fa-print"></i></button>
+                        <button className='btn border-left fs-5' title="Print sale report" onClick={(e) => SaleReportReceipt(e, FilterCounter, user, extra)}><i className="fad fa-receipt"></i></button>
+                        <button className='btn fs-5' title="Print sale report" onClick={(e) => SaleReportPDF(e, FilterCounter, user, extra)}><i className="fad fa-print"></i></button>
                     </div>
                 </div>
                 <div className="row d-flex mx-auto my-2 py-1 border" style={{ borderRadius: "15px" }}>
@@ -314,7 +317,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
                         <div className="cs_outer m-0" style={{ height: "100%" }}>
                             <div className="cs_inner"></div>
                         </div>
-                        <p className='text-dark fw-bold m-0 px-2 text-uppercase' style={{ borderRadius: "15px" }}>Bank: <span className='fw-bolder'>{parseFloat(Bank).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</span></p>
+                        <p className='text-dark fw-bold m-0 px-2 text-uppercase' style={{ borderRadius: "15px" }}>E-POS: <span className='fw-bolder'>{parseFloat(Bank).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</span></p>
 
                         <div className="cs_outer m-0" style={{ height: "100%" }}>
                             <div className="cs_inner"></div>
@@ -329,7 +332,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
                             <div className="cs_outer m-0" style={{ height: "100%" }}>
                                 <div className="cs_inner"></div>
                             </div>
-                            <p className='text-dark fw-bold m-0 px-2 text-uppercase' style={{ borderRadius: "15px" }}>Revenue: <span className='fw-bolder'>{(parseFloat(Revenue) - parseFloat(RefundAmount) - parseFloat(Discount)).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</span></p>
+                            <p className='text-dark fw-bold m-0 px-2 text-uppercase' style={{ borderRadius: "15px" }}>Revenue: <span className='fw-bolder'>{parseFloat(Revenue).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</span></p>
                         </>
                         }
                     </div>
@@ -384,7 +387,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
                                                     <small className="fw-bold fs-5 text-dark">{parseFloat(item.total_grand.Cash).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</small>
                                                 </div>
                                                 <div className='d-flex justify-content-between align-items-center px-2'>
-                                                    <p className="text-dark m-0">Bank:</p>
+                                                    <p className="text-dark m-0">E-POS:</p>
                                                     <small className="fw-bold fs-5 text-dark">{parseFloat(item.total_grand.Bank).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</small>
                                                 </div>
                                                 <div className='d-flex justify-content-between align-items-center px-2'>

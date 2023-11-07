@@ -1,19 +1,11 @@
-import * as moment from 'moment'
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { logout } from '../../../../actions/auth';
+import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { FetchPartyList, GetParty, GetPartyAdmin, PartyStatusList } from '../../../../actions/APIHandler';
-import { getLabel, PartyDelete, PartySectorDelete } from '../../../../actions/ContractAPI';
+import { PartyDelete, PartySectorDelete, getLabel } from '../../../../actions/ContractAPI';
+import { logout } from '../../../../actions/auth';
 
 import { DISPLAY_OVERLAY } from '../../../../actions/types';
-import Select from 'react-select';
-import axios from 'axios';
-import errorIcon from '../../../../assets/error.png';
-import infoIcon from '../../../../assets/info.png';
-import successIcon from '../../../../assets/success.png';
-import warningIcon from '../../../../assets/warning.gif';
-import { Accordion } from 'react-bootstrap';
 import { DeleteMessage } from "./Modals/DeleteModal.js";
 import { PartyInfo } from './PartyUpdate/PartyInfo';
 import { PartySector } from './PartyUpdate/PartySector';
@@ -50,9 +42,8 @@ const Details = ({ PartyID, list, setList, no }) => {
     const PartyData = async () => {
         if (no <= 7)
             var result = await GetPartyAdmin(PartyID);
-        else if (no === 8)
+        else if ([8, 9, 11].includes(no))
             var result = await GetParty(PartyID);
-
 
         if (result !== true) {
             setData(result);

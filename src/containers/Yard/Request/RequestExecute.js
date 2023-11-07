@@ -331,7 +331,7 @@ const OrderExecute = ({ RequestID, user, list, setList }) => {
         }
 
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        var data = moment(Date).format('YYYY-MM-DD')
+        var data = moment(today).format('YYYY-MM-DD')
 
         var result = await SaveDocket(RequestID, data, GrandTotal, Count, ReqData);
         if (result !== true) {

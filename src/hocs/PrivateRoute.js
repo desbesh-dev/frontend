@@ -1,8 +1,6 @@
-import React, { Component } from "react";
-import { Route, Redirect, Link } from "react-router-dom";
-import { checkAuthenticated, load_user, logout } from '../actions/auth';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import Layout from "./Layout";
+import React from "react";
+import { useSelector } from 'react-redux';
+import { Redirect, Route } from "react-router-dom";
 
 export var PrivateRoute = ({ component, render, ...rest }) => {
   const { scale, no } = useSelector((state) => state.auth);
@@ -14,13 +12,13 @@ export var PrivateRoute = ({ component, render, ...rest }) => {
         return typeof (scale) === 'undefined' && scale === null ?
           <Redirect to='/home' />
           :
-          scale && no ?
+          scale && no <= 9 ?
             (component ?
               React.createElement(component, props)
               :
               render(props))
             :
-            scale === 6 && no ?
+            scale === 6 && no <= 9 ?
               (component ?
                 React.createElement(component, props)
                 :

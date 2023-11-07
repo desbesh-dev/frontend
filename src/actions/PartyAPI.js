@@ -34,7 +34,6 @@ export const FetchPrintInvoice = async (id) => {
 }
 
 export const FetchPrintQuote = async (id) => {
-
     const config = {
         headers: {
             'Content-Type': 'application/json',

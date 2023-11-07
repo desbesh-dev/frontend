@@ -10,10 +10,7 @@ import { customHeader, locales } from "../Suppliers/Class/datepicker";
 import { DeleteMessage } from './Modal/DeleteModal';
 let today = new Date();
 
-const AccountJournal = ({ display, BisID, CompanyID, BranchID, user, list, setList }) => {
-    const [CreateModalShow, setCreateModalShow] = useState(false);
-    const [UpdateModalShow, setUpdateModalShow] = useState(false);
-    const [ViewModalShow, setViewModalShow] = useState(false)
+const AccountJournal = ({ no }) => {
     const [DeleteModalShow, setDeleteModalShow] = useState(false)
     const [Date, setDate] = useState(today);
     const [Journal, setJournal] = useState()
@@ -94,8 +91,8 @@ const AccountJournal = ({ display, BisID, CompanyID, BranchID, user, list, setLi
                     </ol>
                 </nav>
                 <p className="display-6 d-flex justify-content-center m-0">Account Journal</p>
-
             </div>
+            
             <div className="col-lg-12 h-100 p-0">
                 <div className={`d-flex justify-content-between align-items-center bg-white py-2 px-2`}>
                     <p className='display-6 bg-white fw-bold text-center m-0'>{moment(Date).format("DD MMM YYYY")}</p>
@@ -117,10 +114,7 @@ const AccountJournal = ({ display, BisID, CompanyID, BranchID, user, list, setLi
                             locale={locales[locale]}
                             placeholderText="Date"
                         />
-
-                        <button className="btn fs-3 px-2 ml-2 py-0 text-dark border-left"
-                        // onClick={() => setToggle(true)}
-                        ><i class="fad fa-file-pdf"></i></button>
+                        <button className="btn fs-3 px-2 ml-2 py-0 text-dark border-left"><i class="fad fa-file-pdf"></i></button>
                     </div>
                 </div>
                 <div className="position-absolute overflow-auto my-1 w-100 bg-white" style={{ maxHeight: "85%" }}>
@@ -141,13 +135,11 @@ const AccountJournal = ({ display, BisID, CompanyID, BranchID, user, list, setLi
                                 Array.isArray(Journal) && Journal.length ? Journal.map((item, i) => (
                                     Array.isArray(item.voucher_map) && item.voucher_map.length ? item.voucher_map.map((data, n) => (
                                         <>
-                                            {/* <tr className={`text-center border-top ${parseInt(data.CR) === 0 ? '' : 'bg-body bg-gradient'}`} key={i}> */}
                                             <tr className={`text-center border-top`} key={i}>
                                                 {
                                                     parseInt(data.SLNo) === 1 ?
                                                         <td rowSpan={parseInt(item.Count) + 1} className="border-right p-0">
                                                             <span className="d-block fs-6 fw-bolder text-center">{item.SectorID.Title}</span>
-                                                            {/* <span className="d-block fs-6 fw-bold text-center">{moment(item.CreatedAt).format("DD MMM YYYY")}</span> */}
                                                             <small className="fw-normal"> {item.OperatorID.Name}</small>,
                                                             <small className="fw-normal text-muted"> {moment(data.UpdatedAt).format("hh.mm.ss A")}</small>
                                                         </td>
@@ -155,11 +147,6 @@ const AccountJournal = ({ display, BisID, CompanyID, BranchID, user, list, setLi
                                                 }
                                                 <Fragment>
                                                     <td className={`border-right py-0 ${parseFloat(data.DR) === 0 ? 'pl-4' : 'px-2'}`}><span className="d-block fs-6 fw-bold text-left">{data.COA ? data.COA.COA_Title : ""}</span></td>
-                                                    {/* {data.COA ?
-                                                    <td className={`border-right py-0 ${parseFloat(data.DR) === 0 ? 'pl-5' : 'px-2'}`}><span className="d-block fs-6 fw-bold text-left">{data.COA.COA_Title + "" + data.SupplierID ? data.SupplierID.CmpName : data.BatchID.id}</span></td>
-                                                    :
-                                                    <td className={`border-right py-0 ${parseFloat(data.CR) === 0 ? 'px-2' : 'pl-5'}`}><span className="d-block fs-6 fw-bold text-left">{data.BusinessID.Title}</span></td>
-                                                } */}
                                                     <td className="border-right p-0"><Link className="d-block fs-6 fw-bold text-center" to="#">{data.COA ? data.COA.COA_Code : "N/A"}</Link></td>
                                                     <td className="border-right p-0"><Link className="d-block fs-6 fw-bold text-center" to="#">{item.Reference ? item.Reference : "N/A"}</Link></td>
                                                     <td className="border-right p-0"><span className="d-block fs-6 fw-bold text-center">{parseFloat(data.DR) === 0.00 ? "—" : parseFloat(data.DR).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
@@ -168,10 +155,9 @@ const AccountJournal = ({ display, BisID, CompanyID, BranchID, user, list, setLi
                                                     {
                                                         parseInt(data.SLNo) === 1 ?
                                                             <td rowSpan={parseInt(item.Count) + 1} className="p-0 mb-2">
-                                                                <button className="btn p-1 text-dark"
-                                                                    onClick={() => { setItemID(item); setDeleteModalShow(true) }} ><i className="fs-3 fad fa-trash-alt" />
-                                                                </button>
-                                                            </td> : null}
+                                                                {no === 1 && <button className="btn p-1 text-dark" onClick={() => { setItemID(item); setDeleteModalShow(true) }} ><i className="fs-3 fad fa-trash-alt" /> </button>}
+                                                            </td> : null
+                                                    }
                                                 </Fragment>
                                             </tr>
                                             {
@@ -188,7 +174,6 @@ const AccountJournal = ({ display, BisID, CompanyID, BranchID, user, list, setLi
                                                     </>
                                                     : null
                                             }
-
                                         </>
                                     ))
                                         : null
@@ -218,7 +203,9 @@ const AccountJournal = ({ display, BisID, CompanyID, BranchID, user, list, setLi
 }
 const mapStateToProps = (state, props) => ({
     display: state.OverlayDisplay,
-    BisID: props.match.params.id
+    BisID: props.match.params.id,
+    no: state.auth.no,
+    cat: state.auth.cat
 });
 
 export default connect(mapStateToProps, { logout })(AccountJournal);

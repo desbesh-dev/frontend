@@ -1,24 +1,22 @@
-import React, { Component } from "react";
-import { Route, Redirect, Link } from "react-router-dom";
-import { checkAuthenticated, load_user, logout } from '../actions/auth';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import Layout from "./Layout";
+import React from "react";
+import { useSelector } from 'react-redux';
+import { Redirect, Route } from "react-router-dom";
 
 export var SalesRepresentativeRoute = ({ component, render, ...rest }) => {
-  const { scale, sub_scale } = useSelector((state) => state.auth);
+  const { no, sub_scale } = useSelector((state) => state.auth);
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        return typeof (scale) === 'undefined' && scale === null ?
-          <Redirect to='/login' />
+        return typeof (no) === 'undefined' && no === null ?
+          <Redirect to='/wellcome' />
           :
-          scale === 3 && (sub_scale === 2 || sub_scale === 3 || sub_scale === 4) ?
+          ([8, 9, 12].includes(no)) || no <= 7 ?
             (component ? React.createElement(component, props) : render(props))
             :
-            <Redirect to='/login' />
+            <Redirect to='/wellcome' />
       }}
     />
   )
-}
+} 

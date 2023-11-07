@@ -8,15 +8,13 @@ import { inWords } from '../../../hocs/NumberToWord';
 // import { numberToWords } from '../../hocs/Class/InWord';
 
 export const QuotePrint = async (e, item, status) => {
-
     var JsBarcode = require('jsbarcode');
-
-    const name = item.SisterName;
-    var cmpAd = 'PO Box: 262, Boroko, National Capital District, S#93, L#31, Vani Place, Gordons';
+    const name = 'DESH BESH ENTERPRISE LTD';
+    const sis_name = item.SisterName;
+    var cmpAd = item.Location;
     const Shop = "Shop: " + item.ShortCode + " (" + item.SectorName + ")";
     const imgData = await convertImgToBase64URL(logo)
     const watermarkData = await convertImgToBase64URL(watermark)
-
     const alignCol = (data) => {
         if (data.row.section === 'body') {
             data.cell.height = 10; // Adjust this value to change the row height in the body section
@@ -63,10 +61,11 @@ export const QuotePrint = async (e, item, status) => {
     const marginX = (pageWidth - canvasWidth) / 1;
     const marginY = (pageHeight - canvasHeight) / 2;
 
-    doc.addImage(imgData, 'JPEG', marginLeft + 30, marginTop, 60, 50);
-    doc.setFontSize(20).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
+    doc.addImage(imgData, 'JPEG', marginLeft + 15, marginTop, 68, 70);
+    doc.setFontSize(18).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
 
-    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 28)
+    doc.setFontSize(14).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(sis_name, marginLeft + 94, marginTop + 28)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 41)
 
     const contact = [
         item.Phone && `Phone: ${item.Phone}`,
@@ -76,13 +75,13 @@ export const QuotePrint = async (e, item, status) => {
         item.Imo && `Imo: ${item.Imo}`,
         item.Wechat && `Wechat: ${item.Wechat}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text(contact, marginLeft + 94, marginTop + 38)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(contact, marginLeft + 94, marginTop + 51)
 
     const online_contact = [
         item.Email && `Email: ${item.Email}`,
         item.Website && `Website: ${item.Website}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text(online_contact, marginLeft + 94, marginTop + 48)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(online_contact, marginLeft + 94, marginTop + 61)
 
     doc.setDrawColor(220, 220, 220);
     doc.setLineWidth(2);
@@ -94,7 +93,7 @@ export const QuotePrint = async (e, item, status) => {
     let height = 20;
 
     doc.setFillColor(255, 255, 255).rect(x - 55, 88, width, height, 'F');
-    doc.setFontSize(16).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("QUOTATION", doc.internal.pageSize.getWidth() / 2, 102, { align: "center" });
+    doc.setFontSize(16).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("QUOTATION", x, 102, { align: "center" });
 
     JsBarcode(order, item.QuoteNo, {
         font: "Arial",
@@ -277,7 +276,7 @@ export const QuotePrint = async (e, item, status) => {
 
     var body = [
         ["TOTAL", " :", getTotal().toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["10% GST INCLUDED", " :", parseFloat(0.00).toLocaleString("en", { minimumFractionDigits: 2 })],
+        ["10% GST INCLUDED", " :", parseFloat((parseFloat(item.GrandTotal) * 0.10).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["DISCOUNT", " :", parseFloat(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["SHIPPING COST", " :", parseFloat(item.Shipping).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["NET TOTAL", " :", parseFloat(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 2 })]
@@ -325,18 +324,22 @@ export const QuotePrint = async (e, item, status) => {
 
 
     let summery_table_y = doc.lastAutoTable.finalY + 4;
-    // doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("Payment Info: ", marginLeft, LastY + 15)
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Total Item: " + parseFloat(item.QuoteMapData.length).toLocaleString("en", { minimumFractionDigits: 0 }), marginLeft, LastY + 30)
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Total Quantity: " + parseFloat(TotalQty).toLocaleString("en", { minimumFractionDigits: 2 }), 200, LastY + 30)
-    // doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Account No: " + item.Bank.AccNo, marginLeft, LastY + 45)
-    // doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("BSB Number: " + item.Bank.BSBNO, marginLeft, LastY + 60)
 
     const amountInWords = inWords(parseFloat(getTotal()));
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("Amount (In Word): ", marginLeft, summery_table_y + 10)
     var Words = doc.splitTextToSize(amountInWords, 400); //Text wrap after char
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text(Words, marginLeft + 100, summery_table_y + 10)
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'italic').text("**Please contact with us for further information about payment options", marginLeft, summery_table_y + 40)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("PLEASE PAYMENT TO: ", marginLeft, summery_table_y + 30)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Bank: " + item.Bank.BankName, marginLeft, summery_table_y + 42)
+    // doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Branch Name: " + item.Bank.BranchName, marginLeft, summery_table_y + 54)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("A/C Name: " + item.Bank.AccName, marginLeft, summery_table_y + 54)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("A/C No: " + item.Bank.AccNo, marginLeft, summery_table_y + 66)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("BSB Number: " + item.Bank.BSBNO, marginLeft, summery_table_y + 78)
+
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'italic').text("**Please contact with us for further information about payment options", marginLeft, summery_table_y + 93)
 
     let pageCount = doc.internal.getNumberOfPages()
     // Add the image to each page

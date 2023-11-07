@@ -168,7 +168,7 @@ export const StockModal = (props) => {
                                 <p class="col-form-label fs-6 fw-bold text-center text-success border-bottom mx-2 p-0">Stock Bird</p>
                                 <div className="form-group px-2 d-flex">
                                     <div className="row pr-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Quantity</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Quantity</label>
                                         <input
                                             type="number"
                                             class="form-control fw-bold"
@@ -183,7 +183,7 @@ export const StockModal = (props) => {
                                             : null}
                                     </div>
                                     <div className="row pl-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Weight</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Weight</label>
                                         <input
                                             type="number"
                                             class="form-control fw-bold"
@@ -200,7 +200,7 @@ export const StockModal = (props) => {
                                 </div>
                                 <div className="form-group px-2 d-flex">
                                     <div className="row pr-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Rate</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Rate</label>
                                         <input
                                             type="number"
                                             class="form-control fw-bold"
@@ -215,7 +215,7 @@ export const StockModal = (props) => {
                                             : null}
                                     </div>
                                     <div className="row pl-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Amount</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Amount</label>
                                         <input
                                             type="text"
                                             class="form-control fw-bold"
@@ -237,7 +237,7 @@ export const StockModal = (props) => {
                                 <p class="col-form-label fs-6 fw-bold text-center text-success border-bottom mx-2 p-0">Stock Feed</p>
                                 <div className="form-group px-2 d-flex">
                                     <div className="row pr-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Quantity</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Quantity</label>
                                         <input
                                             type="numeric"
                                             class="form-control fw-bold"
@@ -253,7 +253,7 @@ export const StockModal = (props) => {
                                             : null}
                                     </div>
                                     <div className="row pl-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Weight</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Weight</label>
                                         <input
                                             type="numeric"
                                             class="form-control fw-bold"
@@ -270,7 +270,7 @@ export const StockModal = (props) => {
                                 </div>
                                 <div className="form-group px-2 d-flex">
                                     <div className="row pr-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Rate</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Rate</label>
                                         <input
                                             type="number"
                                             class="form-control fw-bold"
@@ -285,7 +285,7 @@ export const StockModal = (props) => {
                                             : null}
                                     </div>
                                     <div className="row pl-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Amount</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Amount</label>
                                         <input
                                             type="text"
                                             class="form-control fw-bold"
@@ -309,7 +309,7 @@ export const StockModal = (props) => {
 
                                 <div className="form-group px-2 d-flex">
                                     <div className="row pr-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Quantity</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Quantity</label>
                                         <input
                                             type="number"
                                             class="form-control fw-bold"
@@ -325,7 +325,7 @@ export const StockModal = (props) => {
                                             : null}
                                     </div>
                                     <div className="row pl-1 m-0 w-100">
-                                        <label for="message-text" class="col-form-label p-0">* Weight</label>
+                                        <label htmlFor="message-text" class="col-form-label p-0">* Weight</label>
                                         <input
                                             type="text"
                                             class="form-control fw-bold"

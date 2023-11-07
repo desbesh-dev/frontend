@@ -337,42 +337,14 @@ const RequestList = ({ user, list, setList, no }) => {
                                                     <td className="py-0 border-right"><span className="d-block fw-bold">{(item.Due).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
                                                     <td className="py-0 border-right"><small className="d-block fw-bold">{getLabel(item.Payment, PaymentTerms)}</small> </td>
                                                     <td className="py-0 border-right" style={{ width: "120px" }}>
-                                                        {/* {item.Status === 2 ?
-                                                            <Select
-                                                                menuPlacement="auto"
-                                                                menuPosition="fixed"
-                                                                menuPortalTarget={document.body}
-                                                                borderRadius={"0px"}
-                                                                options={[
-                                                                    { value: 2, label: "Shipped" },
-                                                                    { value: 3, label: "Delivered" },
-                                                                    { value: 4, label: "Cancel" },
-                                                                    { value: 5, label: "Postpond" }
-                                                                ]}
-                                                                name="Status"
-                                                                placeholder={"Status"}
-                                                                styles={CScolourStyles}
-                                                                value={item.Status || selectValue}
-                                                                onChange={(e) => {
-                                                                    item.Status = e.value; // Assign the selected status value directly to the item
-                                                                    UpdateInvoiceStatus(e, item)
-                                                                }}
-                                                                required
-                                                                id="Status"
-                                                            />
-                                                            : */}
                                                         <span className="d-block fw-bold ">{getStatusLabel(item.Status)}</span>
-                                                        {/* } */}
                                                     </td>
                                                     <td className="p-0 text-nowrap">
-                                                        {user.Collocation.SLNo === 5 && item.Status === 1 ?
+                                                        {user.Collocation.SLNo === 30 && item.Status === 1 ?
                                                             <Link className="btn fs-3 px-2 py-0 text-danger" to={`/request_exc/${item.id}`}><i className="fad fa-truck-container"></i></Link>
                                                             :
-                                                            <Link className="btn fs-3 px-2 py-0 text-danger"
-                                                            // to={`/sell_invoice_preview/${item.SaleID}`}
-                                                            ><i className="fad fa-eye"></i></Link>
+                                                            <Link className="btn fs-3 px-2 py-0 text-danger"><i className="fad fa-eye"></i></Link>
                                                         }
-                                                        {/* <Link className="btn fs-3 px-2 py-0 text-danger" to={`/order_exc/${item.id}`}><i className="fad fa-truck-couch"></i></Link> */}
                                                         <button className="btn fs-3 px-2 py-0 text-danger" onClick={(e) => PrintPDF(e, item)}> <i className="fad fa-print"></i></button>
                                                     </td>
                                                 </tr>

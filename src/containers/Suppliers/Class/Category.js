@@ -17,5 +17,9 @@ export const CategoryList = [
     { value: 16, label: "Sheep (Live)" },
     { value: 17, label: "Cow (Live)" },
     { value: 18, label: "Meats" },
-    { value: 18, label: "Fruits" },
+    { value: 19, label: "Fruits" },
+    { value: 20, label: "Kitchen Ware" },
+    { value: 21, label: "Kitchen" },
+    { value: 22, label: "Raw" },
+    { value: 23, label: "Feed" },
 ]

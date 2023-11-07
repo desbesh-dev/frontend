@@ -131,7 +131,7 @@ const Login = ({ display, login, isAuthenticated, error, message, scale, sub_sca
                                     });
                                 }}
                             />
-                            <label for="rememberme">Remember me</label>
+                            <label htmlFor="rememberme">Remember me</label>
                         </div>
                         <button className='btn btn-primary' type='submit'>Login</button>
                     </form>

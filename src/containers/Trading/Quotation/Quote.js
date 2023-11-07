@@ -20,7 +20,7 @@ import { InfoMessage, InvalidDate } from "../../Modals/ModalForm.js";
 import { customHeader, locales } from "../../Suppliers/Class/datepicker";
 import { Receipt } from '../CounterReceipt';
 import { DiscountModal } from '../ViewInvoice/Modals/ModalForm';
-
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 import 'react-virtualized-select/styles.css';
 import '../../../hocs/react-select/dist/react-select.css';
 
@@ -166,18 +166,6 @@ const Quote = ({ user, list, setList }) => {
         }
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
-
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuList: provided => ({
-            ...provided,
-            backgroundColor: 'white',
-        }),
-    };
 
     const handleToggleAutoFire = () => {
         setAutoFire((AutoFire) => !AutoFire);
@@ -811,7 +799,7 @@ const Quote = ({ user, list, setList }) => {
                                     </tr>
                                     <tr className="text-center border-success bg-white">
                                         <td className="py-0 px-1 border-right" colSpan="5"><span className="d-block text-right">10% GST Included </span> </td>
-                                        <td className="py-0 d-flex justify-content-end border-right" style={{ width: "160px" }}><input style={{ width: "140px" }} disabled type="text" autocomplete="off" className="d-block text-right border-0" id="Vat" value={Vat} onChange={(e) => VatCalc(e)} /></td>
+                                        <td className="py-0 d-flex justify-content-end border-right" style={{ width: "160px" }}><input style={{ width: "140px" }} disabled type="text" autocomplete="off" className="d-block text-right border-0" id="Vat" value={(parseFloat(getTotal()) * 0.10).toFixed(2)} onChange={(e) => VatCalc(e)} /></td>
                                     </tr>
                                     <tr className="text-center border-success bg-white">
                                         <td className="py-0 px-1 border-right" colSpan="5"><span className="d-block text-right ">Discount (K) </span> </td>
@@ -922,7 +910,7 @@ const Quote = ({ user, list, setList }) => {
                                         options={MyProList}
                                         name="Title"
                                         placeholder={"Please select product"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Title}
                                         onChange={(e) => { if (e) { DropdownAction(e.value); setFormData(e); } }}
                                         required
@@ -1025,7 +1013,7 @@ const Quote = ({ user, list, setList }) => {
                                             options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, ...(PartyData?.IsDispatchable ? [{ label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }] : [])]}
                                             name="Remark"
                                             placeholder={"Please select product"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={{ label: Remark, value: 0 }}
                                             onChange={(e) => RemarkToggle(e)}
                                             isDisabled={!PartyData?.IsDispatchable}
@@ -1119,7 +1107,7 @@ const Quote = ({ user, list, setList }) => {
                                             options={PartyList}
                                             name="Party"
                                             placeholder={"Please select party"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={PartyID}
                                             onChange={(e) => setPartyID(e)}
                                             required
@@ -1129,7 +1117,7 @@ const Quote = ({ user, list, setList }) => {
                                 </div>
                                 :
 
-                                <div className="d-flex py-2 m-0 justify-content-center align-items-top w-100" style={{ backgroundColor: "#F4DCC1", zIndex: 1, height: "90px" }}>
+                                <div className="d-flex py-2 m-0 justify-content-center align-items-top w-100" style={{ backgroundColor: "#F4DCC1", height: "90px" }}>
                                     <div className="row justify-content-center p-0">
                                         <input
                                             ref={NameFocus}

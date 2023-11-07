@@ -145,7 +145,7 @@ const Home = ({ data, login, error, message, scale, sub_scale }) => {
                                                     });
                                                 }}
                                             />
-                                            <label for="rememberme">Remember me</label>
+                                            <label htmlFor="rememberme">Remember me</label>
                                         </div>
                                         <button className='btn btn-dark' type='submit'>Submit</button>
                                     </form>

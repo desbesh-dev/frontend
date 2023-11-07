@@ -11,9 +11,9 @@ import { inWords } from '../../hocs/NumberToWord';
 
 export const InvoicePrint = async (e, item, status) => {
     var JsBarcode = require('jsbarcode');
-
-    const name = item.SisterName;
-    var cmpAd = 'PO Box: 262, Boroko, National Capital District, S#93, L#31, Vani Place, Gordons';
+    const name = 'DESH BESH ENTERPRISE LTD';
+    const sis_name = item.SisterName;
+    var cmpAd = item.Location;
     const Shop = "Shop: " + item.ShortCode + " (" + item.SectorName + ")";
     const imgData = await convertImgToBase64URL(logo)
     const watermarkData = await convertImgToBase64URL(watermark)
@@ -32,18 +32,6 @@ export const InvoicePrint = async (e, item, status) => {
             data.cell.styles.valign = 'middle';
         } else if (col === 4 || col === 5) {
             data.cell.styles.halign = 'right';
-        }
-    }
-
-    const colorRow = (data) => {
-        let index = null;
-        if (data.cell.text[0] === "Payment" || data.cell.text[0] === "Net Payment" || data.cell.text[0] === "Grand Payment") {
-            index = data.row.index;
-            // data.cell.styles.fontStyle = 'bold';
-        }
-        if (data.row.index === index) {
-            data.cell.styles.fontStyle = 'bold';
-            data.cell.styles.fillColor = [216, 78, 75];
         }
     }
 
@@ -70,10 +58,11 @@ export const InvoicePrint = async (e, item, status) => {
     const marginX = (pageWidth - canvasWidth) / 1;
     const marginY = (pageHeight - canvasHeight) / 2;
 
-    doc.addImage(imgData, 'JPEG', marginLeft + 30, marginTop, 60, 50);
-    doc.setFontSize(20).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
+    doc.addImage(imgData, 'JPEG', marginLeft + 15, marginTop, 68, 70);
+    doc.setFontSize(18).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
 
-    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 28)
+    doc.setFontSize(14).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(sis_name, marginLeft + 94, marginTop + 28)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 41)
 
     const contact = [
         item.Phone && `Phone: ${item.Phone}`,
@@ -83,13 +72,13 @@ export const InvoicePrint = async (e, item, status) => {
         item.Imo && `Imo: ${item.Imo}`,
         item.Wechat && `Wechat: ${item.Wechat}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text(contact, marginLeft + 94, marginTop + 38)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(contact, marginLeft + 94, marginTop + 51)
 
     const online_contact = [
         item.Email && `Email: ${item.Email}`,
         item.Website && `Website: ${item.Website}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text(online_contact, marginLeft + 94, marginTop + 48)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(online_contact, marginLeft + 94, marginTop + 61)
 
     doc.setDrawColor(220, 220, 220);
     doc.setLineWidth(2);
@@ -128,8 +117,6 @@ export const InvoicePrint = async (e, item, status) => {
     const no = item.OrderNo || item.InvoiceNo ?
         `Date: ${moment(item.Date).format("DD MMM YYYY")}, ${item.OrderNo ? `Order No: ${item.OrderNo}` : ""}${item.InvoiceNo ? `${item.OrderNo ? ", " : ""}Invoice No: ${item.InvoiceNo}` : ""}`
         : `Date: ${moment(item.Date).format("DD MMM YYYY")}`;
-
-
 
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(tin, marginLeft + 35, 115)
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(gst, marginLeft + 35, 127)
@@ -302,11 +289,13 @@ export const InvoicePrint = async (e, item, status) => {
         if (!Array.isArray(item.SellMapData) || !item.SellMapData.length) return 0.00;
         return item.SellMapData.reduce((acc, { SubTotal }) => acc + parseFloat(SubTotal), 0.00);
     };
+    const result = ((parseFloat(item.GrandTotal) - parseFloat(item.Shipping) + parseFloat(item.Discount)) * 0.10).toFixed(2);
+    const formattedResult = parseFloat(result).toLocaleString("en", { minimumFractionDigits: 2 });
 
     var body = [
         ["TOTAL", " :", getTotal().toLocaleString("en", { minimumFractionDigits: 2 })],
         ["DISCOUNT", " :", parseFloat(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["10% GST INCLUDED", " :", parseFloat((parseFloat(item.GrandTotal) * 0.10).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 })],
+        ["10% GST INCLUDED", " :", formattedResult],
         ["SHIPPING COST", " :", parseFloat(item.Shipping).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["NET AMOUNT", " :", parseFloat(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["PAID AMOUNT", " :", parseFloat(item.PaidAmount).toLocaleString("en", { minimumFractionDigits: 2 })],
@@ -353,17 +342,22 @@ export const InvoicePrint = async (e, item, status) => {
     });
 
     let summery_table_y = doc.lastAutoTable.finalY + 4;
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("Total Item: " + (Array.isArray(item.SellMapData) ? item.SellMapData.length : 0) + ", Total Qty: " + TotalQty, marginLeft, LastY + 15)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("• Payment Info: ", marginLeft, LastY + 45)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Account Name: " + item.Bank.AccName, marginLeft, LastY + 60)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Account No: " + item.Bank.AccNo, marginLeft, LastY + 75)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("BSB Number: " + item.Bank.BSBNO, marginLeft, LastY + 90)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Total Item: " + parseFloat(item.SellMapData.length).toLocaleString("en", { minimumFractionDigits: 0 }), marginLeft, LastY + 30)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Total Quantity: " + parseFloat(TotalQty).toLocaleString("en", { minimumFractionDigits: 2 }), 200, LastY + 30)
 
     const amountInWords = inWords(parseFloat(getTotal()));
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("Amount (In Word): ", marginLeft, summery_table_y + 20)
-    var Words = doc.splitTextToSize(amountInWords, 260); //Text wrap after char
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text(Words, marginLeft + 100, summery_table_y + 20)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("Amount (In Word): ", marginLeft, summery_table_y + 10)
+    var Words = doc.splitTextToSize(amountInWords, 320); //Text wrap after char
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text(Words, marginLeft + 100, summery_table_y + 10)
 
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("PLEASE PAYMENT TO: ", marginLeft, summery_table_y + 30)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Bank: " + item.Bank.BankName, marginLeft, summery_table_y + 42)
+    // doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Branch Name: " + item.Bank.BranchName, marginLeft, summery_table_y + 54)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("A/C Name: " + item.Bank.AccName, marginLeft, summery_table_y + 54)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("A/C No: " + item.Bank.AccNo, marginLeft, summery_table_y + 66)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("BSB Number: " + item.Bank.BSBNO, marginLeft, summery_table_y + 78)
+
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'italic').text("**Please contact with us for further information about payment options", marginLeft, summery_table_y + 93)
 
     let pageCount = doc.internal.getNumberOfPages()
     // Add the image to each page

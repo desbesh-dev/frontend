@@ -1,16 +1,13 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
+import { useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { useDispatch } from 'react-redux';
 import Select from 'react-select';
-import { checkToken } from '../../../../../actions/auth';
-import { UpdateContract, LoadCondList, getLabel } from '../../../../../actions/ContractAPI';
-import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
+import { CreatePartySector, PartyStatusList } from "../../../../../actions/APIHandler";
+import { getLabel } from '../../../../../actions/ContractAPI';
 import { DISPLAY_OVERLAY } from '../../../../../actions/types';
 import errorIcon from '../../../../../assets/error.png';
-import infoIcon from '../../../../../assets/info.png';
 import successIcon from '../../../../../assets/success.png';
 import warningIcon from '../../../../../assets/warning.gif';
-import { CreatePartySector, PartyStatusList, UpdatePartySector } from "../../../../../actions/APIHandler";
 
 export const PartySectorCreate = (props) => {
 
@@ -127,7 +124,7 @@ export const PartySectorCreate = (props) => {
             <Modal.Body>
                 <form>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Party</label>
+                        <label htmlFor="recipient-name" class="col-form-label">Party</label>
                         <Select
                             menuPlacement="auto"
                             menuPosition="fixed"
@@ -146,7 +143,7 @@ export const PartySectorCreate = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="Contact" class="col-form-label">Address</label>
+                        <label htmlFor="Contact" class="col-form-label">Address</label>
                         <input
                             type="text"
                             class="form-control"
@@ -161,7 +158,7 @@ export const PartySectorCreate = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="Contact" class="col-form-label">Conact No</label>
+                        <label htmlFor="Contact" class="col-form-label">Conact No</label>
                         <input
                             type="text"
                             class="form-control"
@@ -176,7 +173,7 @@ export const PartySectorCreate = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="message-text" class="col-form-label">Security Money</label>
+                        <label htmlFor="message-text" class="col-form-label">Security Money</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -193,7 +190,7 @@ export const PartySectorCreate = (props) => {
                         }
                     </div>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Balance</label>
+                        <label htmlFor="recipient-name" class="col-form-label">Balance</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -208,7 +205,7 @@ export const PartySectorCreate = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="message-text" class="col-form-label">Credit Limit</label>
+                        <label htmlFor="message-text" class="col-form-label">Credit Limit</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -226,7 +223,7 @@ export const PartySectorCreate = (props) => {
                     <div className="row">
                         <div className="col-md-8">
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Target</label>
+                                <label htmlFor="message-text" class="col-form-label">Target</label>
                                 <input
                                     type="numeric"
                                     class="form-control"
@@ -243,7 +240,7 @@ export const PartySectorCreate = (props) => {
                         </div>
                         <div className="col-md-4">
                             <div className="form-group">
-                                <label for="recipient-name" class="col-form-label">Currency</label>
+                                <label htmlFor="recipient-name" class="col-form-label">Currency</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -265,7 +262,7 @@ export const PartySectorCreate = (props) => {
                     </div>
                     {props.access <= 7 ?
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Status</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Status</label>
                             <Select
                                 menuPlacement="auto"
                                 menuPosition="fixed"

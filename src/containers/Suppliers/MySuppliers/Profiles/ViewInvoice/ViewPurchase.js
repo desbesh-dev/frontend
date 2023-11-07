@@ -36,25 +36,12 @@ const ViewPurchase = ({ user, list, setList, PurchaseID }) => {
     const [Data, setData] = useState(false)
     const [Item, setItem] = useState(false)
     const [DeleteData, setDeleteData] = useState(false)
-    const [StockItem, setStockItem] = useState(false)
-    const [PurchaseMapData, setSellMapData] = useState([])
-    const [Count, setCount] = useState(null)
     const [Error, setError] = useState({});
 
-
     const [PurchaseMapReturn, setPurchaseMapReturn] = useState([])
-    const [InvoiceNo, setInvoiceNo] = useState(0)
-    const [Receiver, setReceiver] = useState(null)
-    const [Payment, setPayment] = useState({ label: "Cash", value: 14 })
-    const [Percent, setPercent] = useState(null)
-    const [Vat, setVat] = useState(null)
-    const [Discount, setDiscount] = useState(null)
     const [Total, setTotal] = useState(0.00)
     const [Paid, setPaid] = useState(0.00)
-    const [Due, setDue] = useState(0.00)
-    const [RefundAmount, setRefundAmount] = useState(0.00)
 
-    const [SearchKey, setSearchKey] = useState(false)
     let toastProperties = null;
 
     const dispatch = useDispatch();
@@ -64,13 +51,11 @@ const ViewPurchase = ({ user, list, setList, PurchaseID }) => {
         GetInvoiceData();
     }, [])
 
-
     const GetInvoiceData = async () => {
         setNoteItem(false);
         setNoteModalShow(false)
         setItem(false);
         var result = await FetchPurchaseInvoice(PurchaseID);
-
         if (result !== true) {
             setPurchaseMapReturn(result.PurchaseMapReturn)
             setData(result)

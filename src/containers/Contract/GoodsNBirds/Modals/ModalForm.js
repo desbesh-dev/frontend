@@ -1,20 +1,19 @@
-import { Modal } from "react-bootstrap";
-import React, { useEffect, useState } from 'react';
-import Select from 'react-select';
-import { checkToken } from '../../../../actions/auth';
-import { SaveExpire, SaveGodown, UpdateGodown } from '../../../../actions/ContractAPI';
-import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import * as moment from 'moment';
+import { useEffect, useState } from 'react';
+import { Modal } from "react-bootstrap";
+import Datepicker from 'react-datepicker';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import Select from 'react-select';
+import { FetchBranch, LoadAccount } from "../../../../actions/APIHandler";
+import { SaveExpire, SaveGodown, UpdateGodown } from '../../../../actions/ContractAPI';
 import { DISPLAY_OVERLAY } from '../../../../actions/types';
 import errorIcon from '../../../../assets/error.png';
 import infoIcon from '../../../../assets/info.png';
 import successIcon from '../../../../assets/success.png';
 import warningIcon from '../../../../assets/warning.gif';
-import { FetchBranch, LoadAccount } from "../../../../actions/APIHandler";
 import { customHeader, locales } from "../../../Suppliers/Class/datepicker";
-import Datepicker from 'react-datepicker';
-import * as moment from 'moment'
 
 let today = new Date();
 
@@ -61,7 +60,7 @@ export const Create = (props) => {
 
     const LoadRep = async () => {
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        
+
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -190,7 +189,7 @@ export const Create = (props) => {
                         <small className="text-center px-0">Please fill up the field</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Title</label>
+                                <label htmlFor="message-text" className="col-form-label">Title</label>
                                 <input
                                     type="text"
                                     className="form-control fw-bold"
@@ -205,7 +204,7 @@ export const Create = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Godown Type</label>
+                                <label htmlFor="message-text" className="col-form-label">Godown Type</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -227,7 +226,7 @@ export const Create = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Quantity</label>
+                                <label htmlFor="message-text" className="col-form-label">Quantity</label>
                                 <input
                                     type="number"
                                     className="form-control fw-bold"
@@ -243,7 +242,7 @@ export const Create = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Weight</label>
+                                <label htmlFor="message-text" className="col-form-label">Weight</label>
                                 <input
                                     type="number"
                                     className="form-control fw-bold"
@@ -259,7 +258,7 @@ export const Create = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Unit Cost</label>
+                                <label htmlFor="message-text" className="col-form-label">Unit Cost</label>
                                 <input
                                     type="number"
                                     className="form-control fw-bold"
@@ -275,7 +274,7 @@ export const Create = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Total Cost</label>
+                                <label htmlFor="message-text" className="col-form-label">Total Cost</label>
                                 <input
                                     type="number"
                                     className="form-control fw-bold"
@@ -291,7 +290,7 @@ export const Create = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Representative</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Representative</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -313,7 +312,7 @@ export const Create = (props) => {
 
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Godown Account</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Godown Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -335,7 +334,7 @@ export const Create = (props) => {
 
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Bird Stock Account</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Bird Stock Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -357,7 +356,7 @@ export const Create = (props) => {
 
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Expire Account</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Expire Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -379,7 +378,7 @@ export const Create = (props) => {
 
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Branch</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Branch</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -457,7 +456,7 @@ export const Update = (props) => {
 
     const LoadRep = async () => {
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        
+
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -589,7 +588,7 @@ export const Update = (props) => {
                         <small className="text-center px-0">Please fill up the field</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Title</label>
+                                <label htmlFor="message-text" className="col-form-label">Title</label>
                                 <input
                                     type="text"
                                     className="form-control fw-bold"
@@ -604,7 +603,7 @@ export const Update = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Godown Type</label>
+                                <label htmlFor="message-text" className="col-form-label">Godown Type</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -626,7 +625,7 @@ export const Update = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Quantity</label>
+                                <label htmlFor="message-text" className="col-form-label">Quantity</label>
                                 <input
                                     type="number"
                                     className="form-control fw-bold"
@@ -642,7 +641,7 @@ export const Update = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Weight</label>
+                                <label htmlFor="message-text" className="col-form-label">Weight</label>
                                 <input
                                     type="number"
                                     className="form-control fw-bold"
@@ -658,7 +657,7 @@ export const Update = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Unit Cost</label>
+                                <label htmlFor="message-text" className="col-form-label">Unit Cost</label>
                                 <input
                                     type="number"
                                     className="form-control fw-bold"
@@ -674,7 +673,7 @@ export const Update = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Total Cost</label>
+                                <label htmlFor="message-text" className="col-form-label">Total Cost</label>
                                 <input
                                     type="number"
                                     className="form-control fw-bold"
@@ -690,7 +689,7 @@ export const Update = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Representative</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Representative</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -712,7 +711,7 @@ export const Update = (props) => {
 
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Godown Account</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Godown Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -734,7 +733,7 @@ export const Update = (props) => {
 
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Bird Stock Account</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Bird Stock Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -756,7 +755,7 @@ export const Update = (props) => {
 
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Expire Account</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Expire Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -778,7 +777,7 @@ export const Update = (props) => {
 
 
                             <div className="form-group">
-                                <label for="recipient-name" className="col-form-label">Branch</label>
+                                <label htmlFor="recipient-name" className="col-form-label">Branch</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -1017,7 +1016,7 @@ export const Expire = (props) => {
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label text-center">Expire Quantity</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center">Expire Quantity</label>
                                         <input
                                             type="text"
                                             className="form-control text-center fw-bolder"
@@ -1035,7 +1034,7 @@ export const Expire = (props) => {
 
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label">Expire Weight</label>
+                                        <label htmlFor="message-text" className="col-form-label">Expire Weight</label>
                                         <input
                                             type="text"
                                             className="form-control text-center fw-bolder"
@@ -1055,7 +1054,7 @@ export const Expire = (props) => {
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label text-center">Unit Cost <small className="text-success"> {parseFloat(UnitCost) === parseFloat(AVGCost) ? "(Auto Generated)" : "(Custom Rate)"}</small></label>
+                                        <label htmlFor="message-text" className="col-form-label text-center">Unit Cost <small className="text-success"> {parseFloat(UnitCost) === parseFloat(AVGCost) ? "(Auto Generated)" : "(Custom Rate)"}</small></label>
                                         <input
                                             type="text"
                                             className="form-control text-center fw-bolder"
@@ -1074,7 +1073,7 @@ export const Expire = (props) => {
 
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label">Total Cost</label>
+                                        <label htmlFor="message-text" className="col-form-label">Total Cost</label>
                                         <input
                                             type="text"
                                             className="form-control text-center fw-bolder"

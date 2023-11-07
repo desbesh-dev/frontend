@@ -21,6 +21,7 @@ import { Receipt } from '../CounterReceipt';
 import { DiscountModal } from '../ViewInvoice/Modals/ModalForm';
 
 import 'react-virtualized-select/styles.css';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 import '../../../hocs/react-select/dist/react-select.css';
 
 let today = new Date();
@@ -33,8 +34,6 @@ const PursOrder = ({ user, list, setList }) => {
     const [MyProList, setMyProList] = useState([])
     const [SupplierList, setSupplierList] = useState(false)
     const [Supplier, setSupplier] = useState('')
-    const [WalkIN, setWalkIN] = useState(false)
-    const [PartyData, setPartyData] = useState()
     const [Subscriber, setSubscriber] = useState(false)
     const [SellInfo, setSellInfo] = useState(null)
 
@@ -45,14 +44,11 @@ const PursOrder = ({ user, list, setList }) => {
     const [Percent, setPercent] = useState(null)
     const [Vat, setVat] = useState(null)
     const [Discount, setDiscount] = useState(0.00)
-    const [Shipment, setShipment] = useState(0.00)
     const [Total, setTotal] = useState(0.00)
     const [Paid, setPaid] = useState(0.00)
     const [Due, setDue] = useState(0.00)
-    const [RefundAmount, setRefundAmount] = useState(0.00)
     const [Available, setAvailable] = useState(0)
     const [DiscPrct, setDiscPrct] = useState(0)
-    const [SpecialValue, setSpecialValue] = useState(0)
     const [AutoFire, setAutoFire] = useState(0)
     const [kode, setCode] = useState('')
 
@@ -61,7 +57,6 @@ const PursOrder = ({ user, list, setList }) => {
     const [Name, setName] = useState('')
     const [Address, setAddress] = useState('')
 
-    const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
 
     let [PursData, setPursData] = useState([]);
@@ -161,17 +156,6 @@ const PursOrder = ({ user, list, setList }) => {
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
 
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuList: provided => ({
-            ...provided,
-            backgroundColor: 'white',
-        }),
-    };
 
     const handleToggleAutoFire = () => {
         setAutoFire((AutoFire) => !AutoFire);
@@ -656,7 +640,7 @@ const PursOrder = ({ user, list, setList }) => {
                                         options={MyProList}
                                         name="Title"
                                         placeholder={"Please select product"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Title}
                                         onChange={(e) => { if (e) { BarcodeAction(e.value); setFormData(e); } }}
                                         required
@@ -680,7 +664,7 @@ const PursOrder = ({ user, list, setList }) => {
                                             options={PackageList ? PackageList : []}
                                             name="Title"
                                             placeholder={"Please select product"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={{ label: UnitName, value: UnitQty }}
                                             onChange={(e) => setFormData({ ...formData, "UnitQty": e.UnitQty, "UnitName": e.label, "UnitPrice": e.UnitPrice, "UnitWeight": e.UnitWeight, "Weight": e.UnitWeight * e.UnitQty, "SubTotal": e.UnitPrice * Qty })}
                                             required
@@ -776,7 +760,7 @@ const PursOrder = ({ user, list, setList }) => {
                                         options={SupplierList && SupplierList.map((item) => ({ label: item.SupplierTitle, value: item.id, ...item }))}
                                         name="Supplier"
                                         placeholder={"Please select supplier"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Supplier}
                                         onChange={(e) => setSupplier(e)}
                                         required

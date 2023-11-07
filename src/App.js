@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { Redirect, Route, BrowserRouter as Router, Switch, useHistory } from 'react-router-dom';
 import store from './store';
 
+import { AssistanceRoute } from "./hocs/AssistanceRoute";
 import { BranchManagerRoute } from './hocs/BranchManagerRoute';
 import { FieldWorkerRoute } from './hocs/FieldWorkerRoute';
 import { PrivateRoute } from "./hocs/PrivateRoute";
@@ -63,6 +64,7 @@ import SupplierList from './containers/Inventory/Purchase/SupplierLists';
 import { default as RetailSell, default as Sells } from './containers/Trading/RetailSell';
 
 // Stock
+import CounterStock from './containers/AuthPages/Counter/CounterStock';
 import Stock from './containers/Inventory/Stock/Stock';
 
 //Contract Farm Management
@@ -216,154 +218,155 @@ const App = () => {
                         {/* <PublicRoute exact path='/Register' render={(props) => <Register list={list} setList={setList} {...props} />} /> */}
 
                         <AuthRoute exact path='/wellcome' render={(props) => <Wellcome list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/waiting' component={WaitingUsers} render={undefined} />
-                        <PrivateRoute exact path='/dashboard' component={Dashboard} render={undefined} />
-                        <PrivateRoute exact path='/facebook' component={Facebook} render={undefined} />
-                        <PrivateRoute exact path='/google' component={Google} render={undefined} />
-                        <PrivateRoute exact path='/reset-password' component={ResetPassword} render={undefined} />
-                        <PrivateRoute exact path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm} render={undefined} />
-                        <PrivateRoute exact path='/activate/:uid/:token' component={Activate} render={undefined} />
-                        <PrivateRoute exact path='/LoadPending' component={LoadPending} render={undefined} />
-                        <PrivateRoute exact path='/Register' render={(props) => <Register list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/pending_user' component={PendingUser} render={undefined} />
+                        <AssistanceRoute exact path='/waiting' component={WaitingUsers} render={undefined} />
+                        <AssistanceRoute exact path='/dashboard' component={Dashboard} render={undefined} />
+                        <AssistanceRoute exact path='/facebook' component={Facebook} render={undefined} />
+                        <AssistanceRoute exact path='/google' component={Google} render={undefined} />
+                        <AssistanceRoute exact path='/reset-password' component={ResetPassword} render={undefined} />
+                        <AssistanceRoute exact path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm} render={undefined} />
+                        <AssistanceRoute exact path='/activate/:uid/:token' component={Activate} render={undefined} />
+                        <AssistanceRoute exact path='/LoadPending' component={LoadPending} render={undefined} />
+                        <AssistanceRoute exact path='/Register' render={(props) => <Register list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/pending_user' component={PendingUser} render={undefined} />
 
                         {/* Counters */}
                         <PrivateRoute path='/counter_list' render={(props) => <Counters list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/counter_sale_report/:ctr_no/:date_from/:date_to' render={(props) => <CounterSellReport list={list} setList={setList} {...props} />} component={undefined} />
+                        <SalesRepresentativeRoute exact path='/counter_sell' render={(props) => <RetailSell setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <SalesRepresentativeRoute exact path='/counter_stock' render={(props) => <CounterStock setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <SalesRepresentativeRoute path='/counter_sale_report/:ctr_no/:date_from/:date_to' render={(props) => <CounterSellReport list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Cash Flow */}
                         <PrivateRoute path='/cash_flow' render={(props) => <CashLadger list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/transactions' render={(props) => <Transaction list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/transactions' render={(props) => <Transaction list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Field Works */}
-                        <PrivateRoute path='/fields' render={(props) => <FarmFields list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/light_record/:bis_id/:id' render={(props) => <LightEntry list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/bird_sell/:bis_id/:id/:inv_no/:inv_id' render={(props) => <BirdSell list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/sell_report/:bis_id/:id/:inv_no/:inv_id' render={(props) => <SellReportField list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/field_worker' render={(props) => <FieldWorkerMenu list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/fields' render={(props) => <FarmFields list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/light_record/:bis_id/:id' render={(props) => <LightEntry list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/bird_sell/:bis_id/:id/:inv_no/:inv_id' render={(props) => <BirdSell list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/sell_report/:bis_id/:id/:inv_no/:inv_id' render={(props) => <SellReportField list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/field_worker' render={(props) => <FieldWorkerMenu list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Accounts */}
-                        <PrivateRoute path='/voucher' render={(props) => <Voucher list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/coa' render={(props) => <COA list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/acc_journal' render={(props) => <AccountJournal list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/farmer_payment_list' render={(props) => <PaymentList list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/farmer_payment_release/:id' render={(props) => <PaymentProcedure list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/ledger' render={(props) => <Ledger list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/voucher' render={(props) => <Voucher list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/coa' render={(props) => <COA list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/acc_journal' render={(props) => <AccountJournal list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/farmer_payment_list' render={(props) => <PaymentList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/farmer_payment_release/:id' render={(props) => <PaymentProcedure list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/ledger' render={(props) => <Ledger list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Profiles */}
-                        <PrivateRoute exact path='/my_user_lists' component={MyUserLists} render={undefined} />
-                        <PrivateRoute exact path='/user_profile/:id' render={(props) => <Profiles list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/update_user' render={(props) => <UpdateUser list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/my_user_lists' component={MyUserLists} render={undefined} />
+                        <AssistanceRoute exact path='/user_profile/:id' render={(props) => <Profiles list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/update_user' render={(props) => <UpdateUser list={list} setList={setList} {...props} />} component={undefined} />
 
-                        <PrivateRoute exact path='/business_profiles' render={(props) => <BusinessProfiles list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/employee_main/:id' render={(props) => <EmployeeMain list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/update_branch' component={UpdateBranch} render={undefined} />
-                        <PrivateRoute exact path='/create_branch' render={(props) => <CreateBranch list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/business_profiles' render={(props) => <BusinessProfiles list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/employee_main/:id' render={(props) => <EmployeeMain list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/update_branch' component={UpdateBranch} render={undefined} />
+                        <AssistanceRoute exact path='/create_branch' render={(props) => <CreateBranch list={list} setList={setList} {...props} />} component={undefined} />
 
-                        {/* Supplier PrivateRoute */}
+                        {/* Supplier AssistanceRoute */}
                         {/* National Suppliers */}
-                        <PrivateRoute exact path='/national_supplier_list' render={(props) => <NationalSuppliers list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/my_supplier_pro/:sup_id' render={(props) => <SupplierPro list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/product_item/:sup_id/:id' render={(props) => <ProductItems list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/national_supplier_list' render={(props) => <NationalSuppliers list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/my_supplier_pro/:sup_id' render={(props) => <SupplierPro list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/product_item/:sup_id/:id' render={(props) => <ProductItems list={list} setList={setList} {...props} />} component={undefined} />
 
-                        {/* Supplier PrivateRoute */}
+                        {/* Supplier AssistanceRoute */}
                         {/* My Suppliers */}
-                        <PrivateRoute exact path='/my_supplier_list' render={(props) => <MySupplierList list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/my_supplier/:sup_id' render={(props) => <MySupplierMain list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/supplier_reg' render={(props) => <SupplierReg list={list} setList={setList} {...props} />} component={undefined} />
-                        {/* Supplier PrivateRoute */}
+                        <AssistanceRoute exact path='/my_supplier_list' render={(props) => <MySupplierList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/my_supplier/:sup_id' render={(props) => <MySupplierMain list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/supplier_reg' render={(props) => <SupplierReg list={list} setList={setList} {...props} />} component={undefined} />
+                        {/* Supplier AssistanceRoute */}
 
-                        {/* Party PrivateRoute */}
+                        {/* Party AssistanceRoute */}
                         {/* Party */}
-                        <PrivateRoute exact path='/my_party_list' render={(props) => <PartyLists list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/my_party/:party_id/:my_party_id' render={(props) => <PartyMain list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/party_reg' render={(props) => <PartyReg list={list} setList={setList} {...props} />} component={undefined} />
-                        {/* Party PrivateRoute */}
+                        <AssistanceRoute exact path='/my_party_list' render={(props) => <PartyLists list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/my_party/:party_id/:my_party_id' render={(props) => <PartyMain list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/party_reg' render={(props) => <PartyReg list={list} setList={setList} {...props} />} component={undefined} />
+                        {/* Party AssistanceRoute */}
 
                         {/* Inventory */}
                         {/* Purchase */}
-                        <PrivateRoute exact path='/supplier_items' render={(props) => <SupplierList setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/purchase_product/:sup_id' render={(props) => <PurchaseProduct setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/purchase_reports' render={(props) => <PurchaseReport list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/purchase_order' render={(props) => <PursOrder list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/purs_order_list' render={(props) => <PursOrderList list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/po_edit/:po_id' render={(props) => <EditPursOrder list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/add_docket/:purs_id' render={(props) => <DocketPurchase list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/supplier_items' render={(props) => <SupplierList setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/purchase_product/:sup_id' render={(props) => <PurchaseProduct setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/purchase_reports' render={(props) => <PurchaseReport list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/purchase_order' render={(props) => <PursOrder list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/purs_order_list' render={(props) => <PursOrderList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/po_edit/:po_id' render={(props) => <EditPursOrder list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/add_docket/:purs_id' render={(props) => <DocketPurchase list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Trading */}
                         {/* Order */}
-                        <PrivateRoute exact path='/parties' render={(props) => <Parties setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/order/:party_id' render={(props) => <Order list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/order_exc/:order_id' render={(props) => <OrderExecute list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/order_list' render={(props) => <OrderList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/parties' render={(props) => <Parties setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/order/:party_id' render={(props) => <Order list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/order_exc/:order_id' render={(props) => <OrderExecute list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/order_list' render={(props) => <OrderList list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Quotation */}
-                        <PrivateRoute exact path='/parties' render={(props) => <Parties setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/quote' render={(props) => <Quote list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/quote_list' render={(props) => <QuoteList list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/quote_preview/:qt_id' render={(props) => <QuotePreview list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/quote_edit/:qt_id' render={(props) => <EditQuote list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/quote_sale/:qt_id/:walk_in' render={(props) => <QuoteSale list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/quote_order/:qt_id/:party_id' render={(props) => <QuoteOrder list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/parties' render={(props) => <Parties setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/quote' render={(props) => <Quote list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/quote_list' render={(props) => <QuoteList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/quote_preview/:qt_id' render={(props) => <QuotePreview list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/quote_edit/:qt_id' render={(props) => <EditQuote list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/quote_sale/:qt_id/:walk_in' render={(props) => <QuoteSale list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/quote_order/:qt_id/:party_id' render={(props) => <QuoteOrder list={list} setList={setList} {...props} />} component={undefined} />
 
-                        <PrivateRoute exact path='/order_exc/:order_id' render={(props) => <OrderExecute list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/order_exc/:order_id' render={(props) => <OrderExecute list={list} setList={setList} {...props} />} component={undefined} />
 
-
-                        <PrivateRoute exact path='/rtl_sell' render={(props) => <RetailSell setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/whl_sell' render={(props) => <Sells setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/sell_reports' render={(props) => <SellReport list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/sell_invoice_preview/:inv_id' render={(props) => <PreviewInvoice list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/purs_invoice_preview/:pur_id' render={(props) => <ViewPurchase list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/rtl_sell' render={(props) => <RetailSell setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/whl_sell' render={(props) => <Sells setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/sell_reports' render={(props) => <SellReport list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/sell_invoice_preview/:inv_id' render={(props) => <PreviewInvoice list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/purs_invoice_preview/:pur_id' render={(props) => <ViewPurchase list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Stock */}
-                        <PrivateRoute exact path='/stock' render={(props) => <Stock setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/stock' render={(props) => <Stock setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Bis Profile */}
-                        <PrivateRoute path='/business_pro/:id/:bis_id' render={(props) => <BusinessPro list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/business_pro/:id/:bis_id' render={(props) => <BusinessPro list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Cotract */}
                         {/* Farm */}
-                        <PrivateRoute path='/control_board' render={(props) => <Controlboard list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/contract_summery' render={(props) => <Summary list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/fcr_rank' render={(props) => <FCR_Rank list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/lucy_rank' render={(props) => <LucryRank list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/farm_mng/:id/:bis_id/:batch_id' render={(props) => <FarmMain list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/farm_lists' render={(props) => <FarmLists list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/send_products/:id' render={(props) => <SendProduct list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/live_stock' render={(props) => <LiveStock list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/cost_mapping' render={(props) => <CostMapping list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/bird_sell_history' render={(props) => <BirdSellHistory list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/con_dispatch_report' render={(props) => <ContractDispatchReport list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/prv_dispatch_invoice/:inv_no' render={(props) => <PrvConInvoice list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/field_monitoring' render={(props) => <MonitoringCell list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/recall_products' render={(props) => <Return list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/goods_n_bird' render={(props) => <GoodsNBirdMain list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/gd_invoice/:id' render={(props) => <GDInvoice list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/gd_ladger/:id' render={(props) => <GDLadger list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/control_board' render={(props) => <Controlboard list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/contract_summery' render={(props) => <Summary list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/fcr_rank' render={(props) => <FCR_Rank list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/lucy_rank' render={(props) => <LucryRank list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/farm_mng/:id/:bis_id/:batch_id' render={(props) => <FarmMain list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/farm_lists' render={(props) => <FarmLists list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/send_products/:id' render={(props) => <SendProduct list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/live_stock' render={(props) => <LiveStock list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/cost_mapping' render={(props) => <CostMapping list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/bird_sell_history' render={(props) => <BirdSellHistory list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/con_dispatch_report' render={(props) => <ContractDispatchReport list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/prv_dispatch_invoice/:inv_no' render={(props) => <PrvConInvoice list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/field_monitoring' render={(props) => <MonitoringCell list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/recall_products' render={(props) => <Return list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/goods_n_bird' render={(props) => <GoodsNBirdMain list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/gd_invoice/:id' render={(props) => <GDInvoice list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/gd_ladger/:id' render={(props) => <GDLadger list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Yard */}
-                        <PrivateRoute path='/ctr_list' render={(props) => <ContainerList list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/ctr_purchase' render={(props) => <CtrPurchase list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/yard' render={(props) => <YardStock list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/yard_request' render={(props) => <DeliveryRequest list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/request_list' render={(props) => <RequestList list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/request_exc/:id' render={(props) => <RequestExecute list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/delivery_notes' render={(props) => <DeliveryNoteList list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/delivery_note_view/:id' render={(props) => <DeliveryNoteView list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/ctr_list' render={(props) => <ContainerList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/ctr_purchase' render={(props) => <CtrPurchase list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/yard' render={(props) => <YardStock list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/yard_request' render={(props) => <DeliveryRequest list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/request_list' render={(props) => <RequestList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/request_exc/:id' render={(props) => <RequestExecute list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/delivery_notes' render={(props) => <DeliveryNoteList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/delivery_note_view/:id' render={(props) => <DeliveryNoteView list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Statements */}
-                        <PrivateRoute path='/inc_statement' render={(props) => <IncomeStatement list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/bal_sheet' render={(props) => <BalanceSheet list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/trial_balance' render={(props) => <TrialBalance list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/inc_statement' render={(props) => <IncomeStatement list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/bal_sheet' render={(props) => <BalanceSheet list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/trial_balance' render={(props) => <TrialBalance list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Business Preference */}
-                        <PrivateRoute path='/acc_settings' render={(props) => <AccountSettings list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute path='/profit_margin' render={(props) => <ProfitMargin list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/policy' render={(props) => <Policy list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/acc_settings' render={(props) => <AccountSettings list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/profit_margin' render={(props) => <ProfitMargin list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/policy' render={(props) => <Policy list={list} setList={setList} {...props} />} component={undefined} />
 
-                        <PrivateRoute exact path='/req_list' render={(props) => <RequisitionList list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/req_execute/:req_no' render={(props) => <ReqExecute list={list} setList={setList} {...props} />} component={undefined} />
-                        <PrivateRoute exact path='/pvt_reset_pass' render={(props) => <ResetPass list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/req_list' render={(props) => <RequisitionList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/req_execute/:req_no' render={(props) => <ReqExecute list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/pvt_reset_pass' render={(props) => <ResetPass list={list} setList={setList} {...props} />} component={undefined} />
 
                         <BranchManagerRoute exact path='/' component={Dashboard} render={undefined} />
                         <BranchManagerRoute exact path='/products_requisition' render={(props) => <ProductRequisition list={list} setList={setList} setActive={setActive} {...props} />} component={undefined} />

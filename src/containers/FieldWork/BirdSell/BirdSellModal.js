@@ -1,20 +1,18 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import * as moment from 'moment'
+import axios from 'axios';
+import * as moment from 'moment';
+import { useEffect, useState } from 'react';
 import { Modal } from "react-bootstrap";
+import Datepicker from 'react-datepicker';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
-import { SaveBirdSell, FetchPartyInvoiceNo, LeftBird } from '../../../actions/ContractAPI';
-import { checkToken } from '../../../actions/auth';
-import { useSelector, useDispatch } from 'react-redux';
+import { BusinessType } from '../../../actions/APIHandler';
+import { FetchPartyInvoiceNo, LeftBird, SaveBirdSell } from '../../../actions/ContractAPI';
 import { DISPLAY_OVERLAY } from '../../../actions/types';
 import errorIcon from '../../../assets/error.png';
-import infoIcon from '../../../assets/info.png';
 import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
-import Datepicker from 'react-datepicker';
 import { customHeader, locales } from "../../Suppliers/Class/datepicker";
-import { BusinessType } from '../../../actions/APIHandler';
-import axios from 'axios';
 
 export const SellSummerizeModal = (props) => {
     const { scale, sub_scale } = useSelector((state) => state.auth);
@@ -198,7 +196,7 @@ export const SellSummerizeModal = (props) => {
                         <small className="text-center px-0">(*) Mark field are mandatory</small>
                         <form>
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">Invoice No</label>
+                                <label htmlFor="IssueDate" class="col-form-label">Invoice No</label>
                                 <input
                                     type="Parent Account"
                                     class="form-control fw-bold"
@@ -210,7 +208,7 @@ export const SellSummerizeModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">Date</label>
+                                <label htmlFor="IssueDate" class="col-form-label">Date</label>
                                 <Datepicker
                                     selected={CSDate}
                                     className="form-control fw-bold"
@@ -226,7 +224,7 @@ export const SellSummerizeModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Agent Name</label>
+                                <label htmlFor="message-text" class="col-form-label">Agent Name</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -245,7 +243,7 @@ export const SellSummerizeModal = (props) => {
 
                             <div className="form-group d-flex">
                                 <div className="row pr-1 m-0 w-100 w-100">
-                                    <label for="message-text" class="col-form-label p-0">Quantity</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">Quantity</label>
                                     <input
                                         type="numeric"
                                         class="form-control fw-bold"
@@ -261,7 +259,7 @@ export const SellSummerizeModal = (props) => {
                                         : null}
                                 </div>
                                 <div className="row pl-1 m-0 w-100 w-100">
-                                    <label for="message-text" class="col-form-label p-0">Weight</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">Weight</label>
                                     <input
                                         type="numeric"
                                         class="form-control fw-bold"
@@ -281,7 +279,7 @@ export const SellSummerizeModal = (props) => {
 
                             <div className="form-group d-flex">
                                 <div className="row pr-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">* Stock Qty</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">* Stock Qty</label>
                                     <input
                                         type="number"
                                         class="form-control fw-bold"
@@ -296,7 +294,7 @@ export const SellSummerizeModal = (props) => {
                                         : null}
                                 </div>
                                 <div className="row pl-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">* Stock Weight</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">* Stock Weight</label>
                                     <input
                                         type="text"
                                         class="form-control fw-bold"
@@ -314,7 +312,7 @@ export const SellSummerizeModal = (props) => {
 
                             <div className="form-group d-flex">
                                 <div className="row pr-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">Rate</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">Rate</label>
                                     <input
                                         type="number"
                                         class="form-control fw-bold"
@@ -330,7 +328,7 @@ export const SellSummerizeModal = (props) => {
                                         : null}
                                 </div>
                                 <div className="row pl-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">Amount</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">Amount</label>
                                     <input
                                         type="numeric"
                                         class="form-control fw-bold"
@@ -349,7 +347,7 @@ export const SellSummerizeModal = (props) => {
 
                             <div className="form-group d-flex">
                                 <div className="row pr-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">Vat Rate</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">Vat Rate</label>
                                     <input
                                         type="number"
                                         class="form-control fw-bold"
@@ -364,7 +362,7 @@ export const SellSummerizeModal = (props) => {
                                         : null}
                                 </div>
                                 <div className="row pl-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">Vat</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">Vat</label>
                                     <input
                                         type="numeric"
                                         class="form-control fw-bold"
@@ -383,7 +381,7 @@ export const SellSummerizeModal = (props) => {
 
                             <div className="form-group d-flex">
                                 <div className="row pr-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">Discount</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">Discount</label>
                                     <input
                                         type="number"
                                         class="form-control fw-bold"
@@ -398,7 +396,7 @@ export const SellSummerizeModal = (props) => {
                                         : null}
                                 </div>
                                 <div className="row pl-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">Grand Total</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">Grand Total</label>
                                     <input
                                         type="numeric"
                                         class="form-control fw-bold"
@@ -417,7 +415,7 @@ export const SellSummerizeModal = (props) => {
 
                             <div className="form-group d-flex">
                                 <div className="row pr-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">* Paid</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">* Paid</label>
                                     <input
                                         type="number"
                                         class="form-control fw-bold"
@@ -432,7 +430,7 @@ export const SellSummerizeModal = (props) => {
                                         : null}
                                 </div>
                                 <div className="row pl-1 m-0 w-100">
-                                    <label for="message-text" class="col-form-label p-0">Due</label>
+                                    <label htmlFor="message-text" class="col-form-label p-0">Due</label>
                                     <input
                                         type="numeric"
                                         class="form-control fw-bold"
@@ -489,7 +487,7 @@ export const CreateModal = (props) => {
 
     const LoadRep = async () => {
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        
+
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -612,7 +610,7 @@ export const CreateModal = (props) => {
                         <small className="text-center px-0">(*) Mark field are mandatory</small>
                         <form>
                             <div className="form-group">
-                                <label for="recipient-name" class="col-form-label">Representative</label>
+                                <label htmlFor="recipient-name" class="col-form-label">Representative</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -633,7 +631,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">* Invoice No</label>
+                                <label htmlFor="IssueDate" class="col-form-label">* Invoice No</label>
                                 <input
                                     type="Parent Account"
                                     class="form-control fw-bold"
@@ -645,7 +643,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">* Date</label>
+                                <label htmlFor="IssueDate" class="col-form-label">* Date</label>
                                 <Datepicker
                                     selected={CSDate}
                                     className="form-control fw-bold"
@@ -660,7 +658,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Rate</label>
+                                <label htmlFor="message-text" class="col-form-label">Rate</label>
                                 <input
                                     type="number"
                                     class="form-control fw-bold"
@@ -675,7 +673,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Party</label>
+                                <label htmlFor="message-text" class="col-form-label">Party</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -695,7 +693,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">* Party Agent Name</label>
+                                <label htmlFor="message-text" class="col-form-label">* Party Agent Name</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -710,7 +708,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Car No</label>
+                                <label htmlFor="message-text" class="col-form-label">Car No</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -726,7 +724,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Driver Name</label>
+                                <label htmlFor="message-text" class="col-form-label">Driver Name</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"

@@ -1,15 +1,12 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
+import { useEffect, useState } from 'react';
+import { Modal } from "react-bootstrap";
 import Select from 'react-select';
-import { checkToken } from '../../../actions/auth';
 import { BranchAcc, FetchBranch } from '../../../actions/APIHandler';
-import { FetchAccounts, getLabel } from '../../../actions/ContractAPI';
+import { FetchAccounts } from '../../../actions/ContractAPI';
 
-import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { DISPLAY_OVERLAY } from '../../../actions/types';
 import errorIcon from '../../../assets/error.png';
-import infoIcon from '../../../assets/info.png';
 import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
 
@@ -168,7 +165,7 @@ export const UpdateModal = (props) => {
                         <small className="text-center px-0">Please fill up the desired field to update</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Cash Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Cash Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -187,7 +184,7 @@ export const UpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Sell Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Sell Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -206,7 +203,7 @@ export const UpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Purchase Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Purchase Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -227,7 +224,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Payable Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Payable Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -248,7 +245,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Receivable Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Receivable Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -269,7 +266,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Stock Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Stock Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -290,7 +287,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Bird Sell Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Bird Sell Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -311,7 +308,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Product Sent Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Product Sent Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -332,7 +329,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Batch Payment Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Batch Payment Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -353,7 +350,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Batch Payment Payable Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Batch Payment Payable Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -374,7 +371,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Saving Payment Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Saving Payment Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -395,7 +392,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Saving Payment Payable Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Saving Payment Payable Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -598,7 +595,7 @@ export const CreateModal = (props) => {
                         <small className="text-center px-0">Please fill up the desired field to update</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Branch</label>
+                                <label htmlFor="message-text" class="col-form-label">Branch</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -617,7 +614,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Cash Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Cash Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -636,7 +633,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Sell Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Sell Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -655,7 +652,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Purchase Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Purchase Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -676,7 +673,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Payable Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Payable Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -697,7 +694,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Receivable Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Receivable Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -718,7 +715,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Stock Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Stock Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -739,7 +736,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Bird Sell Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Bird Sell Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -760,7 +757,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Product Sent Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Product Sent Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -781,7 +778,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Batch Payment Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Batch Payment Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -802,7 +799,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Batch Payment Payable Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Batch Payment Payable Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -823,7 +820,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Saving Payment Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Saving Payment Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -844,7 +841,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Saving Payment Payable Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Saving Payment Payable Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"

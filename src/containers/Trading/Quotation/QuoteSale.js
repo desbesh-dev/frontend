@@ -14,7 +14,7 @@ import warningIcon from '../../../assets/warning.gif';
 import { InfoMessage, InvalidDate } from "../../Modals/ModalForm.js";
 
 import * as moment from 'moment';
-import { FetchProduct } from '../../../actions/InventoryAPI';
+import { FetchProduct, PaymentTerms } from '../../../actions/InventoryAPI';
 import { FetchPrintQuote } from '../../../actions/PartyAPI';
 import RefundCash from '../../../assets/change_amt_icon.png';
 import ReceivedCash from '../../../assets/received_amt_icon.png';
@@ -27,6 +27,7 @@ import '../../../hocs/react-select/dist/react-select.css';
 // import 'react-virtualized-select/styles.css';
 // // import 'react-virtualized/styles.css';
 import Select from 'react-select';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 import { useTbody } from './QuotationTableBody.js';
 
 let today = new Date();
@@ -53,6 +54,8 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
     const [Vat, setVat] = useState(0)
     const [Discount, setDiscount] = useState(0.0)
     const [Total, setTotal] = useState(0.00)
+    const [Cash, setCash] = useState(0.00)
+    const [Bank, setBank] = useState(0.00)
     const [Paid, setPaid] = useState(0.00)
     const [Due, setDue] = useState(0.00)
     const [RefundAmount, setRefundAmount] = useState(0.00)
@@ -78,6 +81,8 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
     let toastProperties = null;
     const dispatch = useDispatch();
     const QtyFocus = useRef(null);
+    const CashFocus = useRef(null);
+    const BankFocus = useRef(null);
     const PaidFocus = useRef(null);
     const CodeFocus = useRef(null);
     const BarcodeFocus = useRef(null);
@@ -112,7 +117,6 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
 
 
     useEffect(() => {
-
         if (type)
             WalkNParty_Toggle({ target: { checked: type } })
         // else
@@ -172,18 +176,6 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
         }
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
-
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuList: provided => ({
-            ...provided,
-            backgroundColor: 'white',
-        })
-    };
 
     const handleToggleAutoFire = () => {
         setAutoFire((AutoFire) => !AutoFire);
@@ -494,14 +486,49 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
 
     const history = useHistory();
 
-    const CheackPayment = async (GrandTotal) => {
-        await PaidCalc();
-        if (parseFloat(Paid) >= parseFloat(GrandTotal) && (parseFloat(Paid) !== 0 || parseFloat(GrandTotal !== 0))) {
-            return true;
+    const PaymentCalculation = (e = { target: { value: 0 } }) => {
+        const inputValue = e.target.value;
+        setPaid(inputValue);
+
+        const subTotal = getTotal;
+        const totalWithVat = subTotal + (subTotal * Vat) / 100;
+        const disc = totalWithVat - Discount;
+        let left = disc - inputValue;
+        left = left.toFixed(2);
+        if (left > 0) {
+            setRefundAmount(0.00);
+            setDue(left);
+        } else if (left < 0) {
+            setRefundAmount(-left);
+            setDue(0.00);
         } else {
-            setNotPayed(true);
-            return false;
+            setRefundAmount(0.00);
+            setDue(0.00);
         }
+    };
+
+    const validatePaymentValues = async () => {
+        await PaymentCalculation()
+        let isValid = true;
+
+        if ([15, 16, 17, 18].includes(Payment?.value)) {
+            if (!Bank || Bank.trim() === "" || Bank === "0") {
+                alert("Invalid Bank value.");
+                isValid = false;
+            }
+        } else if ([14].includes(Payment?.value)) {
+            if (!Cash || Cash.trim() === "" || Cash === "0") {
+                alert("Invalid Cash value.");
+                isValid = false;
+            }
+        } else if (Payment?.value === 19) {
+            if (!Cash || Cash.trim() === "" || Cash === "0" || !Bank || Bank.trim() === "" || Bank === "0") {
+                alert("Both Cash and Bank values must be valid for partial payment.");
+                isValid = false;
+            }
+        }
+
+        return isValid;
     };
 
     const SaveInvoice = async (e) => {
@@ -509,20 +536,21 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
         const VatTotal = (getTotal() * Vat) / 100;
         const GrandTotal = Total === 0 ? getTotal() : Total;
 
-        let isPaymentValid = await CheackPayment(parseFloat(GrandTotal).toFixed(2));
-        if (isPaymentValid) {
+        if (validatePaymentValues()) {
             SaveFocus.current.disabled = true;
             SellData = SellData.map((item, index) => ({ ...item, SLNo: index + 1 }));
             dispatch({ type: DISPLAY_OVERLAY, payload: true });
-
             var data = moment(Date).format("YYYY-MM-DD");
-            var result = await Invoice(user.Collocation.CounterID, PartyID, '', data, Vat, VatTotal, Discount, 0, Payment, GrandTotal, Paid, Due, RefundAmount, Count, SellData);
+
+            var result = await Invoice(user.Collocation.CounterID, PartyID, '', data, Vat, VatTotal, Discount, 0, Payment, GrandTotal, Cash, Bank, Paid, Due, RefundAmount, Count, SellData);
             if (result !== true) {
                 if (result.error) {
-                    const updatedState = {};
-                    for (var pair of result.exception.entries()) {
-                        updatedState[pair[1].field] = pair[1].message;
-                        setError({ ...updatedState });
+                    if (result.exception) {
+                        const updatedState = {};
+                        for (var pair of result.exception.entries()) {
+                            updatedState[pair[1].field] = pair[1].message;
+                            setError({ ...updatedState });
+                        }
                     }
                     setList([
                         ...list,
@@ -608,27 +636,59 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
         }
     };
 
-    const PaidCalc = (e = { target: { value: Paid } }) => {
-        const paid = e.target.value || 0.00;
-        const regex = /^(\d+(\.\d{0,2})?|\.?\d{1,2})$/;
+    const PaidCalc = (e) => {
+        const inputId = e.target.id;
+        const inputValue = e.target.value;
 
-        if (paid === '' || regex.test(paid)) {
-            setPaid(prevPaid => paid); // using callback form of setPaid
-            const subTotal = getTotal();
-            const totalWithVat = subTotal + (subTotal * Vat) / 100;
-            const disc = totalWithVat - Discount;
-            let left = disc - paid;
-            left = left.toFixed(2);
-            if (left > 0) {
-                setRefundAmount(0.00);
-                setDue(left);
-            } else if (left < 0) {
-                setRefundAmount(-left);
-                setDue(0.00);
-            } else {
-                setRefundAmount(0.00);
-                setDue(0.00);
-            }
+        if (inputId === "Cash") {
+            setCash(inputValue || 0.00);
+        } else if (inputId === "Bank") {
+            setBank(inputValue || 0.00);
+        } else {
+            console.warn(`Unexpected input id: ${inputId}`);
+            return;
+        }
+
+        const newCash = inputId === "Cash" ? (isNaN(parseFloat(inputValue)) ? 0 : parseFloat(inputValue)) : parseFloat(Cash || 0);
+        const newBank = inputId === "Bank" ? (isNaN(parseFloat(inputValue)) ? 0 : parseFloat(inputValue)) : parseFloat(Bank || 0);
+
+        const paid = newCash + newBank;
+        setPaid(paid);
+
+        let payment;
+        if (newCash && newBank) payment = { label: "Partial", value: 19 };
+        else if (newCash) payment = { label: "Paid in cash", value: 14 };
+        else if (newBank) payment = { label: "Paid in bank", value: 18 };
+        else payment = { label: "COD (Cash on delivery)", value: 12 };
+
+        setPayment(payment);
+
+        const subTotal = getTotal();
+        const totalWithVat = subTotal + (subTotal * Vat) / 100;
+        const disc = totalWithVat - Discount;
+        let left = disc - paid;
+        left = left.toFixed(2);
+        if (left > 0) {
+            setRefundAmount(0.00);
+            setDue(left);
+        } else if (left < 0) {
+            setRefundAmount(-left);
+            setDue(0.00);
+        } else {
+            setRefundAmount(0.00);
+            setDue(0.00);
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        const regex = /^[0-9.]*$/;
+
+        if (event.key === 'Enter') {
+            SaveInvoice(event);
+        } else if (event.key === 'Backspace') {
+            return;
+        } else if (!regex.test(event.key) || (event.key === "." && event.target.value.includes("."))) {
+            event.preventDefault();
         }
     };
 
@@ -883,7 +943,7 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
                                         </tr>
                                         <tr className="text-center border-success bg-white">
                                             <td className="py-0 px-1 border-right" colSpan="5"><span className="d-block text-right">10% GST Included </span> </td>
-                                            <td className="py-0 d-flex justify-content-end border-right" style={{ width: "160px" }}><input style={{ width: "140px" }} disabled type="text" autocomplete="off" className="d-block text-right border-0" id="Vat" value={Vat} onChange={(e) => VatCalc(e)} /></td>
+                                            <td className="py-0 d-flex justify-content-end border-right" style={{ width: "160px" }}><input style={{ width: "140px" }} disabled type="text" autocomplete="off" className="d-block text-right border-0" id="Vat" value={(parseFloat(getTotal()) * 0.10).toFixed(2)} onChange={(e) => VatCalc(e)} /></td>
                                         </tr>
                                         <tr className="text-center border-success bg-white">
                                             <td className="py-0 px-1 border-right" colSpan="5"><span className="d-block text-right ">Discount (K) </span> </td>
@@ -989,7 +1049,7 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
                                             options={MyProList}
                                             name="Title"
                                             placeholder={"Please select product"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={Title}
                                             onChange={(e) => { if (e) { DropdownAction(e.value); setFormData(e); } }}
                                             required
@@ -1102,56 +1162,69 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
                                 </div>
                             </div>
 
-                            <div className='justify-content-center align-self-end my-2 mx-0 p-0'>
-                                <div className="row justify-content-between p-0 align-items-end">
-                                    <div className="col-md-6">
-                                        <p className="text-center fs-3 text-dark fw-bold m-0 border-bottom">Received Amount</p>
-                                        <input
-                                            ref={PaidFocus}
-                                            type="text"
-                                            id="Paid"
-                                            className="form-control fs-3 fw-bold p-0 text-center"
-                                            placeholder="0.00"
-                                            value={Paid ? Paid.toLocaleString("en", { minimumFractionDigits: 2 }) : ""}
-                                            onInput={(e) => PaidCalc(e)}
-                                            maxLength="8"
-                                            required
-                                            disabled={!SellData && SellData.length}
-                                            onFocus={handleFocusSelect}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter')
-                                                    if (SaveFocus.current) {
-                                                        SaveFocus.current.focus();
-                                                    }
-                                            }}
 
-                                        />
-                                    </div>
+                            <div className="row justify-content-between p-0 align-items-end">
+                                <div className="col-md-4">
+                                    <p className="text-center fs-5 text-dark fw-bold m-0 border-bottom">Cash</p>
+                                    <input
+                                        ref={CashFocus}
+                                        name='Cash'
+                                        type="text"
+                                        id="Cash"
+                                        className="form-control fs-5 fw-bold p-0 text-center"
+                                        placeholder="0.00"
+                                        value={Cash ? Cash.toLocaleString("en", { minimumFractionDigits: 2 }) : ""}
+                                        onChange={(e) => PaidCalc(e)}
+                                        maxLength="8"
+                                        required
+                                        disabled={![14, 19].includes(Payment?.value)}
+                                        onKeyDown={handleKeyDown}
+                                        onFocus={handleFocusSelect}
+                                    />
+                                </div>
 
-                                    <div className="col-md-6">
-                                        <div className="row justify-content-between p-0 m-0" disabled>
-                                            <p className="text-center fs-3 text-dark fw-bold m-0 border-bottom">Payment Type</p>
-                                            <div className="input-group fs-3 fw-bold p-0">
-                                                <Select
-                                                    menuPlacement="auto"
-                                                    menuPosition="fixed"
-                                                    menuPortalTarget={document.body}
-                                                    borderRadius={"0px"}
-                                                    options={[{ label: "Cash", value: 14 }, { label: "Card", value: 18 }]}
-                                                    name="Payment"
-                                                    placeholder={"Payment Type"}
-                                                    styles={CScolourStyles}
-                                                    value={Payment}
-                                                    onChange={(e) => setPayment(e)}
-                                                    required
-                                                    id="Payment"
-                                                />
-                                            </div>
+                                <div className="col-md-4">
+                                    <p className="text-center fs-5 text-dark fw-bold m-0 border-bottom">Card</p>
+                                    <input
+                                        ref={BankFocus}
+                                        name='Bank'
+                                        type="text"
+                                        id="Bank"
+                                        className="form-control fs-5 fw-bold p-0 text-center"
+                                        placeholder="0.00"
+                                        value={Bank ? Bank.toLocaleString("en", { minimumFractionDigits: 2 }) : ""}
+                                        onChange={(e) => PaidCalc(e)}
+                                        maxLength="8"
+                                        required
+                                        disabled={![15, 16, 17, 18, 19].includes(Payment?.value)}
+                                        onKeyDown={handleKeyDown}
+                                        onFocus={handleFocusSelect}
+                                    />
+                                </div>
+
+                                <div className="col-md-4">
+                                    <div className="row justify-content-between p-0 m-0" disabled>
+                                        <p className="text-center fs-5 text-dark fw-bold m-0 border-bottom">Payment Type</p>
+                                        <div className="input-group fs-5 fw-bold p-0">
+                                            <Select
+                                                menuPlacement="auto"
+                                                menuPosition="fixed"
+                                                menuPortalTarget={document.body}
+                                                borderRadius={"0px"}
+                                                options={PaymentTerms}
+                                                name="Payment"
+                                                placeholder={"Payment Type"}
+                                                styles={GeneralColourStyles}
+                                                value={Payment}
+                                                onChange={(e) => setPayment(e)}
+                                                required
+                                                id="Payment"
+                                            />
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
+
 
                             <div className={`row m-0 p-0 ${WalkIN ? "border border-light rounded" : null}`}>
 
@@ -1167,7 +1240,7 @@ const QuoteSale = ({ user, list, setList, QuoteID, type }) => {
                                                 options={PartyList}
                                                 name="Party"
                                                 placeholder={"Please select party"}
-                                                styles={CScolourStyles}
+                                                styles={GeneralColourStyles}
                                                 value={PartyID}
                                                 onChange={(e) => setPartyID(e)}
                                                 required

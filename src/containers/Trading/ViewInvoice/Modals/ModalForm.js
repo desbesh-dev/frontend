@@ -131,7 +131,7 @@ export const EditModal = (props) => {
                         <small className="fs-5 fw-bold text-center text-success px-0">{props.EditData.Title}</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Quantity</label>
+                                <label htmlFor="message-text" class="col-form-label">Quantity</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -148,7 +148,7 @@ export const EditModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Weight</label>
+                                <label htmlFor="message-text" class="col-form-label">Weight</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -164,7 +164,7 @@ export const EditModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Reason for Return</label>
+                                <label htmlFor="message-text" class="col-form-label">Reason for Return</label>
                                 <textarea
                                     rows="5"
                                     class="form-control fw-bold"
@@ -350,7 +350,7 @@ export const CreateNote = (props) => {
                         <p className="fs-6 text-center fw-bold text-dark m-0">Amount: <span className="fw-bolder"> {parseFloat(props.item.Amount).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span></p>
                     </div>
                     <div className="form-group">
-                        <label for="Details" class="col-form-label">Details</label>
+                        <label htmlFor="Details" class="col-form-label">Details</label>
                         <textarea
                             rows="2"
                             class="form-control"
@@ -366,7 +366,7 @@ export const CreateNote = (props) => {
                     </div>
 
                     <div className="form-group">
-                        <label for="Advice" class="col-form-label">Advice</label>
+                        <label htmlFor="Advice" class="col-form-label">Advice</label>
                         <textarea
                             rows="2"
                             class="form-control"

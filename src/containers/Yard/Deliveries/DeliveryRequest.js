@@ -16,6 +16,7 @@ import infoIcon from '../../../assets/info.png';
 import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
 import { CustomMenuDeliver } from '../../../hocs/Class/CustomMenuDeliver';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 import '../../../hocs/react-select/dist/react-select.css';
 import { InfoMessage, InvalidDate } from "../../Modals/ModalForm.js";
 import { customHeader, locales } from "../../Suppliers/Class/datepicker";
@@ -31,18 +32,15 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
     const [SectorList, setSectorList] = useState([])
     const [Error, setError] = useState({});
     const [MyProList, setMyProList] = useState([])
-    const [PartyData, setPartyData] = useState()
     const [Subscriber, setSubscriber] = useState(false)
     const [SellInfo, setSellInfo] = useState(null)
     const [ProValue, setProValue] = useState(null)
 
     const [RequestForID, setRequestForID] = useState(null)
     const [RequestToID, setRequestToID] = useState(null)
-    const [Date, setDate] = useState(today)
     const [OrderDate, setOrderDate] = useState(today)
     const [DeliveryDate, setDeliveryDate] = useState(today)
     const [OrderNo, setInvoiceNo] = useState(0)
-    const [Receiver, setReceiver] = useState(null)
     const [Payment, setPayment] = useState({ label: "CND (Cash next delivery)", value: 13 })
     const [Percent, setPercent] = useState(null)
     const [Vat, setVat] = useState(null)
@@ -76,9 +74,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
     const QtyFocus = useRef(null);
     const PaidFocus = useRef(null);
     const CodeFocus = useRef(null);
-    const BarcodeFocus = useRef(null);
     const ProductFocus = useRef(null);
-    const WalkInFocus = useRef(null);
     const AddRowFocus = useRef(null);
     const lastEnterPressTime = useRef(null);
     const SaveFocus = useRef(null);
@@ -101,7 +97,6 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
         SubTotal: "",
         CtrID: "",
     };
-    const [state, setState] = useState(initialState);
     const [formData, setFormData] = useState(initialState);
 
     const { Code, Barcode, Title, UnitName, UnitQty, UnitWeight, UnitPrice, Quantity, Weight, Rate, Remark, SubTotal } = formData;
@@ -196,36 +191,6 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
             backgroundColor: 'white',
         }),
     };
-
-    // const CScolourStyles = {
-    //     container: base => ({
-    //         ...base,
-    //         flex: 1,
-    //         fontWeight: "500"
-    //     }),
-    //     menuList: provided => ({
-    //         ...provided,
-    //         backgroundColor: 'white',
-    //     }),
-    // };
-
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuPortal: base => ({ ...base, zIndex: 9999 }),
-        option: (provided, state) => ({
-            ...provided,
-            color: state.isSelected ? '#000' : '#333',
-            height: '40px',
-            backgroundColor: state.isSelected ? 'whitesmoke' : '#fff',
-            ':hover': {
-                backgroundColor: state.isSelected ? 'lightgray' : '#f8f9fa'
-            }
-        })
-    }
 
     const handleToggleAutoFire = () => {
         setAutoFire((AutoFire) => !AutoFire);
@@ -677,7 +642,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
                 Quantity: parseFloat(Quantity, 10),
                 Weight: value.UnitWeight * parseFloat(Quantity, 10),
                 Remark: "N/A",
-                SubTotal: (parseFloat(Quantity, 10) * value.UnitQty) * cond_rate,
+                SubTotal: parseFloat(Quantity, 10) * cond_rate,
                 CtrID: value.ContainerID || '',
                 // CtrNo: value.ContainerNo || ''
             }
@@ -759,9 +724,9 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
         if (e.value === 1)
             newSubTotal = 0;
         else if (e.value === 3)
-            newSubTotal = (Quantity * UnitQty) * UnitPrice;
+            newSubTotal = Quantity * UnitPrice;
         else
-            newSubTotal = (Quantity * UnitQty) * Rate;
+            newSubTotal = Quantity * Rate;
 
         setFormData({ ...formData, Remark: e.label, SubTotal: newSubTotal });
         setDiscPrct(e.value);
@@ -770,12 +735,12 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
     const handleRequestToChange = (selectedOption) => {
         if (selectedOption.value === (user.Collocation.id).replace(/-/g, '')) {
             alert('This value is not allowed.');
-        } else if (selectedOption.No !== 5) {
+        } else if (selectedOption.No !== 30) {
             setRequestToID(selectedOption);
             const requestForOption = SectorList.find(option => option.value === user.Collocation.id.replace(/-/g, ''));
             setRequestForID(requestForOption);
             sect.current = selectedOption.value
-        } else if (selectedOption.No === 5) {
+        } else if (selectedOption.No === 30) {
             setRequestToID(selectedOption);
             sect.current = user.Collocation.id.replace(/-/g, '')
         } else if (selectedOption.value !== (RequestForID && RequestForID.value)) {
@@ -794,7 +759,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
             alert('This value is not allowed.');
         } else if (RequestToID && RequestToID.value === (user.Collocation.id).replace(/-/g, '')) {
             setRequestForID(selectedOption);
-        } else if (RequestToID && RequestToID.No !== 5) {
+        } else if (RequestToID && RequestToID.No !== 30) {
             const requestForOption = SectorList.find(option => option.value === user.Collocation.id.replace(/-/g, ''));
             setRequestForID(requestForOption);
         } else if (selectedOption.value !== (RequestToID && RequestToID.value)) {
@@ -811,7 +776,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
         return (
             <div style={{ lineHeight: '1' }}>
                 <div className='p-0 m-0' style={{ lineHeight: '1' }}>{label}</div>
-                <small className='p-0 m-0 text-muted' style={{ lineHeight: '1' }}>{CtrNo + ", Qty- " + Qty}</small>
+                <small className='p-0 m-0' style={{ lineHeight: '1', color: "#333333" }}>{CtrNo + ", Qty- " + Qty}</small>
             </div>
         );
     }
@@ -1047,7 +1012,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
                                             options={Array.isArray(MyProList) && MyProList.length ? MyProList : []}
                                             name="Title"
                                             placeholder={"Please select product"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={ProValue}
                                             onChange={(e) => { if (e) { DropdownAction(e); setFormData(e); setCtrNo(e.CtrNo); setProValue(e) } }}
                                             required
@@ -1062,7 +1027,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
                                 <div className='row my-2 mx-0 p-0'>
                                     <div className={`d-flex justify-content-between align-items-center ${AutoFire ? "border border-warning" : null}`} style={{ borderRadius: "15px" }}>
                                         <p className="text-center fs-4 text-dark fw-bold m-0">{UnitName + " Size: " + UnitQty}</p>
-                                        {RequestToID && RequestToID.No === 5 && <p className={`text-center fs-4 text-dark fw-bold bg-success text-white px-2 m-0`} style={{ borderRadius: "15px" }}>{CtrNo}</p>}
+                                        {RequestToID && RequestToID.No === 30 && <p className={`text-center fs-4 text-dark fw-bold bg-success text-white px-2 m-0`} style={{ borderRadius: "15px" }}>{CtrNo}</p>}
                                         <div className="form-check form-switch">
                                             <input
                                                 className="form-check-input"
@@ -1114,7 +1079,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
                                             placeholder="0.00"
                                             value={Rate ? Rate : ""}
                                             onChange={(e) => CS_Rate(e)}
-                                            disabled={Percent ? Percent.operation === 13 ? false : true : true}
+                                            disabled={DiscPrct !== 4}
                                             required
                                         />
                                     </div>
@@ -1142,12 +1107,13 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
                                                 menuPosition="fixed"
                                                 menuPortalTarget={document.body}
                                                 borderRadius={"0px"}
-                                                options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, { label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }]}
+                                                options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, { label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }, { label: "Custom", value: 4 }]}
                                                 name="Remark"
                                                 placeholder={"Please select product"}
-                                                styles={CScolourStyles}
+                                                styles={GeneralColourStyles}
                                                 value={{ label: Remark, value: 0 }}
                                                 onChange={(e) => RemarkToggle(e)}
+                                                isDisabled={!Code}
                                                 id="Remark"
                                             />
 
@@ -1257,7 +1223,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
                                                     options={PaymentTerms}
                                                     name="Payment"
                                                     placeholder={"Payment Type"}
-                                                    styles={CScolourStyles}
+                                                    styles={GeneralColourStyles}
                                                     value={Payment}
                                                     onChange={(e) => setPayment(e)}
                                                     required

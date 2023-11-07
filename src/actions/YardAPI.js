@@ -234,7 +234,9 @@ export const SaveDocket = async (RequestID, Date, GrandTotal, Count, RequestData
     formData.append("Date", Date);
     formData.append("GrandTotal", parseFloat(GrandTotal).toFixed(2));
     formData.append("ItemCount", Count);
-    
+    for (var pair of formData.entries()) {
+        // console.log("Pair: ", pair);
+    }
     for (let i = 0; i < RequestData.length; i++) {
         const sell = RequestData[i];
         formData.append(`DeliveryMapData[${i}]SLNo`, sell.SLNo);

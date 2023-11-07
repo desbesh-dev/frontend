@@ -174,7 +174,7 @@ export const InitProductModal = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center">Item Code</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center">Item Code</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -193,7 +193,7 @@ export const InitProductModal = (props) => {
 
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Unit Weight</label>
+                                        <label htmlFor="message-text" className="col-form-label">Unit Weight</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -212,7 +212,7 @@ export const InitProductModal = (props) => {
 
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Unit Price</label>
+                                        <label htmlFor="message-text" className="col-form-label">Unit Price</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -233,7 +233,7 @@ export const InitProductModal = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Quantity</label>
+                                        <label htmlFor="message-text" className="col-form-label">Quantity</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -250,7 +250,7 @@ export const InitProductModal = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Weight</label>
+                                        <label htmlFor="message-text" className="col-form-label">Weight</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -268,7 +268,7 @@ export const InitProductModal = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Price</label>
+                                        <label htmlFor="message-text" className="col-form-label">Price</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -283,7 +283,7 @@ export const InitProductModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Minimum Quantity</label>
+                                <label htmlFor="message-text" className="col-form-label">Minimum Quantity</label>
                                 <input
                                     type="text"
                                     className="form-control fw-bold"
@@ -299,7 +299,7 @@ export const InitProductModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" className="col-form-label">Active Status</label>
+                                <label htmlFor="message-text" className="col-form-label">Active Status</label>
                                 <div className="form-check form-switch">
                                     <input
                                         className="form-check-input"
@@ -461,7 +461,7 @@ export const UpdatePurchaseInvoice = (props) => {
                         <small className="fs-5 fw-bold text-center px-0">{props.item.PurchaseNo}</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" className="d-flex col-form-label justify-content-center">Invoice No</label>
+                                <label htmlFor="message-text" className="d-flex col-form-label justify-content-center">Invoice No</label>
                                 <input
                                     type="text"
                                     className="form-control fw-bold text-center"

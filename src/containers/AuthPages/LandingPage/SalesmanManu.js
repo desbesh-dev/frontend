@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export const SalesmanManu = () => {
     let date = moment().format('YYYY-MM-DD');
-    const { CounterNo } = useSelector((state) => state.auth.user.Collocation);    
+    const { CounterNo } = useSelector((state) => state.auth.user.Collocation);
     return (
         <div className="hexagon-menu clear">
             <div className="hexagon-item">
@@ -18,7 +18,7 @@ export const SalesmanManu = () => {
                     <div></div>
                     <div></div>
                 </div>
-                <Link className="hex-content" to='/rtl_sell'>
+                <Link className="hex-content" to='/counter_sell'>
                     <span className="hex-content-inner">
                         <span className="icon_dash">
                             <i className="fad fa-tv-alt"></i>
@@ -62,7 +62,7 @@ export const SalesmanManu = () => {
                     <div></div>
                     <div></div>
                 </div>
-                <a className="hex-content">
+                <Link className="hex-content" to={`counter_stock`}>
                     <span className="hex-content-inner">
                         <span className="icon_dash">
                             <i className="fad fa-briefcase"></i>
@@ -70,7 +70,7 @@ export const SalesmanManu = () => {
                         <span className="title">Stock</span>
                     </span>
                     <svg viewBox="0 0 173.20508075688772 200" height="200" width="174" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M86.60254037844386 0L173.20508075688772 50L173.20508075688772 150L86.60254037844386 200L0 150L0 50Z" fill="#32CD32"></path></svg>
-                </a>
+                </Link>
             </div>
 
 

@@ -1,18 +1,17 @@
+import * as moment from 'moment';
+import { useEffect, useState } from 'react';
 import { Modal } from "react-bootstrap";
-import React, { useEffect, useState } from 'react';
-import Select from 'react-select';
-import { checkToken } from '../../../../actions/auth';
-import { CalculateAge, FetchGodown, FetchTFBatchData, SaveTransfer } from '../../../../actions/ContractAPI';
-import { useHistory } from 'react-router-dom';
+import Datepicker from 'react-datepicker';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import Select from 'react-select';
+import { CalculateAge, FetchGodown, FetchTFBatchData, SaveTransfer } from '../../../../actions/ContractAPI';
 import { DISPLAY_OVERLAY } from '../../../../actions/types';
 import errorIcon from '../../../../assets/error.png';
 import infoIcon from '../../../../assets/info.png';
 import successIcon from '../../../../assets/success.png';
 import warningIcon from '../../../../assets/warning.gif';
 import { customHeader, locales } from "../../../Suppliers/Class/datepicker";
-import Datepicker from 'react-datepicker';
-import * as moment from 'moment'
 
 let today = new Date();
 
@@ -204,7 +203,7 @@ export const Transfer = (props) => {
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label text-center">From</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center">From</label>
                                         <input
                                             type="text"
                                             className="form-control text-center fw-bolder"
@@ -223,7 +222,7 @@ export const Transfer = (props) => {
 
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label">To</label>
+                                        <label htmlFor="message-text" className="col-form-label">To</label>
                                         <div className="d-flex justify-content-center mx-2 w-100">
                                             <Select
                                                 menuPlacement="auto"
@@ -255,7 +254,7 @@ export const Transfer = (props) => {
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label text-center">Transfer Quantity</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center">Transfer Quantity</label>
                                         <input
                                             type="text"
                                             className="form-control text-center fw-bolder"
@@ -274,7 +273,7 @@ export const Transfer = (props) => {
 
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label">Transfer Weight</label>
+                                        <label htmlFor="message-text" className="col-form-label">Transfer Weight</label>
                                         <input
                                             type="text"
                                             className="form-control text-center fw-bolder"
@@ -295,7 +294,7 @@ export const Transfer = (props) => {
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label text-center">Unit Cost <small className="text-success"> {parseFloat(UnitCost) === parseFloat(AVGCost) ? "(Auto Generated)" : "(Custom Rate)"}</small></label>
+                                        <label htmlFor="message-text" className="col-form-label text-center">Unit Cost <small className="text-success"> {parseFloat(UnitCost) === parseFloat(AVGCost) ? "(Auto Generated)" : "(Custom Rate)"}</small></label>
                                         <input
                                             type="text"
                                             className="form-control text-center fw-bolder"
@@ -315,7 +314,7 @@ export const Transfer = (props) => {
 
                                 <div className="col-md-6">
                                     <div className="form-group text-center">
-                                        <label for="message-text" className="col-form-label">Total Cost</label>
+                                        <label htmlFor="message-text" className="col-form-label">Total Cost</label>
                                         <input
                                             type="text"
                                             className="form-control text-center fw-bolder"

@@ -4,6 +4,7 @@ import avatar from '../../../assets/avatar.jpg';
 import "../../../hocs/css/menu.css";
 import { CostVoucherModal } from '../../Accounts/Voucher/CostVoucherModal';
 import Clock from '../Dashboard/Clock/clock';
+import { BossMenu } from './BossMenu';
 import { Manager_Menu } from './ManagerMenu';
 import { SalesmanManu } from './SalesmanManu';
 import { SectorIT } from './SectorIT';
@@ -66,9 +67,10 @@ const Wellcome = ({ data, cat, no, setList, list }) => {
                                     {
                                         (parseInt(cat) === 0 || parseInt(cat) === 2) ?
                                             parseInt(no) === 8 ? <Manager_Menu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} /> :
-                                                parseInt(no) === 11 ? <SectorIT /> :
-                                                    parseInt(no) === 12 ? <SalesmanManu /> :
-                                                        null
+                                                parseInt(no) === 1 ? <BossMenu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} /> :
+                                                    parseInt(no) === 11 ? <SectorIT /> :
+                                                        parseInt(no) === 12 ? <SalesmanManu /> :
+                                                            null
                                             : parseInt(cat) === 4 ? parseInt(no) === 8 ? <YardManagerMenu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} /> : null : null
                                     }
 

@@ -97,7 +97,7 @@ export const UpdateModal = (props) => {
                         <small className="text-center px-0">(Please fill up the desired field to update)</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Unit Price</label>
+                                <label htmlFor="message-text" class="col-form-label">Unit Price</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -113,7 +113,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Quantity</label>
+                                <label htmlFor="message-text" class="col-form-label">Quantity</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -129,7 +129,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Weight</label>
+                                <label htmlFor="message-text" class="col-form-label">Weight</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -146,7 +146,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Minimum Quantity</label>
+                                <label htmlFor="message-text" class="col-form-label">Minimum Quantity</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -162,7 +162,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Initial Stock</label>
+                                <label htmlFor="message-text" class="col-form-label">Initial Stock</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -178,7 +178,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Active Status</label>
+                                <label htmlFor="message-text" class="col-form-label">Active Status</label>
                                 <div className="form-check form-switch">
                                     <input
                                         class="form-check-input"

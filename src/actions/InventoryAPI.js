@@ -643,9 +643,9 @@ export const DeliveryOrder = async (CounterID, PartyID, Date, OrderDate, Deliver
     formData.append("Shipping", parseFloat(Shipment).toFixed(2));
     formData.append("Payment", parseInt(Payment.value));
     formData.append("GrandTotal", parseFloat(GrandTotal).toFixed(2));
-    formData.append("Bank", parseFloat(Bank).toFixed(2));
-    formData.append("Cash", parseFloat(Cash).toFixed(2));
-    formData.append("PaidAmount", parseFloat(PaidAmount).toFixed(2));
+    formData.append("Bank", parseFloat(Bank || 0).toFixed(2));
+    formData.append("Cash", parseFloat(Cash || 0).toFixed(2));
+    formData.append("PaidAmount", parseFloat(PaidAmount || 0).toFixed(2));
     formData.append("Due", parseFloat(Due).toFixed(2));
     formData.append("RefundAmount", parseFloat(RefundAmount).toFixed(2));
     formData.append("ItemCount", Count);

@@ -118,7 +118,7 @@ export const CreateModal = (props) => {
                         <small className="text-center px-0">Please fill up the field of account</small>
                         <form>
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">Parent Account</label>
+                                <label htmlFor="IssueDate" class="col-form-label">Parent Account</label>
                                 <input
                                     type="Parent Account"
                                     class="form-control fw-bold"
@@ -133,7 +133,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">Sector</label>
+                                <label htmlFor="IssueDate" class="col-form-label">Sector</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -155,7 +155,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Account Title</label>
+                                <label htmlFor="message-text" class="col-form-label">Account Title</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -170,7 +170,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Short Code</label>
+                                <label htmlFor="message-text" class="col-form-label">Short Code</label>
                                 <input
                                     type="numeric"
                                     class="form-control fw-bold"
@@ -185,7 +185,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Transaction Type</label>
+                                <label htmlFor="message-text" class="col-form-label">Transaction Type</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -206,7 +206,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Account Type</label>
+                                <label htmlFor="message-text" class="col-form-label">Account Type</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -234,7 +234,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Terms</label>
+                                <label htmlFor="message-text" class="col-form-label">Terms</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -253,7 +253,7 @@ export const CreateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Money Type</label>
+                                <label htmlFor="message-text" class="col-form-label">Money Type</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -271,7 +271,7 @@ export const CreateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Tree  Level</label>
+                                <label htmlFor="message-text" class="col-form-label">Tree  Level</label>
                                 <input
                                     type="numeric"
                                     class="form-control fw-bold"

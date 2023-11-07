@@ -1,13 +1,10 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
+import { useEffect, useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { useDispatch } from 'react-redux';
 import Select from 'react-select';
-import { checkToken } from '../../../../actions/auth';
-import { SaveCondition, UpdateCondition, SaveSecondCond, FetchAccounts, UpdateOtherCond, OperationList, CurrencyList, ConditionScheme, getLabel } from '../../../../actions/ContractAPI';
-import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
+import { CurrencyList, FetchAccounts, OperationList, SaveSecondCond, UpdateOtherCond, getLabel } from '../../../../actions/ContractAPI';
 import { DISPLAY_OVERLAY } from '../../../../actions/types';
 import errorIcon from '../../../../assets/error.png';
-import infoIcon from '../../../../assets/info.png';
 import successIcon from '../../../../assets/success.png';
 import warningIcon from '../../../../assets/warning.gif';
 
@@ -129,7 +126,7 @@ export const SecondModal = (props) => {
                         <small className="text-center px-0">All fields are mendatory</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">S/N</label>
+                                <label htmlFor="message-text" class="col-form-label">S/N</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -144,7 +141,7 @@ export const SecondModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Title</label>
+                                <label htmlFor="message-text" class="col-form-label">Title</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -159,7 +156,7 @@ export const SecondModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Type</label>
+                                <label htmlFor="message-text" class="col-form-label">Type</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -179,7 +176,7 @@ export const SecondModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Rate/Value</label>
+                                <label htmlFor="message-text" class="col-form-label">Rate/Value</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -195,7 +192,7 @@ export const SecondModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Currency</label>
+                                <label htmlFor="message-text" class="col-form-label">Currency</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -216,7 +213,7 @@ export const SecondModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Associate Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Associate Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -237,7 +234,7 @@ export const SecondModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Active Status</label>
+                                <label htmlFor="message-text" class="col-form-label">Active Status</label>
                                 <div className="form-check form-switch">
                                     <input
                                         class="form-check-input"
@@ -386,7 +383,7 @@ export const SecondUpdateModal = (props) => {
                         <small className="text-center px-0">All fields are mendatory</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">S/N</label>
+                                <label htmlFor="message-text" class="col-form-label">S/N</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -401,7 +398,7 @@ export const SecondUpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Title</label>
+                                <label htmlFor="message-text" class="col-form-label">Title</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -416,7 +413,7 @@ export const SecondUpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Rate/Value</label>
+                                <label htmlFor="message-text" class="col-form-label">Rate/Value</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -432,7 +429,7 @@ export const SecondUpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Currency</label>
+                                <label htmlFor="message-text" class="col-form-label">Currency</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -453,7 +450,7 @@ export const SecondUpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Operation</label>
+                                <label htmlFor="message-text" class="col-form-label">Operation</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -473,7 +470,7 @@ export const SecondUpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Times</label>
+                                <label htmlFor="message-text" class="col-form-label">Times</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -488,7 +485,7 @@ export const SecondUpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Associate Account</label>
+                                <label htmlFor="message-text" class="col-form-label">Associate Account</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -510,7 +507,7 @@ export const SecondUpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Active Status</label>
+                                <label htmlFor="message-text" class="col-form-label">Active Status</label>
                                 <div className="form-check form-switch">
 
                                     <input

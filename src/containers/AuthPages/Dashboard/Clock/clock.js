@@ -52,7 +52,7 @@ class Clock extends Component {
         return (
             <div className="d-flex align-items-center justify-content-center flex-column pl-2">
                 <div className="Time text-right">
-                    <p className="display-4 fw-bold m-0">{this.state.time}</p>
+                    <p className="display-4 fw-bold text-nowrap m-0">{this.state.time}</p>
                 </div>
                 <p className="text-right m-0">{this.state.date}</p>
             </div>

@@ -1,19 +1,16 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
-import Select from 'react-select';
-import { checkToken } from '../../../actions/auth';
-import { colourStyles } from '../../../actions/SuppliersAPI';
-import { SaveBatch, LoadCondList } from '../../../actions/ContractAPI';
-import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
-import { DISPLAY_OVERLAY } from '../../../actions/types';
-import { customHeader, locales } from "../../Suppliers/Class/datepicker";
+import * as moment from 'moment';
+import { useEffect, useState } from 'react';
+import { Modal } from "react-bootstrap";
 import Datepicker from 'react-datepicker';
-import * as moment from 'moment'
+import { useDispatch } from 'react-redux';
+import Select from 'react-select';
+import { LoadCondList, SaveBatch } from '../../../actions/ContractAPI';
+import { DISPLAY_OVERLAY } from '../../../actions/types';
 import errorIcon from '../../../assets/error.png';
 import infoIcon from '../../../assets/info.png';
 import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
+import { customHeader, locales } from "../../Suppliers/Class/datepicker";
 
 export const BatchIssuance = (props) => {
     const [Loading, setLoading] = useState(false)
@@ -156,7 +153,7 @@ export const BatchIssuance = (props) => {
             <Modal.Body>
                 <form>
                     <div className="form-group">
-                        <label for="IssueDate" class="col-form-label">Batch No</label>
+                        <label htmlFor="IssueDate" class="col-form-label">Batch No</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -171,7 +168,7 @@ export const BatchIssuance = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Conditions</label>
+                        <label htmlFor="recipient-name" class="col-form-label">Conditions</label>
                         <Select
                             menuPlacement="auto"
                             menuPosition="fixed"
@@ -192,7 +189,7 @@ export const BatchIssuance = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="IssueDate" class="col-form-label">Issue Date</label>
+                        <label htmlFor="IssueDate" class="col-form-label">Issue Date</label>
                         {/* <input
                             type="date"
                             class="form-control"
@@ -217,7 +214,7 @@ export const BatchIssuance = (props) => {
                     </div>
 
                     <div className="form-group">
-                        <label for="message-text" class="col-form-label">Size</label>
+                        <label htmlFor="message-text" class="col-form-label">Size</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -232,7 +229,7 @@ export const BatchIssuance = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">FCR</label>
+                        <label htmlFor="recipient-name" class="col-form-label">FCR</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -247,7 +244,7 @@ export const BatchIssuance = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">ABW</label>
+                        <label htmlFor="recipient-name" class="col-form-label">ABW</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -263,7 +260,7 @@ export const BatchIssuance = (props) => {
                     </div>
 
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Cost</label>
+                        <label htmlFor="recipient-name" class="col-form-label">Cost</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -278,7 +275,7 @@ export const BatchIssuance = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Sell Rate</label>
+                        <label htmlFor="recipient-name" class="col-form-label">Sell Rate</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -293,7 +290,7 @@ export const BatchIssuance = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Net Total Pay</label>
+                        <label htmlFor="recipient-name" class="col-form-label">Net Total Pay</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -308,7 +305,7 @@ export const BatchIssuance = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Grand Total Pay</label>
+                        <label htmlFor="recipient-name" class="col-form-label">Grand Total Pay</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -323,7 +320,7 @@ export const BatchIssuance = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Saving Rate</label>
+                        <label htmlFor="recipient-name" class="col-form-label">Saving Rate</label>
                         <input
                             type="numeric"
                             class="form-control"
@@ -338,7 +335,7 @@ export const BatchIssuance = (props) => {
                             : null}
                     </div>
                     <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Savings</label>
+                        <label htmlFor="recipient-name" class="col-form-label">Savings</label>
                         <input
                             type="numeric"
                             class="form-control"

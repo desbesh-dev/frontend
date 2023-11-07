@@ -2,6 +2,7 @@
 import * as moment from 'moment';
 import { useEffect, useState } from 'react';
 import Datepicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import { connect, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
@@ -12,9 +13,10 @@ import errorIcon from '../../../assets/error.png';
 import infoIcon from '../../../assets/info.png';
 import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 import { InfoMessage } from "../../Modals/ModalForm.js";
 import { customHeader, locales } from "../../Suppliers/Class/datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+
 let today = new Date();
 
 const Voucher = ({ list, setList }) => {
@@ -70,23 +72,6 @@ const Voucher = ({ list, setList }) => {
         LoadConcern();
     }, [])
 
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuPortal: base => ({ ...base, zIndex: 9999 }),
-        option: (provided, state) => ({
-            ...provided,
-            color: state.isSelected ? '#000' : '#333',
-            backgroundColor: state.isSelected ? 'whitesmoke' : '#fff',
-            ':hover': {
-                backgroundColor: state.isSelected ? 'whitesmoke' : '#f8f9fa'
-            }
-        })
-    }
-
     const LoadConcern = async () => {
         var result = await FetchConcern();
         if (result !== true) {
@@ -125,7 +110,7 @@ const Voucher = ({ list, setList }) => {
         setACNumber('');
         setChequeNo('');
         setTrxNo('');
-        setAccData([null]);
+        setAccData([]);
     }
 
     const AddRow = (e) => {
@@ -152,8 +137,8 @@ const Voucher = ({ list, setList }) => {
     const getTotal = () => {
         let TotalDebit = 0.00;
         let TotalCredit = 0.00;
-        const Debit = AccData.filter(Boolean).map(row => parseInt(row.Debit));
-        const Credit = AccData.filter(Boolean).map(row => parseInt(row.Credit));
+        const Debit = AccData.filter(Boolean).map(row => parseFloat(row.Debit));
+        const Credit = AccData.filter(Boolean).map(row => parseFloat(row.Credit));
 
         if (Debit.length > 0 && Credit.length > 0) {
             TotalDebit = Debit.reduce((acc, val) => acc + val);
@@ -294,7 +279,7 @@ const Voucher = ({ list, setList }) => {
         return (
             <div style={{ lineHeight: '1' }}>
                 <div className='p-0 m-0' style={{ lineHeight: '1' }}>{label}</div>
-                <small className='p-0 m-0 text-muted' style={{ lineHeight: '1' }}>{username || Address}</small>
+                <small className='p-0 m-0 text-dark' style={{ lineHeight: '1' }}>{username || Address}</small>
             </div>
         );
     }
@@ -326,7 +311,7 @@ const Voucher = ({ list, setList }) => {
                                         options={SisterList}
                                         name="Division"
                                         placeholder={"Select sister"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Sister ? Sister : null}
                                         onChange={(e) => getSector(e)}
                                         required
@@ -343,7 +328,7 @@ const Voucher = ({ list, setList }) => {
                                         options={SectorList}
                                         name="Consignee Type"
                                         placeholder={"Select sector"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Sector}
                                         onChange={(e) => setSector(e)}
                                         required
@@ -365,7 +350,7 @@ const Voucher = ({ list, setList }) => {
                                         options={JournalList}
                                         name="Division"
                                         placeholder={"Select voucher type"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={VoucherType ? VoucherType : null}
                                         onChange={(e) => LoadJaurnal(e)}
                                         isDisabled={Sister && Sector ? false : true}
@@ -383,7 +368,7 @@ const Voucher = ({ list, setList }) => {
                                         options={ConsigneeTypes}
                                         name="Consignee Type"
                                         placeholder={"Select consignee type"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={ConsType}
                                         onChange={(e) => LoadConsignee(e)}
                                         required
@@ -405,7 +390,7 @@ const Voucher = ({ list, setList }) => {
                                     options={ConsigneeList}
                                     name="Consignee"
                                     placeholder={"Please select consignee"}
-                                    styles={CScolourStyles}
+                                    styles={GeneralColourStyles}
                                     value={Transact}
                                     onChange={(e) => TransactHandler(e)}
                                     required
@@ -498,7 +483,7 @@ const Voucher = ({ list, setList }) => {
                                         options={BankLists ? BankLists : null}
                                         name="BankName"
                                         placeholder={"Please select bank"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Bank}
                                         onChange={(e) => setBank(e)}
                                         required
@@ -595,7 +580,7 @@ const Voucher = ({ list, setList }) => {
                                         options={AccLists ? AccLists : null}
                                         name="AccItems"
                                         placeholder={"Please select account"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={AccountTitle ? { label: AccountTitle, value: AccountID } : null}
                                         onChange={(e) => GenVoucheArr(e)}
                                         required
@@ -670,8 +655,8 @@ const Voucher = ({ list, setList }) => {
                                             <tr className="border-bottom text-center" key={i}>
                                                 <td className="p-0 border-right"><span className="d-block fw-bold">{i + 1}</span></td>
                                                 <td className="p-0 border-right"><span className="d-block fw-bold text-left px-2">{item.AccountTitle}</span></td>
-                                                <td className="p-0 border-right"><span className="d-block fw-bold text-right px-2">{parseInt(item.Debit).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                                <td className="p-1 border-right"><span className="d-block fw-bold text-right px-2">{parseInt(item.Credit).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                                <td className="p-0 border-right"><span className="d-block fw-bold text-right px-2">{parseFloat(item.Debit).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                                <td className="p-1 border-right"><span className="d-block fw-bold text-right px-2">{parseFloat(item.Credit).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
                                                 <td className="p-0">
                                                     <button className="btn fs-3 p-0 text-danger" onClick={() => deleteRow(i)}>
                                                         <i className="fad fa-minus"></i>
@@ -682,8 +667,8 @@ const Voucher = ({ list, setList }) => {
                                     }
                                     <tr className="text-center border border-light mt-3">
                                         <td className="p-1" colSpan="2"><span className="d-block text-right fw-bold">Total:</span> </td>
-                                        <td className="p-1"><span className="d-block text-right fw-bolder">{getTotal().Debit.toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                        <td className="p-1"><span className="d-block fw-bolder text-right">{getTotal().Credit.toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                        <td className="p-1"><span className="d-block text-right fw-bolder">{parseFloat(getTotal().Debit).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                        <td className="p-1"><span className="d-block fw-bolder text-right">{parseFloat(getTotal().Credit).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
                                         <td className="px-3 py-0">
                                             <button type="button" className="btn fs-3 p-0 text-success"
                                                 onClick={() => SaveVoucher()}

@@ -4,13 +4,11 @@ import BarcodeReader from 'react-barcode-reader';
 import { connect, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
+import 'react-virtualized-select/styles.css';
 import { DeleteStock } from '../../../actions/InventoryAPI';
 import { logout } from '../../../actions/auth';
 import { DISPLAY_OVERLAY } from '../../../actions/types';
 import '../../../hocs/react-select/dist/react-select.css';
-// import 'react-select/dist/react-select.css'
-import 'react-virtualized-select/styles.css';
-// import 'react-virtualized/styles.css';
 
 import { fetchServerTimestamp } from '../../../actions/APIHandler';
 import { MyProductList } from '../../../actions/SuppliersAPI';
@@ -30,23 +28,16 @@ const Stock = ({ user, list, setList, scale, no }) => {
     const [EditItem, setEditItem] = useState(false);
     const [EditItemModalShow, setEditItemModalShow] = useState(false);
 
-    const [CreateItemModalShow, setCreateItemModalShow] = useState(false);
-
     const [DumpsterModalShow, setDumpsterModalShow] = useState(false);
     const [CreatePKGModalShow, setCreatePKGModalShow] = useState(false);
     const [PackItemID, setPackItemID] = useState(false);
-
-    const [EditPKG, setEditPKG] = useState(false);
     const [EditPKGModalShow, setEditPKGModalShow] = useState(false);
-
     const [ViewPKGModalShow, setViewPKGModalShow] = useState(false);
 
     const [BarcodeItem, setBarcodeItem] = useState(false);
     const [BarcodeModalShow, setBarcodeModalShow] = useState(false);
 
-    const [ItemTitle, setItemTitle] = useState(false);
     const [CreateModalShow, setCreateModalShow] = useState(false);
-    const [UpdateModalShow, setUpdateModalShow] = useState(false);
     const [DeleteModalShow, setDeleteModalShow] = useState(false);
     const [InfoModalShow, setInfoModalShow] = useState(false);
     const [MyProList, setMyProList] = useState([])
@@ -107,16 +98,54 @@ const Stock = ({ user, list, setList, scale, no }) => {
             dispatch({ type: DISPLAY_OVERLAY, payload: false });
         }
     };
-
-    const today = new Date().toLocaleDateString("en-us", "dd/MM/yyyy");
-
     const CScolourStyles = {
-        control: styles => ({ ...styles, backgroundColor: "#F4F7FC", border: 0, boxShadow: 'none', fontWeight: "bold", minHeight: "fit-content", minWidth: "30vh", borderRadius: '20px' }),
         container: base => ({
             ...base,
             flex: 1,
+            fontWeight: "500"
         }),
-    }
+        menuList: provided => ({
+            ...provided,
+            backgroundColor: 'white',
+        }),
+        option: (provided, state) => {
+            let backgroundColor = state.isSelected ? '#6495ED' : 'transparent';
+            let color = state.isSelected ? 'whitesmoke' : '#333';
+            let scale = state.isSelected ? 'scale(1)' : 'scale(1.01)';
+
+            if (state.isFocused) {
+                backgroundColor = '#6495ED';
+                color = 'whitesmoke';
+                scale = 'scale(1.01)';
+            }
+
+            return {
+                ...provided,
+                color,
+                backgroundColor,
+                paddingTop: "5px",
+                paddingBottom: "5px",
+                cursor: 'pointer',
+                ':focus': {
+                    backgroundColor: '#6495ED',
+                    color: '#fff',
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                },
+                ':hover': {
+                    backgroundColor: '#6495ED',
+                    color: '#fff',
+                    paddingTop: "5px",
+                    paddingBottom: "5px"
+                },
+            };
+        },
+        control: styles => ({ ...styles, backgroundColor: "#F4F7FC", border: 0, boxShadow: 'none', fontWeight: "bold", minHeight: "fit-content", minWidth: "30vh", borderRadius: '20px' }),
+        indicatorsContainer: (provided) => ({
+            ...provided,
+            cursor: 'pointer',
+        }),
+    };
 
     useEffect(() => {
         LoadProductItems();
@@ -148,22 +177,6 @@ const Stock = ({ user, list, setList, scale, no }) => {
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
 
-    const Summuation = (arr) => {
-        var result = [];
-        arr.reduce(function (res, val) {
-            if (!res[val.Category]) {
-                res[val.Category] = { Category: val.Category, Qty: 0, Weight: 0 };
-                result.push(res[val.Category])
-            }
-            res[val.Category].Qty += parseFloat(val.Qty, 10)
-            res[val.Category].Weight += parseFloat(val.Weight, 10)
-            return res;
-        }, {});
-        return Array.isArray(result) && result.length ? result.map((item, i) => (
-            <p className='text-dark fs-4 fw-bold m-0 border border-light px-2' style={{ borderRadius: "15px" }}>{item.Category + ": " + item.Qty.toLocaleString("en-BD", { minimumFractionDigits: 2 }) + "PCS & " + item.Weight.toLocaleString("en-BD", { minimumFractionDigits: 3 }) + "KG"}</p>
-        )) : null;
-    }
-
     MyProList.forEach(option => {
         option.combinedLabel = `${option.label} (${option.value})`;
     });
@@ -174,7 +187,7 @@ const Stock = ({ user, list, setList, scale, no }) => {
     };
 
     var h = window.innerHeight - 167;
-
+    const sortedOptions = data?.sector?.sort((a, b) => a.label.localeCompare(b.label));
     return (
         <div className="row m-0 d-flex justify-content-center">
             <div className="col-lg-12 px-0">
@@ -194,8 +207,7 @@ const Stock = ({ user, list, setList, scale, no }) => {
                                         menuPosition="fixed"
                                         menuPortalTarget={document.body}
                                         borderRadius={"0px"}
-                                        options={data.sector}
-                                        // options={}
+                                        options={sortedOptions}
                                         defaultValue={{ label: "Select Sector", value: 0 }}
                                         name="Sector"
                                         placeholder={"Sector"}
@@ -204,7 +216,7 @@ const Stock = ({ user, list, setList, scale, no }) => {
                                         onChange={(e) => setSectorFilter(e)}
                                         required
                                         id="Sector"
-                                        isClearable={false}
+                                        isClearable={true}
                                         isSearchable={true}
                                     />
                                 </div>
@@ -216,7 +228,6 @@ const Stock = ({ user, list, setList, scale, no }) => {
                                     menuPosition="fixed"
                                     menuPortalTarget={document.body}
                                     borderRadius={"0px"}
-                                    // options={data.results.map}
                                     options={CategoryList}
                                     defaultValue={{ label: "Select Dept", value: 0 }}
                                     name="Category"
@@ -264,17 +275,17 @@ const Stock = ({ user, list, setList, scale, no }) => {
                             <table className={`table table-hover table-borderless no-wrap bg-white m-0`}>
                                 <thead>
                                     <tr className="text-center">
-                                        {/* <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">SLNo</span></th> */}
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Code</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Category</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Title</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Unit (Wt)</span></th>
+                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Ctn Price</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Unit Price</span></th>
-                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Stock (Wt)</span></th>
+                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Stock (Ctn) </span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Stock (Qt)</span></th>
-                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Status</span></th>
+                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Stock (Wt)</span></th>
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Last Received</span></th>
-                                        <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Min Qt</span></th>
+                                        {/* <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Min Qt</span></th> */}
                                         <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Supplier</span></th>
                                         {no <= 7 && <th className="border-right p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Sector</span></th>}
                                         <th className="p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase"> Action </span></th>
@@ -284,24 +295,23 @@ const Stock = ({ user, list, setList, scale, no }) => {
                                     data.results.map((item, i) => (
                                         <tbody>
                                             <tr className="border-bottom text-center" key={i}>
-                                                {/* <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0">{i + 1}</span></td> */}
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.Code}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0">{item.Category}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-left text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.Title}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.UnitWeight.toLocaleString("en", { minimumFractionDigits: 3 })}</span></td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{item.Cost.toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{item.Weight.toLocaleString("en", { minimumFractionDigits: 3 })}</span></td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{parseFloat(item.Qty).toLocaleString("en", { minimumFractionDigits: 2 })} PCS</span> </td>
-                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0">{item.Status ? "Available" : "Unavailable"}</span> </td>
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bolder text-right text-dark p-0">{parseFloat(item.CtnPrice || 0).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.Cost || 0).toLocaleString("en", { minimumFractionDigits: 2 })}</span></td>
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bolder text-right text-dark p-0">{parseFloat(item.Ctn || 0).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{parseFloat(item.Qty || 0).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                                <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0">{parseFloat(item.Weight || 0).toLocaleString("en", { minimumFractionDigits: 3 })}</span></td>
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.LastReceived.toLocaleString("en", { minimumFractionDigits: 2 })} PCS</span> </td>
-                                                <td className={`border-right p-1 ${scale === 6 || (scale === 3 && (no === 5 || no === 6 || no === 9 || no === 10)) ? "border-right" : null} `}><span className="d-block fs-6 fw-bold text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.MinRequired.toLocaleString("en", { minimumFractionDigits: 0 })} PCS</span> </td>
+                                                {/* <td className={`border-right p-1 ${scale === 6 || (scale === 3 && (no === 5 || no === 6 || no === 9 || no === 10)) ? "border-right" : null} `}><span className="d-block fs-6 fw-bold text-right text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.MinRequired.toLocaleString("en", { minimumFractionDigits: 0 })} PCS</span> </td> */}
                                                 <td className="border-right p-1"><span className="d-block fs-6 fw-bold text-left text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.Supplier}</span> </td>
                                                 {no <= 7 &&
                                                     <td className={`border-right p-1}`}><span className="d-block fs-6 fw-bold text-center text-dark p-0" style={{ whiteSpace: 'nowrap' }}>{item.Sector}</span> </td>
                                                 }
                                                 <td className="p-1"><span className="d-block fs-6 fw-bold text-center text-dark p-0" style={{ whiteSpace: 'nowrap' }}>
                                                     <button title="Remove Product" className="btn fs-5 px-2 py-0 fad fa-minus text-dark" onClick={() => { setStockItem(item); setDeleteModalShow(true) }} />
-                                                    {/* <button title="Update Product" className="btn fs-5 px-2 py-0 fad fa-edit text-dark" id="print" onClick={(e) => { setStockItem(item); setUpdateModalShow(true) }} /> */}
                                                     <button title="View Package" className="btn fs-4 px-2 py-0 fad fa-eye text-dark" onClick={() => { setPackItemID(item); setViewPKGModalShow(true) }} />
                                                     {no <= 7 ?
                                                         <>

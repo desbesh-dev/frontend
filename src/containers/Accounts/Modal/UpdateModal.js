@@ -1,13 +1,9 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
+import { useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { useDispatch } from 'react-redux';
 import Select from 'react-select';
-import { checkToken } from '../../../actions/auth';
 import { UpdateAcc } from '../../../actions/APIHandler';
-import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
-import { DISPLAY_OVERLAY } from '../../../actions/types';
 import errorIcon from '../../../assets/error.png';
-import infoIcon from '../../../assets/info.png';
 import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
 
@@ -135,7 +131,7 @@ export const UpdateModal = (props) => {
                         <small className="text-center px-0">Please fill up the desire field to update</small>
                         <form>
                             <div className="form-group">
-                                <label for="IssueDate" class="col-form-label">Parent Account</label>
+                                <label htmlFor="IssueDate" class="col-form-label">Parent Account</label>
                                 <input
                                     type="Parent Account"
                                     class="form-control fw-bold"
@@ -149,7 +145,7 @@ export const UpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Account Title</label>
+                                <label htmlFor="message-text" class="col-form-label">Account Title</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -164,7 +160,7 @@ export const UpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Short Code</label>
+                                <label htmlFor="message-text" class="col-form-label">Short Code</label>
                                 <input
                                     type="numeric"
                                     class="form-control fw-bold"
@@ -179,7 +175,7 @@ export const UpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Transaction Type</label>
+                                <label htmlFor="message-text" class="col-form-label">Transaction Type</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -202,7 +198,7 @@ export const UpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Account Type</label>
+                                <label htmlFor="message-text" class="col-form-label">Account Type</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -232,7 +228,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Terms</label>
+                                <label htmlFor="message-text" class="col-form-label">Terms</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -254,7 +250,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Money Type</label>
+                                <label htmlFor="message-text" class="col-form-label">Money Type</label>
                                 <Select
                                     menuPlacement="auto"
                                     menuPosition="fixed"
@@ -275,7 +271,7 @@ export const UpdateModal = (props) => {
                                     : null}
                             </div>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Tree  Level</label>
+                                <label htmlFor="message-text" class="col-form-label">Tree  Level</label>
                                 <input
                                     type="numeric"
                                     class="form-control fw-bold"

@@ -1,15 +1,9 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
-import Select from 'react-select';
-import { checkToken } from '../../../../../actions/auth';
-import { UpdateStock } from '../../../../../actions/InventoryAPI';
-import { FetchAccounts, getLabel, RecallProduct } from '../../../../../actions/ContractAPI';
+import { useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { RecallProduct } from '../../../../../actions/ContractAPI';
 
-import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
-import { DISPLAY_OVERLAY } from '../../../../../actions/types';
+import { useDispatch } from 'react-redux';
 import errorIcon from '../../../../../assets/error.png';
-import infoIcon from '../../../../../assets/info.png';
 import successIcon from '../../../../../assets/success.png';
 import warningIcon from '../../../../../assets/warning.gif';
 
@@ -114,7 +108,7 @@ export const EditModal = (props) => {
                         <small className="fs-5 fw-bold text-center text-success px-0">{props.EditData.Title}</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Quantity</label>
+                                <label htmlFor="message-text" class="col-form-label">Quantity</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -131,7 +125,7 @@ export const EditModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Weight</label>
+                                <label htmlFor="message-text" class="col-form-label">Weight</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"

@@ -22,6 +22,7 @@ import { DiscountModal } from '../ViewInvoice/Modals/ModalForm';
 
 import 'react-virtualized-select/styles.css';
 import { FetchPrintQuote } from '../../../actions/PartyAPI';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
 import '../../../hocs/react-select/dist/react-select.css';
 
 let today = new Date();
@@ -153,18 +154,6 @@ const EditQuote = ({ user, list, setList, QuoteID }) => {
     useEffect(() => {
         setError({});
     }, [Name, Address])
-
-    const CScolourStyles = {
-        container: base => ({
-            ...base,
-            flex: 1,
-            fontWeight: "500"
-        }),
-        menuList: provided => ({
-            ...provided,
-            backgroundColor: 'white',
-        }),
-    };
 
     const handleToggleAutoFire = () => {
         setAutoFire((AutoFire) => !AutoFire);
@@ -922,7 +911,7 @@ const EditQuote = ({ user, list, setList, QuoteID }) => {
                                         options={MyProList}
                                         name="Title"
                                         placeholder={"Please select product"}
-                                        styles={CScolourStyles}
+                                        styles={GeneralColourStyles}
                                         value={Title}
                                         onChange={(e) => { if (e) { DropdownAction(e.value); setFormData(e); } }}
                                         required
@@ -1025,7 +1014,7 @@ const EditQuote = ({ user, list, setList, QuoteID }) => {
                                             options={[{ label: "N/A", value: 0 }, { label: "Discount", value: 2 }, ...(PartyData?.IsDispatchable ? [{ label: "Bonus", value: 1 }, { label: "Dispatch", value: 3 }] : [])]}
                                             name="Remark"
                                             placeholder={"Please select product"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={{ label: Remark, value: 0 }}
                                             onChange={(e) => RemarkToggle(e)}
                                             isDisabled={!PartyData?.IsDispatchable}
@@ -1119,7 +1108,7 @@ const EditQuote = ({ user, list, setList, QuoteID }) => {
                                             options={PartyList}
                                             name="Party"
                                             placeholder={"Please select party"}
-                                            styles={CScolourStyles}
+                                            styles={GeneralColourStyles}
                                             value={PartyID}
                                             onChange={(e) => setPartyID(e)}
                                             required

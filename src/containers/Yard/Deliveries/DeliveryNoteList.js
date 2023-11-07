@@ -107,7 +107,6 @@ const DeliveryNoteList = ({ cat, no }) => {
     }
 
     var h = window.innerHeight - 215;
-
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">
             <div className="col-lg-12 h-100 px-0">
@@ -267,12 +266,11 @@ const DeliveryNoteList = ({ cat, no }) => {
                                                     <td className="py-0 px-1 border-right text-nowrap">{item.Concern}</td>
                                                     <td className="py-0 px-1 border-right text-center">{item.DeliveryNoteNo}</td>
 
-                                                    <td className="py-0 px-1 border-right text-nowrap">{moment(item.Date).format("DD MMM YY")}</td>
-                                                    <td className="py-0 px-1 border-right">{moment(item.DeliveryDate).format("DD MMM YY")}</td>
+                                                    <td className="py-0 px-1 border-right text-nowrap">{moment(item.OrderDate).format("DD MMM YY")}</td>
+                                                    <td className="py-0 px-1 border-right">{moment(item.Date).format("DD MMM YY")}</td>
 
                                                     <td className="py-0 px-1 border-right">{item.ItemCount}</td>
                                                     <td className="py-0 border-right"><span className="d-block fw-bold">{(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
-
 
                                                     <td className="py-0 px-1 border-right text-center">{item.ReqShortCode}</td>
                                                     <td className="py-0 px-1 border-right text-center">{item.ReqForShortCode}</td>
@@ -311,7 +309,6 @@ const DeliveryNoteList = ({ cat, no }) => {
                                                         <button className="btn fs-3 px-2 py-0 text-danger" onClick={(e) => PrintPDF(e, item)}> <i className="fad fa-print"></i></button>
                                                     </td>
                                                 </tr>
-
                                             )
                                         })
                                     }

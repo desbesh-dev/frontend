@@ -1,14 +1,11 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
-import Select from 'react-select';
-import { checkToken } from '../../actions/auth';
-import { colourStyles } from '../../actions/SuppliersAPI';
-import { UpdateContract, LoadCondList } from '../../actions/ContractAPI';
 import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
+import { Fragment, useEffect, useState } from 'react';
+import { Modal } from "react-bootstrap";
+import { useDispatch } from 'react-redux';
+import Select from 'react-select';
+import { LoadCondList, UpdateContract } from '../../actions/ContractAPI';
 import { DISPLAY_OVERLAY } from '../../actions/types';
 import errorIcon from '../../assets/error.png';
-import infoIcon from '../../assets/info.png';
 import successIcon from '../../assets/success.png';
 import warningIcon from '../../assets/warning.gif';
 
@@ -76,7 +73,7 @@ export const ContractUpdate = (props) => {
 
     const LoadRep = async () => {
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        
+
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -204,7 +201,7 @@ export const ContractUpdate = (props) => {
                 {!Next ?
                     <form>
                         <div className="form-group">
-                            <label for="Title" class="col-form-label">Farm/Shed/Business Title</label>
+                            <label htmlFor="Title" class="col-form-label">Farm/Shed/Business Title</label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -219,7 +216,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Conditions</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Conditions</label>
                             <Select
                                 menuPlacement="auto"
                                 menuPosition="fixed"
@@ -240,7 +237,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="message-text" class="col-form-label">Security Money</label>
+                            <label htmlFor="message-text" class="col-form-label">Security Money</label>
                             <input
                                 type="numeric"
                                 class="form-control"
@@ -255,7 +252,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Balance</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Balance</label>
                             <input
                                 type="numeric"
                                 class="form-control"
@@ -270,7 +267,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Representative</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Representative</label>
                             <Select
                                 menuPlacement="auto"
                                 menuPosition="fixed"
@@ -344,7 +341,7 @@ export const ContractUpdate = (props) => {
                     <form>
                         <small className="text-danger">Not mandatory</small>
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Shed Size</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Shed Size</label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -359,7 +356,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="message-text" class="col-form-label">Floor</label>
+                            <label htmlFor="message-text" class="col-form-label">Floor</label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -374,7 +371,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Roof</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Roof</label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -389,7 +386,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Water Pot</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Water Pot</label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -404,7 +401,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Feed Pot</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Feed Pot</label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -419,7 +416,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Employee Name</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Employee Name</label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -434,7 +431,7 @@ export const ContractUpdate = (props) => {
                                 : null}
                         </div>
                         <div className="form-group">
-                            <label for="recipient-name" class="col-form-label">Emergency Contact</label>
+                            <label htmlFor="recipient-name" class="col-form-label">Emergency Contact</label>
                             <input
                                 type="text"
                                 class="form-control"

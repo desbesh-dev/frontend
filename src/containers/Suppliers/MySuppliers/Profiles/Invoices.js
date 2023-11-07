@@ -253,8 +253,8 @@ const Invoices = ({ user, PartyID, SupplierID, id, list, setList }) => {
                                     <th className="py-1 border-right">Purchase No</th>
                                     <th className="py-1 border-right"><span>Invoice No</span></th>
                                     <th className="py-1 border-right">Items</th>
-                                    <th className="py-1 border-right">Vat Rate</th>
-                                    <th className="py-1 border-right">Vat Total</th>
+                                    {/* <th className="py-1 border-right">Vat Rate</th>
+                                    <th className="py-1 border-right">Vat Total</th> */}
                                     <th className="py-1 border-right">Discount</th>
                                     <th className="py-1 border-right">Total</th>
                                     <th className="py-1 border-right">Paid</th>
@@ -273,12 +273,12 @@ const Invoices = ({ user, PartyID, SupplierID, id, list, setList }) => {
                                             <td className="py-0 border-right"><span className="d-block fw-bold">{item?.PurchaseNo}</span> </td>
                                             <td className="py-0 px-1 border-right">{item.InvoiceNo}</td>
                                             <td className="py-0 px-1 border-right">{item.Count}</td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.VatRate).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.Vat).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.PaidAmount).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{(item.Due).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
+                                            {/* <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.VatRate).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Vat).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td> */}
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.PaidAmount).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
+                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Due).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
                                             <td className="py-0 border-right"><small className="d-block fw-bold">{getLabel(item.Payment, PaymentTerms)}</small> </td>
                                             <td className="p-0 text-nowrap">
                                                 <Link className="btn px-2 py-0 text-danger" title="View Details" to={`/purs_invoice_preview/${item.id}`}><i className="fad fa-eye"></i></Link>

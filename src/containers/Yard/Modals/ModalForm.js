@@ -442,7 +442,7 @@ export const CtrRegister = (props) => {
                             <div className="row mt-3">
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Pick-up From</label>
+                                        <label htmlFor="message-text" className="col-form-label">Pick-up From</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -459,7 +459,7 @@ export const CtrRegister = (props) => {
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Date</label>
+                                        <label htmlFor="message-text" className="col-form-label">Date</label>
                                         <Datepicker
                                             selected={Date}
                                             className="form-control fs-5 fw-bold round_radius50px text-center"
@@ -481,7 +481,7 @@ export const CtrRegister = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Docket No</label>
+                                        <label htmlFor="message-text" className="col-form-label">Docket No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -499,7 +499,7 @@ export const CtrRegister = (props) => {
 
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Container No</label>
+                                        <label htmlFor="message-text" className="col-form-label">Container No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -517,7 +517,7 @@ export const CtrRegister = (props) => {
 
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Invoice No</label>
+                                        <label htmlFor="message-text" className="col-form-label">Invoice No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -537,7 +537,7 @@ export const CtrRegister = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Order No</label>
+                                        <label htmlFor="message-text" className="col-form-label">Order No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -554,7 +554,7 @@ export const CtrRegister = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Car No</label>
+                                        <label htmlFor="message-text" className="col-form-label">Car No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -571,7 +571,7 @@ export const CtrRegister = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label">Driver Name</label>
+                                        <label htmlFor="message-text" className="col-form-label">Driver Name</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -591,7 +591,7 @@ export const CtrRegister = (props) => {
                             <div className="row">
                                 <div className="col-md-3 d-flex align-items-center">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Push Back</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Push Back</label>
                                         <Datepicker
                                             selected={PushDate || null}
                                             className="form-control fs-5 fw-bold round_radius50px text-center"
@@ -609,7 +609,7 @@ export const CtrRegister = (props) => {
                                 </div>
                                 <div className="col-md-3 d-flex align-items-center">
                                     <div className="form-group m-0">
-                                        <label for="message-text" className="col-form-label text-center w-100">Active Status</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Active Status</label>
                                         <div className="form-check form-switch">
                                             <input
                                                 className="form-check-input"
@@ -629,7 +629,7 @@ export const CtrRegister = (props) => {
                                 </div>
                                 <div className="col-md-3 d-flex align-items-center">
                                     <div className="form-group m-0">
-                                        <label for="message-text" className="col-form-label text-center w-100">Seal Status</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Seal Status</label>
                                         <div className="form-check form-switch">
                                             <input
                                                 className="form-check-input"
@@ -649,7 +649,7 @@ export const CtrRegister = (props) => {
                                 </div>
                                 <div className="col-md-3 d-flex align-items-center">
                                     <div className="form-group m-0">
-                                        <label for="message-text" className="col-form-label text-center w-100">Share Status</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Share Status</label>
                                         <div className="form-check form-switch">
                                             <input
                                                 className="form-check-input"
@@ -668,7 +668,7 @@ export const CtrRegister = (props) => {
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <label for="message-text" className="col-form-label text-center w-100">Remark</label>
+                                    <label htmlFor="message-text" className="col-form-label text-center w-100">Remark</label>
                                     <textarea
                                         cols={2}
                                         className="form-control fw-bold text-center"
@@ -965,7 +965,7 @@ export const UpdateModal = (props) => {
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Sector</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Sector</label>
                                         <Select
                                             menuPortalTarget={document.body}
                                             borderRadius={'0px'}
@@ -982,7 +982,7 @@ export const UpdateModal = (props) => {
                                     </div>
                                 </div>
                                 <div className="col-md-6">
-                                    <label for="message-text" className="col-form-label text-center w-100">Supplier</label>
+                                    <label htmlFor="message-text" className="col-form-label text-center w-100">Supplier</label>
                                     <Select
                                         menuPortalTarget={document.body}
                                         borderRadius={'0px'}
@@ -1003,7 +1003,7 @@ export const UpdateModal = (props) => {
                             <div className="row mt-3">
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Pick-up From</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Pick-up From</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -1020,7 +1020,7 @@ export const UpdateModal = (props) => {
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Date</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Date</label>
                                         <Datepicker
                                             selected={Date}
                                             className="form-control fs-5 fw-bold round_radius50px text-center"
@@ -1042,7 +1042,7 @@ export const UpdateModal = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Docket No</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Docket No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -1060,7 +1060,7 @@ export const UpdateModal = (props) => {
 
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Container No</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Container No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -1078,7 +1078,7 @@ export const UpdateModal = (props) => {
 
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Invoice No</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Invoice No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -1098,7 +1098,7 @@ export const UpdateModal = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Order No</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Order No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -1115,7 +1115,7 @@ export const UpdateModal = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Car No</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Car No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -1132,7 +1132,7 @@ export const UpdateModal = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Driver Name</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Driver Name</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -1152,7 +1152,7 @@ export const UpdateModal = (props) => {
                             <div className="row">
                                 <div className="col-md-3 d-flex align-items-center">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Push Back</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Push Back</label>
                                         <Datepicker
                                             selected={PushDate || null}
                                             className="form-control fs-5 fw-bold round_radius50px text-center"
@@ -1170,7 +1170,7 @@ export const UpdateModal = (props) => {
                                 </div>
                                 <div className="col-md-3 d-flex align-items-center">
                                     <div className="form-group m-0">
-                                        <label for="message-text" className="col-form-label text-center w-100">Active Status</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Active Status</label>
                                         <div className="form-check form-switch">
                                             <input
                                                 className="form-check-input"
@@ -1190,7 +1190,7 @@ export const UpdateModal = (props) => {
                                 </div>
                                 <div className="col-md-3 d-flex align-items-center">
                                     <div className="form-group m-0">
-                                        <label for="message-text" className="col-form-label text-center w-100">Seal Status</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Seal Status</label>
                                         <div className="form-check form-switch">
                                             <input
                                                 className="form-check-input"
@@ -1210,7 +1210,7 @@ export const UpdateModal = (props) => {
                                 </div>
                                 <div className="col-md-3 d-flex align-items-center">
                                     <div className="form-group m-0">
-                                        <label for="message-text" className="col-form-label text-center w-100">Share Status</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Share Status</label>
                                         <div className="form-check form-switch">
                                             <input
                                                 className="form-check-input"
@@ -1229,7 +1229,7 @@ export const UpdateModal = (props) => {
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <label for="message-text" className="col-form-label text-center w-100">Remark</label>
+                                    <label htmlFor="message-text" className="col-form-label text-center w-100">Remark</label>
                                     <textarea
                                         cols={2}
                                         className="form-control fw-bold text-center"
@@ -1392,14 +1392,14 @@ export const PushBackModal = (props) => {
                 <small className="text-center px-0 text-muted"> &nbsp; (Please fill up the desired field)</small>
             </Modal.Header>
             <Modal.Body>
-                <label for="message-text" className="col-form-label text-center w-100 fw-bold">{"Container No: " + props.item.ContainerNo}</label>
+                <label htmlFor="message-text" className="col-form-label text-center w-100 fw-bold">{"Container No: " + props.item.ContainerNo}</label>
 
                 <div className="d-flex justify-content-center bg-white h-100">
                     <div className="row justify-content-center align-items-center">
                         <form>
                             <div className="row">
                                 <div className="form-group">
-                                    <label for="message-text" className="col-form-label text-center w-100">Pick-up By</label>
+                                    <label htmlFor="message-text" className="col-form-label text-center w-100">Pick-up By</label>
                                     <input
                                         type="text"
                                         className="form-control fw-bold"
@@ -1418,7 +1418,7 @@ export const PushBackModal = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Date</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Date</label>
                                         <Datepicker
                                             selected={Date}
                                             className="form-control fs-5 fw-bold round_radius50px text-center"
@@ -1436,7 +1436,7 @@ export const PushBackModal = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Car No</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Car No</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"
@@ -1453,7 +1453,7 @@ export const PushBackModal = (props) => {
                                 </div>
                                 <div className="col-md-4">
                                     <div className="form-group">
-                                        <label for="message-text" className="col-form-label text-center w-100">Driver Name</label>
+                                        <label htmlFor="message-text" className="col-form-label text-center w-100">Driver Name</label>
                                         <input
                                             type="text"
                                             className="form-control fw-bold"

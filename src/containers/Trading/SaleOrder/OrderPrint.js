@@ -11,8 +11,9 @@ import { inWords } from '../../../hocs/NumberToWord';
 
 export const OrderPrint = async (e, item, status) => {
     var JsBarcode = require('jsbarcode');
-    const name = item.SisterName;
-    var cmpAd = 'PO Box: 262, Boroko, National Capital District, S#93, L#31, Vani Place, Gordons';
+    const name = 'DESH BESH ENTERPRISE LTD';
+    const sis_name = item.SisterName;
+    var cmpAd = item.Location;
     const Shop = "Shop: " + item.ShortCode + " (" + item.SectorName + ")";
     const imgData = await convertImgToBase64URL(logo)
     const watermarkData = await convertImgToBase64URL(watermark)
@@ -63,10 +64,11 @@ export const OrderPrint = async (e, item, status) => {
     const marginX = (pageWidth - canvasWidth) / 1;
     const marginY = (pageHeight - canvasHeight) / 2;
 
-    doc.addImage(imgData, 'JPEG', marginLeft + 30, marginTop, 60, 50);
-    doc.setFontSize(20).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
+    doc.addImage(imgData, 'JPEG', marginLeft + 15, marginTop, 68, 70);
+    doc.setFontSize(18).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
 
-    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 28)
+    doc.setFontSize(14).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(sis_name, marginLeft + 94, marginTop + 28)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 41)
 
     const contact = [
         item.Phone && `Phone: ${item.Phone}`,
@@ -76,13 +78,13 @@ export const OrderPrint = async (e, item, status) => {
         item.Imo && `Imo: ${item.Imo}`,
         item.Wechat && `Wechat: ${item.Wechat}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text(contact, marginLeft + 94, marginTop + 38)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(contact, marginLeft + 94, marginTop + 51)
 
     const online_contact = [
         item.Email && `Email: ${item.Email}`,
         item.Website && `Website: ${item.Website}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("courier", 'normal').text(online_contact, marginLeft + 94, marginTop + 48)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(online_contact, marginLeft + 94, marginTop + 61)
 
     doc.setDrawColor(220, 220, 220);
     doc.setLineWidth(2);
@@ -131,12 +133,11 @@ export const OrderPrint = async (e, item, status) => {
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text("Contact: " + item.PartyContact, marginLeft + 35, 139)
 
     var party_address = item.PartyAddress.substring(0, 70) + (item.PartyAddress.length < 70 ? "" : "...");
-    party_address = doc.splitTextToSize(party_address, 190);
+    party_address = doc.splitTextToSize(party_address, 360);
     var ht = doc.getTextDimensions(party_address).h;
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(party_address, marginLeft + 35, 150)
 
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'bold').text("Payment: " + getPaymentShort(item.Payment, PaymentTerms), marginLeft + 35, 139 + ht + 11)
-
 
 
     const TotalQty = item.OrderMapData.reduce((TotalQt, myvalue) => TotalQt + parseInt(myvalue.Qty, 10), 0);
@@ -293,7 +294,7 @@ export const OrderPrint = async (e, item, status) => {
 
     var body = [
         ["TOTAL", " :", getTotal().toLocaleString("en", { minimumFractionDigits: 2 })],
-        ["10% GST INCLUDED", " :", parseFloat(0.00).toLocaleString("en", { minimumFractionDigits: 2 })],
+        ["10% GST INCLUDED", " :", parseFloat(((parseFloat(item.GrandTotal) - parseFloat(item.Shipping) - parseFloat(item.Discount)) * 0.10).toFixed(2)).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["DISCOUNT", " :", parseFloat(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["SHIPPING COST", " :", parseFloat(item.Shipping).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["NET TOTAL", " :", parseFloat(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 2 })]

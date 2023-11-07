@@ -1,11 +1,11 @@
-import { Link, Redirect, useHistory } from "react-router-dom";
-import React, { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
+import { Link, Redirect, useHistory } from "react-router-dom";
 
-import { DISPLAY_OVERLAY } from "../../../actions/types";
-import Select from "react-select";
 import axios from "axios";
+import Select from "react-select";
 import { signup } from "../../../actions/auth";
+import { DISPLAY_OVERLAY } from "../../../actions/types";
 
 const Signup = ({ signup, isAuthenticated }) => {
   const dispatch = useDispatch();
@@ -775,7 +775,7 @@ const Signup = ({ signup, isAuthenticated }) => {
 
                     <div className="form-group col-md-6">
                       <span className="control-fileupload form-rounded pl-3">
-                        <label for="file1" className="text-right">
+                        <label htmlFor="file1" className="text-right">
                           Please choose your image.
                         </label>
                         <input

@@ -1,15 +1,9 @@
-import { Button, Modal, Spinner } from "react-bootstrap";
-import React, { useEffect, useRef, useState, Fragment } from 'react';
-import Select from 'react-select';
-import { checkToken } from '../../../actions/auth';
-import { UpdateStock } from '../../../actions/InventoryAPI';
+import { useState } from 'react';
+import { Modal } from "react-bootstrap";
 import { UpdateScale } from '../../../actions/ContractAPI';
 
-import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
-import { DISPLAY_OVERLAY } from '../../../actions/types';
+import { useDispatch } from 'react-redux';
 import errorIcon from '../../../assets/error.png';
-import infoIcon from '../../../assets/info.png';
 import successIcon from '../../../assets/success.png';
 import warningIcon from '../../../assets/warning.gif';
 
@@ -92,7 +86,7 @@ export const UpdateModal = (props) => {
                         <small className="text-center px-0">(Please fill up the return quantity & weight)</small>
                         <form>
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Quantity</label>
+                                <label htmlFor="message-text" class="col-form-label">Quantity</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"
@@ -108,7 +102,7 @@ export const UpdateModal = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <label for="message-text" class="col-form-label">Weight</label>
+                                <label htmlFor="message-text" class="col-form-label">Weight</label>
                                 <input
                                     type="text"
                                     class="form-control fw-bold"

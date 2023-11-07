@@ -24,7 +24,7 @@ const PartyMain = ({ UserID, PartyID, MyPartyID, list, setList, no }) => {
     const LoadParty = async () => {
         if (no <= 7)
             var result = await GetPartyAdmin(PartyID);
-        else if (no === 8)
+        else if ([8, 9].includes(no))
             var result = await GetParty(PartyID);
 
         if (result !== true) {

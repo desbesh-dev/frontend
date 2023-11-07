@@ -13,7 +13,7 @@ export const DeliveryNotePrint = async (e, item, status, type) => {
     const ReqForSector = "———(" + item.ReqForSector + " - " + item.ReqForShortCode + ")———"
     var ReqForAdd = item.ReqForAdd;
 
-    const DelNoteNo = "DELIVERY NOTE NO# " + item.DeliveryNoteNo;
+    const DelNoteNo = "DELIVERY NO# " + item.DeliveryNoteNo;
     const Dates = "Date: " + moment(item.CreatedAt).format("DD MMM YYYY") + ", Order Date: " + moment(item.OrderDate).format("DD MMM YYYY");
     const Sender = "Sender: " + item.Sender;
 
@@ -61,7 +61,7 @@ export const DeliveryNotePrint = async (e, item, status, type) => {
             lineWidth: 0.1,
             lineColor: [128, 128, 128]
         },
-        tableWidth: 72,
+        tableWidth: 71,
         didParseCell: function (cell, data) {
             alignCol(cell, data);
         },
