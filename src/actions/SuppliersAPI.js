@@ -251,7 +251,7 @@ export const UpdateProductPro = async (SupplierID, ProductID, Title, Description
     }
 }
 
-export const SaveProductItem = async (SupplierID, ProductID, Code, Barcode, Title, PackType, UnitName, UnitQty, UnitWeight, UnitPrice, MRP, LoosePrice, Status, CtnBarcode, CtnQty, CtnPrice, HalfCtnBarcode, HalfCtnQty, HalfCtnPrice, TwelveBarcode, TwelveQty, TwelvePrice, TenBarcode, TenQty, TenPrice, EightBarcode, EightQty, EightPrice, SixBarcode, SixQty, SixPrice, FourBarcode, FourQty, FourPrice, Pack1Barcode, Pack1Qty, Pack1Price, Pack2Barcode, Pack2Qty, Pack2Price, Package) => {
+export const SaveProductItem = async (SupplierID, CatCode, ProductID, Code, Barcode, Title, PackType, UnitName, UnitQty, UnitWeight, UnitPrice, MRP, LoosePrice, Status, CtnBarcode, CtnQty, CtnPrice, HalfCtnBarcode, HalfCtnQty, HalfCtnPrice, TwelveBarcode, TwelveQty, TwelvePrice, TenBarcode, TenQty, TenPrice, EightBarcode, EightQty, EightPrice, SixBarcode, SixQty, SixPrice, FourBarcode, FourQty, FourPrice, Pack1Barcode, Pack1Qty, Pack1Price, Pack2Barcode, Pack2Qty, Pack2Price, Package) => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -262,6 +262,7 @@ export const SaveProductItem = async (SupplierID, ProductID, Code, Barcode, Titl
 
     const formData = new FormData();
     formData.append("SupplierID", SupplierID);
+    formData.append("CatCode", CatCode);
     formData.append("ProductID", ProductID);
     formData.append("Code", parseInt(Code));
     formData.append("Barcode", parseInt(Barcode));
@@ -400,7 +401,7 @@ export const CreatePackage = async (ItemID, PurchasePrice, MRP, RetailPrice, Whl
     }
 }
 
-export const FetchProductCode = async () => {
+export const FetchProductCode = async (cat_code) => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -409,7 +410,7 @@ export const FetchProductCode = async () => {
         }
     };
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/get_product_code/`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/get_product_code/${cat_code}`, config);
         return res.data
     } catch (err) {
         return true;

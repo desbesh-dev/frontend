@@ -18,6 +18,7 @@ const Wellcome = ({ data, cat, no, setList, list }) => {
     // } else if (scale === null || no === null) {
     //     return <Redirect to='/home' />
     // }
+
     const [OpenModal, setOpenModal] = useState(false)
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">
@@ -65,7 +66,7 @@ const Wellcome = ({ data, cat, no, setList, list }) => {
                                 <div className="col-xs-12 col-md-offset-1 col-md-10 col-lg-offset-2 col-lg-8">
                                     <div className="home my-5 text-center"><span className="heading-page"> Main Menu</span></div>
                                     {
-                                        (parseInt(cat) === 0 || parseInt(cat) === 2) ?
+                                        [0, 2, 5].includes(cat) ?
                                             parseInt(no) === 8 ? <Manager_Menu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} /> :
                                                 parseInt(no) === 1 ? <BossMenu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} /> :
                                                     parseInt(no) === 11 ? <SectorIT /> :

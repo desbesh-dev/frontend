@@ -11,9 +11,7 @@ import { inWords } from '../../../../../hocs/NumberToWord';
 
 export const InvoicePrint = async (e, item, status) => {
     var JsBarcode = require('jsbarcode');
-
     const name = item.SisterName;
-    var cmpAd = 'PO Box: 262, Boroko, National Capital District, S#93, L#31, Vani Place, Gordons';
     const Shop = "Shop: " + item.ShortCode + " (" + item.SectorName + ")";
     const imgData = await convertImgToBase64URL(logo)
     const watermarkData = await convertImgToBase64URL(watermark)
@@ -73,7 +71,7 @@ export const InvoicePrint = async (e, item, status) => {
     doc.addImage(imgData, 'JPEG', marginLeft + 30, marginTop, 60, 50);
     doc.setFontSize(20).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
 
-    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 28)
+    doc.setFontSize(12).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(item.Location, marginLeft + 94, marginTop + 28)
 
     const contact = [
         item.Phone && `Phone: ${item.Phone}`,
@@ -129,8 +127,8 @@ export const InvoicePrint = async (e, item, status) => {
 
     const slsman = "Receiver: " + item.Receiver
     const no = item.PurchaseNo || item.InvoiceNo ?
-        `Date: ${moment(item.Date).format("DD MMM YYYY")}, ${pn}, Invoice No: ${item.InvoiceNo}`
-        : `Date: ${moment(item.Date).format("DD MMM YYYY")}`;
+        `Date: ${moment(item.RcvDate).format("DD MMM YYYY")}, ${pn}, Invoice No: ${item.InvoiceNo}`
+        : `Date: ${moment(item.RcvDate).format("DD MMM YYYY")}`;
 
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(tin, marginLeft + 35, 115)
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(gst, marginLeft + 35, 127)
@@ -281,7 +279,7 @@ export const InvoicePrint = async (e, item, status) => {
                 doc.setFontSize(20);
                 doc.setTextColor(40);
                 doc.setFontSize(12).setFont("helvetica", 'bold').text(name, data.settings.margin.left, 40, { align: "left" })
-                doc.setFontSize(10).setTextColor(105, 105, 105).setFont("helvetica", 'normal').text(cmpAd, data.settings.margin.left, 50, { align: "left" })
+                doc.setFontSize(10).setTextColor(105, 105, 105).setFont("helvetica", 'normal').text(item.Location, data.settings.margin.left, 50, { align: "left" })
             }
 
             // Footer

@@ -1,22 +1,19 @@
-import * as moment from 'moment'
-import { SaveProductItem, ProductItemList, UpdateImage, UpdateProductItem, AddProduct, UpdateProductImage, UnitNameList, FetchProductCode, FetchPack } from '../../../../actions/SuppliersAPI';
-import React, { Fragment, useEffect, useState } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
-import { checkToken, logout } from '../../../../actions/auth';
+import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { AddProduct } from '../../../../actions/SuppliersAPI';
+import { logout } from '../../../../actions/auth';
 
-import { CreateMessage } from "../../../Modals/ModalForm.js";
-import { DISPLAY_OVERLAY } from '../../../../actions/types';
 import Select from 'react-select';
-import axios from 'axios';
+import { AllProductList } from '../../../../actions/APIHandler';
+import { DISPLAY_OVERLAY } from '../../../../actions/types';
 import errorIcon from '../../../../assets/error.png';
 import infoIcon from '../../../../assets/info.png';
 import successIcon from '../../../../assets/success.png';
 import warningIcon from '../../../../assets/warning.gif';
-import { Accordion } from 'react-bootstrap';
-import { AllProductList, findUnique } from '../../../../actions/APIHandler';
-import { CreateItem, ItemUpdate } from '../../NationalSuppliers/Profiles/Modal/Item';
+import { CreateMessage } from "../../../Modals/ModalForm.js";
 import { BarcodeList } from '../../NationalSuppliers/Profiles/Modal/BarcodePrintModal';
+import { CreateItem, ItemUpdate } from '../../NationalSuppliers/Profiles/Modal/Item';
 import { AddPack, UpdatePack, ViewPack } from '../../NationalSuppliers/Profiles/Modal/Package';
 
 
@@ -61,7 +58,7 @@ const ProductItems = ({ list, setList, SupplierID, ProductID, user, No, sub_scal
 
     useEffect(() => {
         LoadProductItems();
-        LoadProductCode();
+        // LoadProductCode();
     }, [])
 
     const LoadProductItems = async () => {
@@ -77,17 +74,17 @@ const ProductItems = ({ list, setList, SupplierID, ProductID, user, No, sub_scal
         }
     }
 
-    const LoadProductCode = async () => {
-        dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        var result = await FetchProductCode();
+    // const LoadProductCode = async () => {
+    //     dispatch({ type: DISPLAY_OVERLAY, payload: true });
+    //     var result = await FetchProductCode();
 
-        if (result !== true) {
-            setNewCode(result);
-        } else {
-            setStep(null);
-        }
-        dispatch({ type: DISPLAY_OVERLAY, payload: false });
-    }
+    //     if (result !== true) {
+    //         setNewCode(result);
+    //     } else {
+    //         setStep(null);
+    //     }
+    //     dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    // }
 
 
     const isStringNullOrWhiteSpace = (str) => {

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { AddProduct, FetchProductCode, ProductItemList, UpdateProductImage } from '../../../../actions/SuppliersAPI';
+import { AddProduct, ProductItemList, UpdateProductImage } from '../../../../actions/SuppliersAPI';
 import { logout } from '../../../../actions/auth';
 
 import Select from 'react-select';
@@ -102,19 +102,19 @@ const ProductProfiles = ({ list, setList, SupplierID, ProductID, user, no, sub_s
 
     useEffect(() => {
         LoadProductItems();
-        LoadProductCode();
+        // LoadProductCode();
     }, [])
 
-    const LoadProductCode = async () => {
-        dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        var result = await FetchProductCode();
-        if (result !== true) {
-            setNewCode(result);
-        } else {
-            setStep(null);
-        }
-        dispatch({ type: DISPLAY_OVERLAY, payload: false });
-    }
+    // const LoadProductCode = async () => {
+    //     dispatch({ type: DISPLAY_OVERLAY, payload: true });
+    //     var result = await FetchProductCode();
+    //     if (result !== true) {
+    //         setNewCode(result);
+    //     } else {
+    //         setStep(null);
+    //     }
+    //     dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    // }
 
     const LoadProductItems = async () => {
         dispatch({ type: DISPLAY_OVERLAY, payload: true });

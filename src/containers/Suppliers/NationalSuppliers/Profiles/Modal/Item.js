@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Modal } from "react-bootstrap";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import { FetchProductCode, SaveProductItem, UnitNameList, UpdateProductItem } from "../../../../../actions/SuppliersAPI";
 import { DISPLAY_OVERLAY } from '../../../../../actions/types';
@@ -44,13 +44,14 @@ const colourStyles = {
 };
 
 export const CreateItem = (props) => {
-
+    const no = useSelector((state) => state.auth.no);
     const [Error, setError] = useState({});
     let toastProperties = null;
     const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
         id: '',
+        CatCode: { label: "Market", value: '1' },
         ProductID: props.ProductID,
         Code: '',
         Barcode: '',
@@ -62,28 +63,30 @@ export const CreateItem = (props) => {
         Status: '',
     });
 
-    const { id, ProductID, Code, Barcode, Title, PackType, UnitName, UnitQty, UnitWeight, Status } = formData;
+    const { id, CatCode = { label: "Market", value: '1' }, ProductID, Code, Barcode, Title, PackType, UnitName, UnitQty, UnitWeight, Status } = formData;
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     useEffect(() => {
-        LoadProductCode();
+        LoadProductCode({ label: "Market", value: '1' });
     }, [])
 
-    const LoadProductCode = async () => {
-        dispatch({ type: DISPLAY_OVERLAY, payload: true });
-        var result = await FetchProductCode();
-
-        if (result !== true) {
-            setFormData({ ...formData, Code: result });
-        } else {
-            props.onHide();
+    const LoadProductCode = async (e = { label: "Market", value: '1' }) => {
+        if (e) {
+            dispatch({ type: DISPLAY_OVERLAY, payload: true });
+            var result = await FetchProductCode(e.value);
+            if (result !== true) {
+                setFormData({ ...formData, Code: result, CatCode: e });
+            } else {
+                props.onHide();
+            }
+            dispatch({ type: DISPLAY_OVERLAY, payload: false });
         }
-        dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
 
     const ClearField = () => {
         setFormData({
             id: props.item.id,
+            CatCode: props.item.CatCode,
             ProductID: props.item.ProductID,
             Code: props.item.Code,
             Barcode: props.item.Barcode,
@@ -95,7 +98,6 @@ export const CreateItem = (props) => {
             Status: parseInt(props.item.Status) === 1 ? "Available" : parseInt(props.item.Status) === 2 ? "Unavailable" : parseInt(props.item.Status) === 3 ? "Withdraw" : 'N/A',
         });
         props.onHide()
-
     }
 
     const PackList = [
@@ -116,16 +118,32 @@ export const CreateItem = (props) => {
         { value: 12, label: "Casket" },
         { value: 13, label: "Sack" }
     ]
+
+    const CatCodeList = [
+        { value: 1, label: "Market" },
+        { value: 2, label: "Kaibar" },
+        { value: 3, label: "Bakery" },
+        { value: 4, label: "Yard" },
+        { value: 5, label: "Department" },
+        { value: 6, label: "Freezer" },
+        { value: 7, label: "Sub-station" },
+        { value: 8, label: "Agro Farm" },
+        { value: 9, label: "Meat Processing" },
+        { value: 10, label: "Water Plant" },
+        { value: 11, label: "Feed Mill" }
+    ]
+
     const isStringNullOrWhiteSpace = (str) => {
         return str === undefined || str === null || str === "";
     }
+
     const Create_Product_Item = async e => {
         setError({})
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
         e.preventDefault();
         let Package = 0
-        if ([props.SupplierID, ProductID, Code, Barcode, Title, PackType, UnitName, UnitQty, UnitWeight, Status].some(el => !isStringNullOrWhiteSpace(el))) {
-            const result = await SaveProductItem(props.SupplierID, ProductID, Code, Barcode, Title, PackType, UnitName, UnitQty, UnitWeight, Status);
+        if ([props.SupplierID, CatCode.value, ProductID, Code, Barcode, Title, PackType, UnitName, UnitQty, UnitWeight, Status].some(el => !isStringNullOrWhiteSpace(el))) {
+            const result = await SaveProductItem(props.SupplierID, CatCode.value, ProductID, Code, Barcode, Title, PackType, UnitName, UnitQty, UnitWeight, Status);
             if (result !== true) {
                 if (result.error) {
                     const updatedState = {};
@@ -188,6 +206,25 @@ export const CreateItem = (props) => {
                 <form>
                     <table className="table table-bordered px-3">
                         <tbody className='w-100'>
+                            {no <= 7 &&
+                                <tr>
+                                    <td className="py-2">Sector</td>
+                                    <td className="py-2 px-1 text-center">:</td>
+                                    <th className="py-2">
+                                        <Select
+                                            menuPortalTarget={document.body}
+                                            closeMenuOnSelect={true}
+                                            borderRadius={"0px"}
+                                            options={CatCodeList}
+                                            name="CatCode"
+                                            placeholder={"Please select sector"}
+                                            styles={colourStyles}
+                                            value={CatCode}
+                                            onChange={(e) => LoadProductCode(e)}
+                                        />
+                                    </th>
+                                </tr>
+                            }
                             <tr>
                                 <td className="py-2" scope="row">Code</td>
                                 <td className="py-2 px-1 text-center">:</td>
@@ -498,6 +535,20 @@ export const ItemUpdate = (props) => {
         { value: 11, label: "Mini Pack" },
         { value: 12, label: "Casket" },
         { value: 13, label: "Sack" }
+    ]
+
+    const CatCodeList = [
+        { value: 1, label: "Market" },
+        { value: 2, label: "Kaibar" },
+        { value: 3, label: "Bakery" },
+        { value: 4, label: "Yard" },
+        { value: 5, label: "Department" },
+        { value: 6, label: "Freezer" },
+        { value: 7, label: "Sub-station" },
+        { value: 8, label: "Agro Farm" },
+        { value: 9, label: "Meat Processing" },
+        { value: 10, label: "Water Plant" },
+        { value: 11, label: "Feed Mill" }
     ]
 
     const Update_Product_Item = async e => {
