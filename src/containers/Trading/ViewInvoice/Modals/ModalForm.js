@@ -93,9 +93,10 @@ export const EditModal = (props) => {
     }
 
     const QuantityCalc = (e) => {
-        if (e.target.value <= props.EditData.Qty) {
+        if (e.target.value <= parseFloat(props.EditData.Qty)) {
             setError({});
             let weight = props.EditData.UnitWeight * e.target.value
+            weight = parseFloat(weight).toFixed(2)
             let Total = e.target.value * props.EditData.Rate
             setWeight(weight)
             setQty(e.target.value)
