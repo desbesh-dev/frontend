@@ -5,6 +5,7 @@ import Datepicker from 'react-datepicker';
 import { connect, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
+import 'react-virtualized-select/styles.css';
 import { FetchInvoiceNo, FetchSectorPartyList, fetchServerTimestamp } from '../../../actions/APIHandler';
 import { CreateQuote, FetchProduct } from '../../../actions/InventoryAPI';
 import { MyProductList } from '../../../actions/SuppliersAPI';
@@ -16,13 +17,12 @@ import successIcon from '../../../assets/success.png';
 import TotalPrice from '../../../assets/total_price.png';
 import warningIcon from '../../../assets/warning.gif';
 import { CustomMenuList } from '../../../hocs/Class/CustomMenuList';
+import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
+import '../../../hocs/react-select/dist/react-select.css';
 import { InfoMessage, InvalidDate } from "../../Modals/ModalForm.js";
 import { customHeader, locales } from "../../Suppliers/Class/datepicker";
 import { Receipt } from '../CounterReceipt';
 import { DiscountModal } from '../ViewInvoice/Modals/ModalForm';
-import { GeneralColourStyles } from '../../../hocs/Class/SelectStyle';
-import 'react-virtualized-select/styles.css';
-import '../../../hocs/react-select/dist/react-select.css';
 
 let today = new Date();
 
@@ -281,10 +281,10 @@ const Quote = ({ user, list, setList }) => {
             return;
         }
 
-        if (parseFloat(Qty) > parseFloat(Available)) {
-            setInfoModalShow(true);
-            return;
-        }
+        // if (parseFloat(Qty) > parseFloat(Available)) {
+        //     setInfoModalShow(true);
+        //     return;
+        // }
         const dataExistsIndex = QuoteData.findIndex(item => item.Code === formData.Code && item.UnitName === formData.UnitName && item.Remark === formData.Remark);
 
         if (dataExistsIndex === -1) {
@@ -1060,7 +1060,7 @@ const Quote = ({ user, list, setList }) => {
                                         className="btn btn-outline-success fs-3 text-center justify-content-center align-items-center w-auto px-3"
                                         // onKeyDown={(e) => handleKeyDown(e)}
                                         type="submit"
-                                        onClick={(e) => availability ? AddRow(e) : null}><i className="fs-3 fad fa-plus pr-2"></i>  ENTER </Link>
+                                        onClick={(e) => AddRow(e)}><i className="fs-3 fad fa-plus pr-2"></i>  ENTER </Link>
                                 </div>
                             </div>
                         </div>

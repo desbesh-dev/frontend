@@ -24,20 +24,24 @@ export const GeneralColourStyles = {
             ...provided,
             color,
             backgroundColor,
-            paddingTop: "5px",
-            paddingBottom: "5px",
+            padding: "5px 5px",
             cursor: 'pointer',
+            lineHeight: '1',
+            whiteSpace: 'nowrap',
+            height: '40px',
             ':focus': {
                 backgroundColor: '#6495ED',
                 color: '#fff',
                 paddingTop: "5px",
                 paddingBottom: "5px",
+                whiteSpace: 'wrap',
             },
             ':hover': {
                 backgroundColor: '#6495ED',
                 color: '#fff',
                 paddingTop: "5px",
-                paddingBottom: "5px"
+                paddingBottom: "5px",
+                whiteSpace: 'wrap',
             },
         };
     },

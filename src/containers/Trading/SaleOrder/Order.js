@@ -822,7 +822,7 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
             <div className="d-flex py-2 m-0 justify-content-between align-items-center" style={{ zIndex: 1, backgroundColor: "#F4DCC1" }}>
                 <div className="justify-content-center align-items-center w-25">
                     <p className="display-6 m-0 text-left text-primary fw-bolder">{"CREATE A ORDER"}</p>
-                    <p className="fs-6 m-0 text-left text-primary fs-6" style={{ fontFamily: "Scream alt" }}>{"COUNTER " + user.Collocation.CounterNo}</p>
+                    <p className="fs-6 m-0 text-left text-primary fs-6" style={{ fontFamily: "Scream alt" }}>{"COUNTER " + (user.Collocation.CounterNo || 1)}</p>
                     <p className="fw-bold text-dark text-left align-self-center m-0" ><i className="fad fa-user-clock text-center"></i> {user.Name}</p>
                 </div>
 

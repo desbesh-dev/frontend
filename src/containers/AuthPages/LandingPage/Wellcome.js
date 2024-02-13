@@ -4,11 +4,41 @@ import avatar from '../../../assets/avatar.jpg';
 import "../../../hocs/css/menu.css";
 import { CostVoucherModal } from '../../Accounts/Voucher/CostVoucherModal';
 import Clock from '../Dashboard/Clock/clock';
+import { AsstMang } from './AsstManager';
 import { BossMenu } from './BossMenu';
 import { Manager_Menu } from './ManagerMenu';
 import { SalesmanManu } from './SalesmanManu';
 import { SectorIT } from './SectorIT';
 import { YardManagerMenu } from './YardManagerMenu';
+// Create a mapping object for easy lookup of components
+
+const menuComponents = {
+    8: Manager_Menu,
+    9: AsstMang,
+    1: BossMenu,
+    11: SectorIT,
+    12: SalesmanManu,
+    4: YardManagerMenu
+};
+
+// Helper function to determine which component to render
+function renderMenu(cat, no, setOpenModal, OpenModal, list, setList) {
+    // Parse the category and number, and check if they match any conditions
+    const parsedCat = parseInt(cat);
+    const parsedNo = parseInt(no);
+
+    // Check if the combination matches any condition
+    if ([0, 2, 5].includes(parsedCat) && menuComponents[parsedNo]) {
+        const MenuComponent = menuComponents[parsedNo];
+        return <MenuComponent setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} />;
+    } else if (parsedCat === 4 && parsedNo === 8) {
+        return <YardManagerMenu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} />;
+    }
+
+    // Default case if no matching condition is found
+    return null;
+}
+
 
 const Wellcome = ({ data, cat, no, setList, list }) => {
     // if (scale === 6 || (scale === 3 && (no === 1 || no === 2 || no === 3 || no === 5 || no === 6 || no === 7 || no === 9 || no === 10) && no !== 4)) {
@@ -18,7 +48,7 @@ const Wellcome = ({ data, cat, no, setList, list }) => {
     // } else if (scale === null || no === null) {
     //     return <Redirect to='/home' />
     // }
-
+    console.log("no: ", no);
     const [OpenModal, setOpenModal] = useState(false)
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">
@@ -64,16 +94,18 @@ const Wellcome = ({ data, cat, no, setList, list }) => {
                         <div className="container">
                             <div className="row justify-content-center align-items-center">
                                 <div className="col-xs-12 col-md-offset-1 col-md-10 col-lg-offset-2 col-lg-8">
-                                    <div className="home my-5 text-center"><span className="heading-page"> Main Menu</span></div>
-                                    {
+                                    <div className="home my-5 text-center"><span className="heading-page"> Shortcut</span></div>
+                                    {renderMenu(cat, no, setOpenModal, OpenModal, list, setList)}
+                                    {/* {
                                         [0, 2, 5].includes(cat) ?
                                             parseInt(no) === 8 ? <Manager_Menu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} /> :
-                                                parseInt(no) === 1 ? <BossMenu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} /> :
-                                                    parseInt(no) === 11 ? <SectorIT /> :
-                                                        parseInt(no) === 12 ? <SalesmanManu /> :
-                                                            null
+                                                parseInt(no) === 9 ? <AsstMang /> :
+                                                    parseInt(no) === 1 ? <BossMenu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} /> :
+                                                        parseInt(no) === 11 ? <SectorIT /> :
+                                                            parseInt(no) === 12 ? <SalesmanManu /> :
+                                                                null
                                             : parseInt(cat) === 4 ? parseInt(no) === 8 ? <YardManagerMenu setOpenModal={setOpenModal} OpenModal={OpenModal} list={list} setList={setList} /> : null : null
-                                    }
+                                    } */}
 
                                 </div>
                             </div>
