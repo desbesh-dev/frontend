@@ -18,7 +18,7 @@ let today = new Date();
 const oneMonthAgo = new Date();
 oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-const Invoices = ({ PartyID, list, setList }) => {
+const Invoices = ({ PartyID, list, setList, no }) => {
     const initialValue = { value: 0, label: "" };
     const [Data, setData] = useState(false);
     const [DateTo, setDateTo] = useState(today);
@@ -42,6 +42,7 @@ const Invoices = ({ PartyID, list, setList }) => {
 
     const InvoiceList = async () => {
         setItem(false);
+        setPaymentModalShow(false)
         let date_from = moment(DateFrom).format("YYYY-MM-DD");
         let date_to = moment(DateTo).format("YYYY-MM-DD");
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
@@ -86,8 +87,8 @@ const Invoices = ({ PartyID, list, setList }) => {
     const FilterInvoice = Data?.length && Data?.filter(({ Payment, InvoiceNo, OrderNo }) =>
         (!PayTypeFilter || Payment === PayTypeFilter.value) &&
         (!SearchKey || InvoiceNo === SearchKey.value || OrderNo === SearchKey.value)
-    ).map(({ id, Date, OrderNo, InvoiceNo, ItemCount, VatRate, Vat, Shipping, Discount, GrandTotal, Cash, Bank, PaidAmount, Due, Payment, Operator, Status, PaymentStatus }) => ({
-        id, Date, OrderNo, InvoiceNo, ItemCount, VatRate, Vat, Shipping, Discount, GrandTotal, Cash, Bank, PaidAmount, Due, Payment, Operator, Status, PaymentStatus
+    ).map(({ id, Date, OrderNo, InvoiceNo, ItemCount, VatRate, Vat, Shipping, Discount, GrandTotal, Cash, Bank, PaidAmount, Due, Payment, Operator, Status, PaymentStatus, Return, CreditNote }) => ({
+        id, Date, OrderNo, InvoiceNo, ItemCount, VatRate, Vat, Shipping, Discount, GrandTotal, Cash, Bank, PaidAmount, Due, Payment, Operator, Status, PaymentStatus, Return, CreditNote
     }));
 
     const purchaseOptions = FilterInvoice && FilterInvoice.filter(item => item.OrderNo).map(item => ({
@@ -101,7 +102,6 @@ const Invoices = ({ PartyID, list, setList }) => {
     }));
 
     const LoadReceiptList = async (inv) => {
-
         const result = await LoadReceipt(inv)
         if (result) {
             setReceiptLists(result)
@@ -125,6 +125,28 @@ const Invoices = ({ PartyID, list, setList }) => {
             setItem(item);
             setPaymentModalShow(true);
         }
+    };
+
+    const PaymentButton = (item, no) => {
+        const status = parseInt(item.PaymentStatus);
+        const actionsMap = {
+            1: [
+                { icon: <i className="fad fa-hand-holding-usd" />, title: 'Make Payment' },
+
+                { icon: <i className="fad fa-receipt" />, title: 'View Payment' },
+            ],
+            2: [{ icon: <i className="fad fa-receipt" />, title: 'View Payment' }],
+            3: [{ icon: <i className="fad fa-hand-holding-usd" />, title: 'Make Payment' }]
+        };
+
+        if (no <= 10 && actionsMap[status]) {
+            return actionsMap[status].map(({ icon, title }, index) => (
+                <button key={index} className="btn px-2 py-0 text-danger" title={title} onClick={(e) => handleReceiptClick(e, item)}>
+                    {icon}
+                </button>
+            ));
+        }
+        return null;
     };
 
     var h = window.innerHeight - 290;
@@ -162,7 +184,7 @@ const Invoices = ({ PartyID, list, setList }) => {
                             borderRadius={"0px"}
                             options={[
                                 { label: "Invoices", options: invoiceOptions },
-                                { label: "Purchase No", options: purchaseOptions }
+                                { label: "Order No", options: purchaseOptions }
                             ]}
                             defaultValue={{ label: "Select Dept", value: 0 }}
                             name="SearchKey"
@@ -243,31 +265,7 @@ const Invoices = ({ PartyID, list, setList }) => {
                                             <td className="py-0 border-right"><span className="d-block fw-bold ">{item.Status === 1 ? "Delivered" : item.Status === 2 ? "Modified" : item.Status === 3 ? "Deleted" : item.Status === 4 ? "Postpond" : "N/A"}</span> </td>
                                             <td className="p-0 text-nowrap text-left">
                                                 <Link className="btn fs-3 px-2 py-0 text-danger" to={`/sell_invoice_preview/${item.id}`}><i className="fad fa-eye"></i></Link>
-                                                {parseInt(item.PaymentStatus) === 1 ?
-                                                    <>
-                                                        <button className="btn px-2 py-0 text-danger" title='View Payment' onClick={(e) => handleReceiptClick(e, item)}>
-                                                            <i className="fad fa-receipt"></i>
-                                                        </button>
-                                                        <button className="btn px-2 py-0 text-danger" title='Make Payment' onClick={(e) => handleReceiptClick(e, item)}>
-                                                            <i className="fad fa-hand-holding-usd"></i>
-                                                        </button>
-                                                    </>
-                                                    :
-                                                    parseInt(item.PaymentStatus) === 2 ?
-                                                        <button className="btn px-2 py-0 text-danger" title='View Payment' onClick={(e) => handleReceiptClick(e, item)}>
-                                                            <i className={`fad fa-receipt`}></i>
-                                                        </button>
-                                                        :
-                                                        parseInt(item.PaymentStatus) === 3 ?
-                                                            <button className="btn px-2 py-0 text-danger" title='Make Payment' onClick={(e) => handleReceiptClick(e, item)}>
-                                                                <i className={`fad fa-hand-holding-usd`}></i>
-                                                            </button>
-                                                            : null
-                                                }
-                                                {/* <Link className="btn fs-3 px-2 py-0 text-danger" to={`/order_exc/${item.id}`}>
-                                                    <i class="fad fa-people-carry"></i>
-                                                </Link> */}
-
+                                                {PaymentButton(item, no)}
                                                 <button className="btn fs-3 px-2 py-0 text-danger" onClick={(e) => PrintPDF(e, item.id)}><i className="fad fa-print"></i></button>
                                             </td>
                                         </tr>
@@ -283,7 +281,7 @@ const Invoices = ({ PartyID, list, setList }) => {
                     </div>
             }
             {
-                Item ?
+                PaymentModalShow ?
                     <CreatePaymentModal
                         list={list}
                         setList={setList}
@@ -310,6 +308,7 @@ const Invoices = ({ PartyID, list, setList }) => {
 const mapStateToProps = (state, props) => ({
     display: state.OverlayDisplay,
     user: state.auth.user,
+    no: state.auth.no
 });
 
 export default connect(mapStateToProps, { logout })(Invoices);

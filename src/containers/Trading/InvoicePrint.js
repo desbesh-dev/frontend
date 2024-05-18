@@ -42,7 +42,7 @@ export const InvoicePrint = async (e, item, status) => {
     const marginLeft = 20;
     const marginTop = 20;
     const doc = new jsPDF(orientation, unit, size);
-
+    let pageCount = 0;
     let canvas = document.createElement('CANVAS')
 
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -67,10 +67,10 @@ export const InvoicePrint = async (e, item, status) => {
     const contact = [
         item.Phone && `Phone: ${item.Phone}`,
         item.Contact && `Contact: ${item.Contact}`,
-        item.Fax && `Fax: ${item.Fax}`,
-        item.Whatsapp && `Whatsapp: ${item.Whatsapp}`,
-        item.Imo && `Imo: ${item.Imo}`,
-        item.Wechat && `Wechat: ${item.Wechat}`
+        // item.Fax && `Fax: ${item.Fax}`,
+        // item.Whatsapp && `Whatsapp: ${item.Whatsapp}`,
+        // item.Imo && `Imo: ${item.Imo}`,
+        // item.Wechat && `Wechat: ${item.Wechat}`
     ].filter(Boolean).join(", ") || "";
     doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(contact, marginLeft + 94, marginTop + 51)
 
@@ -128,25 +128,23 @@ export const InvoicePrint = async (e, item, status) => {
     }
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(slsman, marginLeft + 35, item.OrderNo ? 175 : 151)
 
-    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("courier", 'bold').text("Invoice to: ", 380, 115)
-    var party_title = doc.splitTextToSize(item.PartyTitle, 250);
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(party_title, 380, 127);
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text("Contact: " + item.PartyContact, 380, 139);
+    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("courier", 'bold').text("Invoice to: ", 350, 115)
+    var party_title = doc.splitTextToSize(item.PartyTitle, 290);
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(party_title, 350, 127);
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Contact: " + item.PartyContact, 350, 139);
 
     var party_address = item.PartyAddress.substring(0, 70) + (item.PartyAddress.length < 70 ? "" : "...");
     party_address = doc.splitTextToSize(party_address, 190);
     var ht = doc.getTextDimensions(party_address).h;
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(party_address, 380, 150);
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(party_address, 350, 150);
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'bold').text("Payment: " + getPaymentShort(item.Payment, PaymentTerms), 380, 139 + ht + 11);
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Payment: " + getPaymentShort(item.Payment, PaymentTerms), 350, 139 + ht + 11);
 
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'bold').text(no, doc.internal.pageSize.getWidth() / 2, 200, { align: "center" });
 
     const TotalQty = item.SellMapData.reduce((TotalQt, myvalue) => TotalQt + parseInt(myvalue.Qty, 10), 0);
     const TotalWt = item.SellMapData.reduce((TotalWt, myvalue) => TotalWt + parseInt(myvalue.Weight, 10), 0);
 
-    let gpay = 0
-    let pay = 0
     const ord_headers = [["S/N", "CODE", "ITEM DETAILS", "UOM", "ORDERED", "SHIPPED", "RATE", "SUB-TOTAL"]];
     const inv_headers = [["S/N", "CODE", "ITEM DETAILS", "UOM", "Qty", "RATE", "SUB-TOTAL"]];
 
@@ -183,7 +181,7 @@ export const InvoicePrint = async (e, item, status) => {
         margin: { left: marginLeft },
         tableWidth: 555,
         bodyStyles: {
-            lineColor: [26, 189, 156],
+            lineColor: [0, 0, 0],
             textColor: [0, 0, 0],
             fontStyle: 'normal',
             fontSize: 10,
@@ -242,30 +240,16 @@ export const InvoicePrint = async (e, item, status) => {
                 var parts = data.cell.raw.split("\n");
                 doc.setFontSize(8).setTextColor(105, 105, 105).setFont("helvetica", 'italic').text(parts[1], data.cell.x + 5, data.cell.y + 25);
             }
-        },
-
-        didDrawPage: function (data) {
-            data.settings.margin.top = 60;
-            const pageCount = doc.internal.getNumberOfPages();
-            if (pageCount !== 1) {
-                // Header
-                doc.setFontSize(20);
-                doc.setTextColor(40);
-                doc.setFontSize(12).setFont("helvetica", 'bold').text(name, data.settings.margin.left, 40, { align: "left" })
-                doc.setFontSize(10).setTextColor(105, 105, 105).setFont("helvetica", 'normal').text(cmpAd, data.settings.margin.left, 50, { align: "left" })
-            }
-
-            // Footer
-            doc.setFontSize(10);
-            var pageSize = doc.internal.pageSize;
-            var pageHeight = pageSize.height
-                ? pageSize.height
-                : pageSize.getHeight();
         }
     };
 
     doc.autoTable(options);
     LastY = doc.lastAutoTable.finalY + 4;
+
+    const getTotal = () => {
+        if (!Array.isArray(item.SellMapData) || !item.SellMapData.length) return 0.00;
+        return item.SellMapData.reduce((acc, { SubTotal }) => acc + parseFloat(SubTotal), 0.00);
+    };
 
     const alignColCalc = (data) => {
         var col = data.column.index;
@@ -285,12 +269,10 @@ export const InvoicePrint = async (e, item, status) => {
         }
     }
 
-    const getTotal = () => {
-        if (!Array.isArray(item.SellMapData) || !item.SellMapData.length) return 0.00;
-        return item.SellMapData.reduce((acc, { SubTotal }) => acc + parseFloat(SubTotal), 0.00);
-    };
-    const result = ((parseFloat(item.GrandTotal) - parseFloat(item.Shipping) + parseFloat(item.Discount)) * 0.10).toFixed(2);
-    const formattedResult = parseFloat(result).toLocaleString("en", { minimumFractionDigits: 2 });
+    const result = (parseFloat(item.GrandTotal) - parseFloat(item.Shipping) + parseFloat(item.Discount));
+    const re_gst = result / 1.1
+    const gst_value = (re_gst * 0.1).toFixed(2)
+    const formattedResult = parseFloat(gst_value).toLocaleString("en", { minimumFractionDigits: 2 });
 
     var body = [
         ["TOTAL", " :", getTotal().toLocaleString("en", { minimumFractionDigits: 2 })],
@@ -299,28 +281,34 @@ export const InvoicePrint = async (e, item, status) => {
         ["SHIPPING COST", " :", parseFloat(item.Shipping).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["NET AMOUNT", " :", parseFloat(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 2 })],
         ["PAID AMOUNT", " :", parseFloat(item.PaidAmount).toLocaleString("en", { minimumFractionDigits: 2 })],
-        [parseFloat(item.Due) === 0.00 ? "BALANCE" : "DUE", " :", parseFloat(item.Due) !== 0 ? parseFloat(item.Due).toLocaleString("en", { minimumFractionDigits: 2 }) : (0.00).toLocaleString("en", { minimumFractionDigits: 2 })]
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
     ];
 
     doc.autoTable({
         body: body,
         startY: LastY,
         bodyStyles: {
-            lineColor: [220, 220, 220],
+            lineColor: [0, 0, 0],
             textColor: [0, 0, 0],
             fontStyle: 'normal',
-            fontSize: 10,
+            fontSize: 12,
             minCellHeight: 10,
         },
         theme: "plain",
         margin: { left: 340 },
         tableWidth: 235,
+        pageBreak: 'avoid',
         columnStyles: {
             0: { cellWidth: 147 },
-            1: { cellWidth: 8 },
+            1: { cellWidth: 10 },
             2: { cellWidth: 80 },
         },
-        styles: { fontSize: 11, leading: 15, textColor: [0, 0, 0], cellPadding: 1 },
+        styles: { fontSize: 12, leading: 15, textColor: [0, 0, 0], cellPadding: 1 },
         minCellHeight: 25, // specify the line height here
         didParseCell: function (cell, data) {
             alignColCalc(cell, data);
@@ -329,7 +317,7 @@ export const InvoicePrint = async (e, item, status) => {
             if (data.row.index === 1 || data.row.index === 4 || data.row.index === 6) {
                 doc.setDrawColor(0, 0, 0); // set the border color
                 doc.setLineWidth(0.1); // set the border with
-                doc.setLineDash([], 0); // set the border with
+                // doc.setLineDash([], 0); // set the border with
                 // draw bottom border
                 doc.line(
                     data.cell.x,
@@ -338,67 +326,86 @@ export const InvoicePrint = async (e, item, status) => {
                     data.cell.y
                 );
             }
-        },
+        }
     });
 
-    let summery_table_y = doc.lastAutoTable.finalY + 4;
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Total Item: " + parseFloat(item.SellMapData.length).toLocaleString("en", { minimumFractionDigits: 0 }), marginLeft, LastY + 30)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Total Quantity: " + parseFloat(TotalQty).toLocaleString("en", { minimumFractionDigits: 2 }), 200, LastY + 30)
+    let summery_table_y = doc.lastAutoTable.finalY - 180;
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Total Item: " + parseFloat(item.SellMapData.length).toLocaleString("en", { minimumFractionDigits: 0 }), marginLeft, summery_table_y - 2)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Total Quantity: " + parseFloat(TotalQty).toLocaleString("en", { minimumFractionDigits: 2 }), 200, summery_table_y - 2)
 
     const amountInWords = inWords(parseFloat(getTotal()));
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("Amount (In Word): ", marginLeft, summery_table_y + 10)
-    var Words = doc.splitTextToSize(amountInWords, 320); //Text wrap after char
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text(Words, marginLeft + 100, summery_table_y + 10)
+    var Words = doc.splitTextToSize(amountInWords, 300); //Text wrap after char
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text(Words, marginLeft, summery_table_y + 23)
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("PLEASE PAYMENT TO: ", marginLeft, summery_table_y + 30)
-    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Bank: " + item.Bank.BankName, marginLeft, summery_table_y + 42)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("PLEASE PAYMENT TO: ", marginLeft, summery_table_y + 50)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Bank: " + item.Bank.BankName, marginLeft, summery_table_y + 62)
     // doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("Branch Name: " + item.Bank.BranchName, marginLeft, summery_table_y + 54)
-    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("A/C Name: " + item.Bank.AccName, marginLeft, summery_table_y + 54)
-    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("A/C No: " + item.Bank.AccNo, marginLeft, summery_table_y + 66)
-    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("BSB Number: " + item.Bank.BSBNO, marginLeft, summery_table_y + 78)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("A/C Name: " + item.Bank.AccName, marginLeft, summery_table_y + 74)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("A/C No: " + item.Bank.AccNo, marginLeft, summery_table_y + 86)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text("BSB Number: " + item.Bank.BSBNO, marginLeft, summery_table_y + 98)
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'italic').text("**Please contact with us for further information about payment options", marginLeft, summery_table_y + 93)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'italic').text("**Please contact with us for further information about payment options", marginLeft, summery_table_y + 113)
+    const contactDetails = `${item.Whatsapp ? 'Whatsapp: ' + item.Whatsapp : ''} ${item.Imo ? 'Imo: ' + item.Imo : ''} ${item.Wechat ? 'Wechat: ' + item.Wechat : ''}`;
 
-    let pageCount = doc.internal.getNumberOfPages()
-    // Add the image to each page
+    doc.setFontSize(11)
+        .setTextColor(0, 0, 0)
+        .setFont('helvetica', 'bolditalic')
+        .text(`NB: Change or complaints must be submitted within 7 days.`, marginLeft, summery_table_y + 128);
+
+    doc.setFontSize(11)
+        .setTextColor(0, 0, 0)
+        .setFont('helvetica', 'normal')
+        .text(`Contact- ${contactDetails}`, marginLeft, summery_table_y + 140);
+
+    pageCount = doc.internal.getNumberOfPages()
+
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         doc.addImage(watermarkData, 'PNG', 80, 320);
+
+        if (i !== 1) {
+            // Header
+            doc.setFontSize(20);
+            doc.setTextColor(40);
+            doc.setFontSize(12).setFont("helvetica", 'bold').text(name + ' (' + item.ShortCode + "-" + item.SectorName + ")", 20, 25, { align: "left" })
+            doc.setFontSize(10).setTextColor(105, 105, 105).setFont("helvetica", 'normal').text(cmpAd, 20, 35, { align: "left" })
+        }
 
         if (i === pageCount) {
             // Prepare by
             doc.setDrawColor(97, 97, 97);
             doc.setLineWidth(0.5);
             doc.setLineDash([1, 1], 0);
-            doc.line(40, pageHeight - 70, doc.internal.pageSize.getWidth() / 4, pageHeight - 70);
+            doc.line(40, pageHeight - 55, doc.internal.pageSize.getWidth() / 4, pageHeight - 55);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Prepared By", doc.internal.pageSize.getWidth() / 9, pageHeight - 60, { align: "left" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Prepared By", doc.internal.pageSize.getWidth() / 9, pageHeight - 45, { align: "left" })
 
             // Checked by
             doc.setDrawColor(97, 97, 97);
             doc.setLineWidth(0.5);
             doc.setLineDash([1, 1], 0);
-            doc.line(165, pageHeight - 70, 260, pageHeight - 70);
+            doc.line(165, pageHeight - 55, 260, pageHeight - 55);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Checked By", 215, pageHeight - 60, { align: "center" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Checked By", 215, pageHeight - 45, { align: "center" })
 
 
             // Authority
             doc.setDrawColor(97, 97, 97);
             doc.setLineWidth(0.5);
             doc.setLineDash([1, 1], 0);
-            doc.line(280, pageHeight - 70, 395, pageHeight - 70);
+            doc.line(280, pageHeight - 55, 395, pageHeight - 55);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Authority", 340, pageHeight - 60, { align: "center" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Authority", 340, pageHeight - 45, { align: "center" })
 
 
             // Recepient
             doc.setDrawColor(97, 97, 97);
             doc.setLineWidth(0.5);
             doc.setLineDash([1, 1], 0);
-            doc.line(550, pageHeight - 70, doc.internal.pageSize.getWidth() - 165, pageHeight - 70);
+            doc.line(550, pageHeight - 55, doc.internal.pageSize.getWidth() - 165, pageHeight - 55);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Recipient", doc.internal.pageSize.getWidth() - 100, pageHeight - 60, { align: "center" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Recipient", doc.internal.pageSize.getWidth() - 100, pageHeight - 45, { align: "center" })
         }
 
         // Footer line
@@ -420,7 +427,7 @@ export const InvoicePrint = async (e, item, status) => {
 
     doc.setProperties({
         title: fileName,
-        subject: 'Subscriber PDF Ladger',
+        subject: 'Party Invoice',
         author: JSON.parse(localStorage.getItem("user")).Name,
         keywords: 'generated by DESH BESH ERP v1.00 web-version beta',
         creator: "DESH BESH ERP"

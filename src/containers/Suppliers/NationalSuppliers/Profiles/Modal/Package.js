@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from 'react-redux';
+import Select from 'react-select';
+import { fetchServerTimestamp } from '../../../../../actions/APIHandler';
+import { AllProductList, FetchAnyProduct } from '../../../../../actions/InventoryAPI';
 import { CreatePackage, FetchPack, FetchPackNPrice, SavePackage } from "../../../../../actions/SuppliersAPI";
 import { DISPLAY_OVERLAY } from '../../../../../actions/types';
 import errorIcon from '../../../../../assets/error.png';
 import successIcon from '../../../../../assets/success.png';
 import warningIcon from '../../../../../assets/warning.gif';
+import { CustomMenuList } from '../../../../../hocs/Class/CustomMenuList';
 
 export const ViewPack = (props) => {
     const { no, sub_scale } = useSelector((state) => state.auth);
@@ -637,7 +641,7 @@ export const UpdatePack = (props) => {
                         </thead>
                         <tbody className='w-100'>
                             <tr>
-                                <td className="py-2">Cartoon</td>
+                                <td className="py-0">Cartoon</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center", textAlign: "center" }}
@@ -670,7 +674,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">Half Cartoon</td>
+                                <td className="py-0" scope="row">Half Cartoon</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -703,7 +707,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">12 Pack</td>
+                                <td className="py-0" scope="row">12 Pack</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -737,7 +741,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">10 Pack</td>
+                                <td className="py-0" scope="row">10 Pack</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -771,7 +775,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">8 Pack</td>
+                                <td className="py-0" scope="row">8 Pack</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -805,7 +809,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">6 Pack</td>
+                                <td className="py-0" scope="row">6 Pack</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -839,7 +843,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">4 Pack</td>
+                                <td className="py-0" scope="row">4 Pack</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -873,7 +877,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">Pack 1</td>
+                                <td className="py-0" scope="row">Pack 1</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -907,7 +911,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">Pack 2</td>
+                                <td className="py-0" scope="row">Pack 2</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -941,7 +945,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">Pack 3</td>
+                                <td className="py-0" scope="row">Pack 3</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -975,7 +979,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" scope="row">Other Pack</td>
+                                <td className="py-0" scope="row">Other Pack</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center" }}
@@ -1009,7 +1013,7 @@ export const UpdatePack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2">Wholesale</td>
+                                <td className="py-0">Wholesale</td>
                                 <td className="py-2 px-1">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", width: '90%', fontWeight: "bold", paddingLeft: "5px", textAlign: "center", textAlign: "center" }}
@@ -1315,9 +1319,9 @@ export const AddPack = (props) => {
                     <table className="table table-bordered">
                         <tbody className='w-100'>
                             <tr>
-                                <td className="py-2">Purchase Price</td>
-                                <td className="py-2">:</td>
-                                <th className="py-2">
+                                <td className="py-0">Purchase Price</td>
+                                <td className="py-0">:</td>
+                                <th className="py-0">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px" }}
                                         type='number'
@@ -1332,9 +1336,9 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2">MRP</td>
-                                <td className="py-2">:</td>
-                                <th className="py-2">
+                                <td className="py-0">MRP</td>
+                                <td className="py-0">:</td>
+                                <th className="py-0">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px" }}
                                         type='number'
@@ -1349,9 +1353,9 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2">Retail Price</td>
-                                <td className="py-2">:</td>
-                                <th className="py-2">
+                                <td className="py-0">Retail Price</td>
+                                <td className="py-0">:</td>
+                                <th className="py-0">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px" }}
                                         type='number'
@@ -1379,8 +1383,8 @@ export const AddPack = (props) => {
                         </thead>
                         <tbody className='w-100'>
                             <tr>
-                                <td className="py-2" colSpan={1}>Cartoon</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>Cartoon</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center", textAlign: "center" }}
                                         type='text'
@@ -1394,7 +1398,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1408,7 +1412,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1426,8 +1430,8 @@ export const AddPack = (props) => {
 
 
                             <tr>
-                                <td className="py-2" colSpan={1}>Half Cartoon</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>Half Cartoon</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1441,7 +1445,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1455,7 +1459,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1472,8 +1476,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>12 Pack</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>12 Pack</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1487,7 +1491,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1501,7 +1505,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1518,8 +1522,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>10 Pack</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>10 Pack</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1534,7 +1538,7 @@ export const AddPack = (props) => {
                                     />
                                 </td>
 
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1549,7 +1553,7 @@ export const AddPack = (props) => {
                                     />
                                 </td>
 
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1567,8 +1571,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>8 Pack</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>8 Pack</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1582,7 +1586,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1596,7 +1600,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1613,8 +1617,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>6 Pack</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>6 Pack</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1628,7 +1632,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
 
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
@@ -1643,7 +1647,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1660,8 +1664,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>4 Pack</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>4 Pack</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1675,7 +1679,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1689,7 +1693,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1706,8 +1710,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>Pack 1</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>Pack 1</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1721,7 +1725,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1735,7 +1739,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1752,8 +1756,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>Pack 2</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>Pack 2</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1767,7 +1771,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1781,7 +1785,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1798,8 +1802,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>Pack 3</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>Pack 3</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1813,7 +1817,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1827,7 +1831,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1844,8 +1848,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>Other Pack</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>Other Pack</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1859,7 +1863,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1873,7 +1877,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1890,8 +1894,8 @@ export const AddPack = (props) => {
                             </tr>
 
                             <tr>
-                                <td className="py-2" colSpan={1}>Wholesale</td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0" colSpan={1}>Wholesale</td>
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1905,7 +1909,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1919,7 +1923,7 @@ export const AddPack = (props) => {
                                         required
                                     />
                                 </td>
-                                <td className="py-2 justify-content-center">
+                                <td className="py-0 justify-content-center">
                                     <input
                                         style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
                                         type='text'
@@ -1948,8 +1952,1061 @@ export const AddPack = (props) => {
     );
 }
 
+export const SearchNPrice = (props) => {
+    const [MyProList, setMyProList] = useState([])
+    const [Error, setError] = useState({});
+    const [Exist, setExist] = useState(false);
+    const [HasMore, setHasMore] = useState(false);
+    const [SearchKey, setSearchKey] = useState('')
+    const [currentPage, setCurrentPage] = useState(1);
+    let toastProperties = null;
+    const dispatch = useDispatch();
+
+    const [formData, setFormData] = useState({
+        ItemID: null,
+        Supplier: 'N/A',
+        Profile: 'N/A',
+        PurchasePrice: "",
+        MRP: "",
+        RetailPrice: "",
+        WhlslPrice: "",
+
+        CtnBarcode: "",
+        CtnQty: "",
+        CtnPrice: "",
+        HalfCtnBarcode: "",
+        HalfCtnQty: "",
+        HalfCtnPrice: "",
+        TwelveBarcode: "",
+        TwelveQty: "",
+        TwelvePrice: "",
+        TenBarcode: "",
+        TenQty: "",
+        TenPrice: "",
+        EightBarcode: "",
+        EightQty: "",
+        EightPrice: "",
+        SixBarcode: "",
+        SixQty: "",
+        SixPrice: "",
+        FourBarcode: "",
+        FourQty: "",
+        FourPrice: "",
+        Pack1Barcode: "",
+        Pack1Qty: "",
+        Pack1Price: "",
+        Pack2Barcode: "",
+        Pack2Qty: "",
+        Pack2Price: "",
+        Pack3Barcode: "",
+        Pack3Qty: "",
+        Pack3Price: "",
+        OtherBarcode: "",
+        OtherQty: "",
+        OtherPrice: "",
+        WhlslBarcode: "",
+        WhlslQty: "",
+        WhlslPrice: "",
+    });
+
+    const { ItemID, Supplier, Profile, PurchasePrice, MRP, RetailPrice, CtnBarcode, CtnQty, CtnPrice, HalfCtnBarcode, HalfCtnQty, HalfCtnPrice, TwelveBarcode, TwelveQty, TwelvePrice, TenBarcode, TenQty, TenPrice, EightBarcode, EightQty, EightPrice, SixBarcode, SixQty, SixPrice, FourBarcode, FourQty, FourPrice, Pack1Barcode, Pack1Qty, Pack1Price, Pack2Barcode, Pack2Qty, Pack2Price, Pack3Barcode, Pack3Qty, Pack3Price, OtherBarcode, OtherQty, OtherPrice, WhlslBarcode, WhlslQty, WhlslPrice } = formData;
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    useEffect(() => {
+        LoadProductItems();
+    }, []);
+
+    const CScolourStyles = {
+        container: base => ({
+            ...base,
+            flex: 1,
+            fontWeight: "500",
+            textAlign: 'left'
+        }),
+        menuList: provided => ({
+            ...provided,
+            backgroundColor: 'white',
+        }),
+        option: (provided, state) => {
+            let backgroundColor = state.isSelected ? '#6495ED' : 'transparent';
+            let color = state.isSelected ? 'whitesmoke' : '#333';
+            let scale = state.isSelected ? 'scale(1)' : 'scale(1.01)';
+
+            if (state.isFocused) {
+                backgroundColor = '#6495ED';
+                color = 'whitesmoke';
+                scale = 'scale(1.01)';
+            }
+
+            return {
+                ...provided,
+                color,
+                backgroundColor,
+                paddingTop: "5px",
+                paddingBottom: "5px",
+                cursor: 'pointer',
+                ':focus': {
+                    backgroundColor: '#6495ED',
+                    color: '#fff',
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                },
+                ':hover': {
+                    backgroundColor: '#6495ED',
+                    color: '#fff',
+                    paddingTop: "5px",
+                    paddingBottom: "5px"
+                },
+            };
+        },
+        control: styles => ({ ...styles, backgroundColor: "#F4F7FC", border: 0, boxShadow: 'none', fontWeight: "bold", minHeight: "fit-content", minWidth: "25vh", borderRadius: '20px' }),
+        indicatorsContainer: (provided) => ({
+            ...provided,
+            cursor: 'pointer',
+        }),
+    };
+
+    async function LoadProductItems() {
+        dispatch({ type: DISPLAY_OVERLAY, payload: true });
+        setMyProList([]);
+        const today = new Date();
+        const storedOptions = localStorage.getItem("data");
+        let storedOptionsTimestamp = localStorage.getItem("dataTimestamp");
+
+        if (storedOptions && storedOptionsTimestamp) {
+            const currentTimestamp = await fetchServerTimestamp();
+            if (storedOptionsTimestamp >= currentTimestamp) {
+                setMyProList(JSON.parse(storedOptions));
+                setHasMore(false);
+                dispatch({ type: DISPLAY_OVERLAY, payload: false });
+                return;
+            }
+        }
+
+        var ProductItems = await AllProductList();
+        if (ProductItems !== true) {
+            setMyProList([...MyProList, ...ProductItems.data]);
+            localStorage.setItem("data", JSON.stringify([...MyProList, ...ProductItems.data]));
+            localStorage.setItem("dataTimestamp", today.getTime());
+            if (ProductItems.data.length === 0) setHasMore(false);
+        }
+        dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    }
+
+    MyProList.forEach(option => {
+        option.combinedLabel = `${option.label} (${option.value})`;
+    });
+
+    useEffect(() => {
+        LoadProductPackage(SearchKey);
+    }, [SearchKey]);
+
+    const LoadProductPackage = async (SearchKey) => {
+        // dispatch({ type: DISPLAY_OVERLAY, payload: true });
+        ClearField();
+        var pack = await FetchPackNPrice(SearchKey.id);
+        if (pack !== true) {
+            setExist(pack.Exist)
+            setFormData({
+                ItemID: pack.ItemID,
+                Supplier: pack.Supplier,
+                Profile: pack.Profile,
+                PurchasePrice: pack.PurchasePrice,
+                MRP: pack.MRP,
+                RetailPrice: pack.RetailPrice,
+
+                CtnBarcode: pack.CtnBarcode,
+                CtnQty: pack.CtnQty,
+                CtnPrice: pack.CtnPrice,
+                HalfCtnBarcode: pack.HalfCtnBarcode,
+                HalfCtnQty: pack.HalfCtnQty,
+                HalfCtnPrice: pack.HalfCtnPrice,
+                TwelveBarcode: pack.TwelveBarcode,
+                TwelveQty: pack.TwelveQty,
+                TwelvePrice: pack.TwelvePrice,
+                TenBarcode: pack.TenBarcode,
+                TenQty: pack.TenQty,
+                TenPrice: pack.TenPrice,
+                EightBarcode: pack.EightBarcode,
+                EightQty: pack.EightQty,
+                EightPrice: pack.EightPrice,
+                SixBarcode: pack.SixBarcode,
+                SixQty: pack.SixQty,
+                SixPrice: pack.SixPrice,
+                FourBarcode: pack.FourBarcode,
+                FourQty: pack.FourQty,
+                FourPrice: pack.FourPrice,
+                Pack1Barcode: pack.Pack1Barcode,
+                Pack1Qty: pack.Pack1Qty,
+                Pack1Price: pack.Pack1Price,
+                Pack2Barcode: pack.Pack2Barcode,
+                Pack2Qty: pack.Pack2Qty,
+                Pack2Price: pack.Pack2Price,
+                Pack3Barcode: pack.Pack3Barcode,
+                Pack3Qty: pack.Pack3Qty,
+                Pack3Price: pack.Pack3Price,
+                OtherBarcode: pack.OtherBarcode,
+                OtherQty: pack.OtherQty,
+                OtherPrice: pack.OtherPrice,
+                WhlslBarcode: pack.WhlslBarcode,
+                WhlslQty: pack.WhlslQty,
+                WhlslPrice: pack.WhlslPrice,
+            });
+        }
+
+        // dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    }
+
+    const ClearField = () => {
+        setFormData({
+            ItemID: null,
+            Supplier: 'N/A',
+            Profile: 'N/A',
+            PurchasePrice: '',
+            MRP: '',
+            RetailPrice: '',
+
+            CtnBarcode: "",
+            CtnQty: "",
+            CtnPrice: '',
+            HalfCtnBarcode: "",
+            HalfCtnQty: "",
+            HalfCtnPrice: '',
+            TwelveBarcode: "",
+            TwelveQty: "",
+            TwelvePrice: '',
+            TenBarcode: "",
+            TenQty: "",
+            TenPrice: '',
+            EightBarcode: "",
+            EightQty: "",
+            EightPrice: '',
+            SixBarcode: "",
+            SixQty: "",
+            SixPrice: '',
+            FourBarcode: "",
+            FourQty: "",
+            FourPrice: '',
+            Pack1Barcode: "",
+            Pack1Qty: "",
+            Pack1Price: '',
+            Pack2Barcode: "",
+            Pack2Qty: "",
+            Pack2Price: '',
+            Pack3Barcode: "",
+            Pack3Qty: "",
+            Pack3Price: '',
+            OtherBarcode: "",
+            OtherQty: "",
+            OtherPrice: '',
+            WhlslBarcode: "",
+            WhlslQty: "",
+            WhlslPrice: '',
+        });
+        // props.onHide()
+
+    }
+
+    const PackList = [
+        { value: 1, label: "Bolus" },
+        { value: 2, label: "Bottle" },
+        { value: 3, label: "Carton" },
+        { value: 4, label: "Bag" },
+        { value: 5, label: "Loose" },
+        { value: 6, label: "Container" },
+        { value: 7, label: "Aluminium Foil" },
+        { value: 8, label: "Injectable/Vial" },
+        { value: 9, label: "Paper Board" },
+        { value: 10, label: "Paper" },
+        { value: 11, label: "Lamitube" },
+        { value: 11, label: "Box" },
+        { value: 11, label: "Pack" },
+        { value: 11, label: "Mini Pack" },
+        { value: 12, label: "Casket" },
+        { value: 13, label: "Sack" }
+    ]
+
+    const isStringNullOrWhiteSpace = (str) => {
+        return str === undefined || str === null || str === "";
+    }
+
+    const Create_Product_Item = async e => {
+        setError({})
+        dispatch({ type: DISPLAY_OVERLAY, payload: true });
+        e.preventDefault();
+        let Package = 0
+        const result = await CreatePackage(ItemID, PurchasePrice, MRP, RetailPrice, WhlslPrice, CtnPrice, HalfCtnPrice, TwelvePrice, TenPrice, EightPrice, SixPrice, FourPrice, Pack1Price, Pack2Price, Pack3Price, OtherPrice);
+        if (result !== true) {
+            if (result.error) {
+                const updatedState = {};
+                for (var pair of result.exception.entries()) {
+                    updatedState[pair[1].field] = pair[1].message;
+                    setError({
+                        ...updatedState,
+                    });
+                }
+                props.setList([...props.list, toastProperties = {
+                    id: 1,
+                    title: 'Invalid',
+                    description: result.message,
+                    backgroundColor: '#f0ad4e',
+                    icon: warningIcon
+                }])
+                dispatch({ type: DISPLAY_OVERLAY, payload: false });
+            } else {
+                props.setList([...props.list, toastProperties = {
+                    id: 1,
+                    title: 'Success',
+                    description: result.message,
+                    backgroundColor: '#f0ad4e',
+                    icon: successIcon
+                }])
+                props.onClose();
+                dispatch({ type: DISPLAY_OVERLAY, payload: false });
+            }
+        } else {
+            props.setList([...props.list, toastProperties = {
+                id: 1,
+                title: 'Error',
+                description: "Failed to save product package. Please try after some moment.",
+                backgroundColor: '#f0ad4e',
+                icon: errorIcon
+            }])
+            dispatch({ type: DISPLAY_OVERLAY, payload: false });
+        }
+        dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    };
+
+    const BarcodeAction = async (e) => {
+        const input = e.toString()
+        const paddedValue = input.length <= 7 ? input.padStart(7, '0') : input;
+        const value = await FetchAnyProduct(paddedValue);
+        setSearchKey({ id: value.ItemID.replace(/-/g, ""), label: value.Title, value: value.value })
+    };
+
+    const EnterKeyEvent = (e) => {
+        const value = e.target.value;
+        const paddedValue = value.padStart(7, '0');
+        if (e.key === "Enter") {
+            BarcodeAction(paddedValue);
+        }
+    }
+
+    const handleFocusSelect = (e) => {
+        e.target.select();
+    };
 
 
+    return (
+        <Modal
+            {...props}
+            size="md"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            backdrop="static"
+        // onClick={() => ClearField()}
+        >
+            <Modal.Header className="py-1 justify-content-center">
+                <div className='row w-100 justify-content-center'>
+                    <div className='col-12 pb-2'>
+                        <p className="fs-3 fw-bold text-center">Search & Pricing Info</p>
+                    </div>
+                </div>
+            </Modal.Header>
+
+            <Modal.Body>
+                <div className='row w-100 justify-content-center'>
+                    <div className='col-4 justify-content-center align-items-center'>
+                        <input
+                            type="number"
+                            style={{ borderRadius: '20px' }}
+                            className="py-1 m-0 text-center"
+                            id="Code"
+                            placeholder="******"
+                            value={SearchKey?.value}
+                            onKeyDown={event => EnterKeyEvent(event)}
+                            onFocus={handleFocusSelect}
+                            required
+                            autoFocus
+                        />
+                    </div>
+                    <div className='col-8'>
+                        <Select
+                            options={MyProList}
+                            name="Title"
+                            placeholder={"Please select product"}
+                            styles={CScolourStyles}
+                            value={SearchKey}
+                            onChange={(e) => { setCurrentPage(1); setSearchKey(e) }}
+                            required
+                            id="Title"
+                            isClearable={true}
+                            components={{ MenuList: CustomMenuList }}
+                            optionLabel="combinedLabel"
+                            maxMenuHeight={20 * 35}
+                        />
+                    </div>
+
+                </div>
+
+                <form>
+                    <div className='col-12 py-2'>
+                        <p className="fs-4 fw-bold text-center text-dark fw-bold">{Exist ? "Update Product Prices" : "Set Product Prices"}</p>
+                    </div>
+                    <table className="table table-bordered">
+                        <tbody className='w-100'>
+                            <tr>
+                                <td className="py-0">Product Name</td>
+                                <td className="py-0">:</td>
+                                <th className="py-0 fw-bold">{SearchKey ? SearchKey.label : "N/A"}</th>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0">Supplier Name</td>
+                                <td className="py-0">:</td>
+                                <th className="py-0 fw-bold">{Supplier}</th>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0">Profile</td>
+                                <td className="py-0">:</td>
+                                <th className="py-0 fw-bold">{Profile}</th>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0">Purchase Price</td>
+                                <td className="py-0">:</td>
+                                <th className="py-0">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px" }}
+                                        type='number'
+                                        placeholder='Unit Price'
+                                        name='PurchasePrice'
+                                        value={PurchasePrice}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        required
+                                    />
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0">MRP</td>
+                                <td className="py-0">:</td>
+                                <th className="py-0">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px" }}
+                                        type='number'
+                                        placeholder='MRP'
+                                        name='MRP'
+                                        value={MRP}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        required
+                                    />
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0">Retail Price</td>
+                                <td className="py-0">:</td>
+                                <th className="py-0">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px" }}
+                                        type='number'
+                                        placeholder='Retail Price'
+                                        name='RetailPrice'
+                                        value={RetailPrice}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        required
+                                    />
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <table className="table table-bordered">
+                        <thead>
+                            <tr className="text-center" style={{ borderBottom: "3px solid #DEE2E6" }}>
+                                <th className="border-0 p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Pack</span> </th>
+                                <th className="border-right-0 p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Barcode</span> </th>
+                                <th className="border-right-0 p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Quantity</span> </th>
+                                <th className="border-right-0 p-1"> <span className="fs-6 fw-bolder text-dark text-uppercase p-0">Price</span> </th>
+                            </tr>
+                        </thead>
+                        <tbody className='w-100'>
+                            <tr>
+                                <td className="py-0" colSpan={1}>Cartoon</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='CtnBarcode'
+                                        value={CtnBarcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='CtnQty'
+                                        value={CtnQty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='CtnPrice'
+                                        value={CtnPrice}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>Half Cartoon</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='HalfCtnBarcode'
+                                        value={HalfCtnBarcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='HalfCtnQty'
+                                        value={HalfCtnQty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='HalfCtnPrice'
+                                        value={HalfCtnPrice}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>12 Pack</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='TwelveBarcode'
+                                        value={TwelveBarcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='TwelveQty'
+                                        value={TwelveQty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='TwelvePrice'
+                                        value={TwelvePrice}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>10 Pack</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='TenBarcode'
+                                        value={TenBarcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='TenQty'
+                                        value={TenQty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='TenPrice'
+                                        value={TenPrice}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>8 Pack</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='EightBarcode'
+                                        value={EightBarcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='EightQty'
+                                        value={EightQty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='EightPrice'
+                                        value={EightPrice}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>6 Pack</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='SixBarcode'
+                                        value={SixBarcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='SixQty'
+                                        value={SixQty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='SixPrice'
+                                        value={SixPrice}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>4 Pack</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='FourBarcode'
+                                        value={FourBarcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='FourQty'
+                                        value={FourQty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='FourPrice'
+                                        value={FourPrice}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>Pack 1</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='Pack1Barcode'
+                                        value={Pack1Barcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='Pack1Qty'
+                                        value={Pack1Qty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='Pack1Price'
+                                        value={Pack1Price}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>Pack 2</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='Pack2Barcode'
+                                        value={Pack2Barcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='Pack2Qty'
+                                        value={Pack2Qty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='Pack2Price'
+                                        value={Pack2Price}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>Pack 3</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='Pack3Barcode'
+                                        value={Pack3Barcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='Pack3Qty'
+                                        value={Pack3Qty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='Pack3Price'
+                                        value={Pack3Price}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>Other Pack</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='OtherBarcode'
+                                        value={OtherBarcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='OtherQty'
+                                        value={OtherQty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='OtherPrice'
+                                        value={OtherPrice}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td className="py-0" colSpan={1}>Wholesale</td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100%", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Barcode'
+                                        name='WhlslBarcode'
+                                        value={WhlslBarcode}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Qty'
+                                        name='WhlslQty'
+                                        value={WhlslQty}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                                <td className="py-0 justify-content-center">
+                                    <input
+                                        style={{ backgroundColor: "#F4F7FC", border: "0px", fontWeight: "bold", width: "100px", paddingLeft: "5px", textAlign: "center" }}
+                                        type='text'
+                                        placeholder='Price'
+                                        name='WhlslPrice'
+                                        value={WhlslPrice}
+                                        //onFocus={e => handleFocus(e)}
+                                        onChange={e => onChange(e)}
+                                        //onBlur={(e) => onBlur(e)}
+                                        maxLength='50'
+                                        required
+                                    />
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+                </form>
+
+            </Modal.Body >
+            <Modal.Footer className="justify-content-center">
+                <button className="btn btn-outline-success" onClick={() => { ClearField(); props.onHide() }}>Close</button>
+                <button className="btn btn-outline-success" onClick={(e) => Create_Product_Item(e)}>Submit </button>
+            </Modal.Footer>
+        </Modal >
+    );
+}
 
 
 

@@ -377,22 +377,22 @@ export const CreatePackage = async (ItemID, PurchasePrice, MRP, RetailPrice, Whl
 
     const formData = new FormData();
     formData.append("ItemID", ItemID);
-    formData.append("PurchasePrice", parseFloat(PurchasePrice || null));
-    formData.append("RetailPrice", parseFloat(RetailPrice || null));
-    formData.append("WhlslPrice", parseFloat(WhlslPrice || null));
-    formData.append("MRP", parseFloat(MRP || null));
+    formData.append("PurchasePrice", parseFloat(PurchasePrice || 0));
+    formData.append("RetailPrice", parseFloat(RetailPrice || 0));
+    formData.append("WhlslPrice", parseFloat(WhlslPrice || 0));
+    formData.append("MRP", parseFloat(MRP || 0));
 
-    formData.append("CtnPrice", parseFloat(CtnPrice || null));
-    formData.append("HalfCtnPrice", parseFloat(HalfCtnPrice || null));
-    formData.append("TwelvePrice", parseFloat(TwelvePrice || null));
-    formData.append("TenPrice", parseFloat(TenPrice || null));
-    formData.append("EightPrice", parseFloat(EightPrice || null));
-    formData.append("SixPrice", parseFloat(SixPrice || null));
-    formData.append("FourPrice", parseFloat(FourPrice || null));
-    formData.append("Pack1Price", parseFloat(Pack1Price || null));
-    formData.append("Pack2Price", parseFloat(Pack2Price || null));
-    formData.append("Pack3Price", parseFloat(Pack3Price || null));
-    formData.append("OtherPrice", parseFloat(OtherPrice || null));
+    formData.append("CtnPrice", parseFloat(CtnPrice || 0));
+    formData.append("HalfCtnPrice", parseFloat(HalfCtnPrice || 0));
+    formData.append("TwelvePrice", parseFloat(TwelvePrice || 0));
+    formData.append("TenPrice", parseFloat(TenPrice || 0));
+    formData.append("EightPrice", parseFloat(EightPrice || 0));
+    formData.append("SixPrice", parseFloat(SixPrice || 0));
+    formData.append("FourPrice", parseFloat(FourPrice || 0));
+    formData.append("Pack1Price", parseFloat(Pack1Price || 0));
+    formData.append("Pack2Price", parseFloat(Pack2Price || 0));
+    formData.append("Pack3Price", parseFloat(Pack3Price || 0));
+    formData.append("OtherPrice", parseFloat(OtherPrice || 0));
     try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/packaging_n_reform/add_package/`, formData, config);
         return res.data

@@ -300,10 +300,10 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
             return;
         }
 
-        if (parseFloat(SellWeight) > parseFloat(Available)) {
-            setInfoModalShow(true);
-            return;
-        }
+        // if (parseFloat(SellWeight) > parseFloat(Available)) {
+        //     setInfoModalShow(true);
+        //     return;
+        // }
 
         const dataExistsIndex = OrderData.findIndex(item => item.Code === formData.Code && item.UnitName === formData.UnitName && item.Remark === formData.Remark);
         if (dataExistsIndex === -1) {
@@ -934,6 +934,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                     <thead className='bg-white'>
                                         <tr className="text-center">
                                             <th className="py-1 border-right"><span>S/N</span></th>
+                                            <th className="py-1 border-right"><span>Code</span></th>
                                             <th className="py-1 border-right"><span>Title</span></th>
                                             <th className="py-1 border-right"><span className="d-block text-right fw-bolder text-nowrap">Ord. Qty</span></th>
                                             <th className="py-1 border-right"><span className="d-block text-right fw-bolder text-nowrap">Del. Qty</span></th>
@@ -950,7 +951,8 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                                 const reversedIndex = OrderData.length - i - 1;
                                                 return (
                                                     <tr className="border-bottom text-center" key={reversedIndex}>
-                                                        <td className="py-0 border-right"><span className="d-block fw-bold">{reversedIndex + 1}</span></td>
+                                                        <td className="py-0 border-right"><span className="d-block">{reversedIndex + 1}</span></td>
+                                                        <td className="py-0 border-right"><span className="d-block fw-bolder">{item.Code}</span> </td>
                                                         <td className="py-0 px-1 border-right">
                                                             <span className="d-block fw-bold text-left text-nowrap" style={{ lineHeight: "1" }}>{item.label ? item.label : item.Title} <small className='text-warning text-left ml-0'>{errorMessage && errorMessage}</small></span>
                                                             {item.Remark !== "N/A" ?
@@ -1241,7 +1243,7 @@ const OrderExecute = ({ OrderID, user, list, setList }) => {
                                             className="btn btn-outline-success fs-3 text-center justify-content-center align-items-center w-auto px-3"
                                             // onKeyDown={(e) => handleKeyDown(e)}
                                             type="submit"
-                                            onClick={(e) => availability ? AddRow(e) : null}><i className="fs-3 fad fa-plus pr-2"></i>  ENTER </Link>
+                                            onClick={(e) => AddRow(e)}><i className="fs-3 fad fa-plus pr-2"></i>  ENTER </Link>
                                     </div>
                                 </div>
                             </div>

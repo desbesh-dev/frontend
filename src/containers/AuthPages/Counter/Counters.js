@@ -20,12 +20,13 @@ let today = new Date();
 
 const Counters = ({ list, setList, user, scale, no }) => {
     const [Data, setData] = useState(null)
+    const [Payment, setPayment] = useState(0.00)
     const [Error, setError] = useState(false)
     const dispatch = useDispatch();
     const [SectorFilter, setSectorFilter] = useState(null);
     const [SisterFilter, setSisterFilter] = useState(null);
     const [ModeFilter, setModeFilter] = useState({ label: "Both (Walk-in & Party)", value: 3 });
-    const [SearchKey, setSearchKey] = useState({ min: 0, max: 50 })
+    const [SearchKey, setSearchKey] = useState({ min: 1, max: 50 })
     const [DateTo, setDateTo] = useState(today);
     const [DateFrom, setDateFrom] = useState(today);
     const [VoucherItem, setVoucherItem] = useState(false);
@@ -45,6 +46,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
         let date_to = moment(DateTo).format("YYYY-MM-DD");
         var result = await LoadCounter(date_from, date_to, ModeFilter.value);
         setData(result.Counters);
+        setPayment(result.Payment)
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
 
@@ -61,6 +63,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
         }
         var result = await LoadCounter(date_from, date_to, ModeFilter.value);
         setData(result.Counters);
+        setPayment(result.Payment)
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
 
@@ -172,7 +175,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
         }
     }
 
-    const extra = { FromDate: DateFrom, ToDate: DateTo, SisterFilter, SectorFilter, SearchKey, ModeFilter, Counter: FilterCounter?.length, Count, Sub, Cost, GrandTotal, Vat, Discount, Shipping, PaidAmount, Due, RefundAmount, RefundCost, Revenue, Bank, Cash }
+    const extra = { FromDate: DateFrom, ToDate: DateTo, SisterFilter, SectorFilter, SearchKey, ModeFilter, Counter: FilterCounter?.length, Count, Sub, Cost, GrandTotal, Vat, Discount, Shipping, PaidAmount, Due, RefundAmount, RefundCost, Revenue, Bank, Cash, Payment: SearchKey.min === 1 ? Payment : 0 }
 
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">
@@ -319,10 +322,26 @@ const Counters = ({ list, setList, user, scale, no }) => {
                         </div>
                         <p className='text-dark fw-bold m-0 px-2 text-uppercase' style={{ borderRadius: "15px" }}>E-POS: <span className='fw-bolder'>{parseFloat(Bank).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</span></p>
 
-                        <div className="cs_outer m-0" style={{ height: "100%" }}>
-                            <div className="cs_inner"></div>
-                        </div>
-                        <p className='text-dark fw-bold m-0 px-2 text-uppercase' style={{ borderRadius: "15px" }}>Liquid: <span className='fw-bolder'>{parseFloat(PaidAmount).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</span></p>
+                        {SearchKey.min === 1 ?
+                            <>
+                                <div className="cs_outer m-0" style={{ height: "100%" }}>
+                                    <div className="cs_inner"></div>
+                                </div>
+                                <p className='text-dark fw-bold m-0 px-2 text-uppercase' style={{ borderRadius: "15px" }}>Payment: <span className='fw-bolder'>{parseFloat(Payment || 0.00).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</span></p>
+
+                                <div className="cs_outer m-0" style={{ height: "100%" }}>
+                                    <div className="cs_inner"></div>
+                                </div>
+                                <p className='text-dark fw-bold m-0 px-2 text-uppercase' style={{ borderRadius: "15px" }}>Liquid: <span className='fw-bolder'>{parseFloat(PaidAmount + Payment).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</span></p>
+                            </>
+                            :
+                            <>
+                                <div className="cs_outer m-0" style={{ height: "100%" }}>
+                                    <div className="cs_inner"></div>
+                                </div>
+                                <p className='text-dark fw-bold m-0 px-2 text-uppercase' style={{ borderRadius: "15px" }}>Liquid: <span className='fw-bolder'>{parseFloat(PaidAmount).toLocaleString('en-PG', { minimumFractionDigits: 2, style: 'currency', currency: 'PGK' })}</span></p>
+                            </>
+                        }
 
                         {no <= 2 && <>
                             <div className="cs_outer m-0" style={{ height: "100%" }}>

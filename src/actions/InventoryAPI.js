@@ -571,6 +571,23 @@ export const FetchProduct = async (code) => {
     }
 }
 
+export const FetchAnyProduct = async (code) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/fetch_any_product/${code}`, config);
+        return res.data
+    } catch (err) {
+        return false;
+    }
+}
+
 export const FetchProductYard = async (code, sect_id, sect_to, ctr_no) => {
     const config = {
         headers: {
@@ -810,7 +827,6 @@ export const FetchProductInit = async (code, SectorID) => {
     }
 }
 
-
 export const MyProductList = async (currentPage, sector) => {
     const page = currentPage || 1;
     const config = {
@@ -823,6 +839,23 @@ export const MyProductList = async (currentPage, sector) => {
 
     try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/sell_product_list/${page}/${sector}`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
+export const AllProductList = async () => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/all_product_list/`, config);
         return res
     } catch (err) {
         return true;

@@ -14,7 +14,7 @@ import { fetchServerTimestamp } from '../../../actions/APIHandler';
 import { MyProductList } from '../../../actions/SuppliersAPI';
 import { BarcodeList } from '../../../containers/Suppliers/NationalSuppliers/Profiles/Modal/BarcodePrintModal';
 import { ItemUpdate } from '../../../containers/Suppliers/NationalSuppliers/Profiles/Modal/Item';
-import { AddPack, UpdatePack, ViewPack } from '../../../containers/Suppliers/NationalSuppliers/Profiles/Modal/Package';
+import { AddPack, SearchNPrice, UpdatePack, ViewPack } from '../../../containers/Suppliers/NationalSuppliers/Profiles/Modal/Package';
 import { CustomMenuList } from '../../../hocs/Class/CustomMenuList';
 import { CategoryList } from '../../Suppliers/Class/Category';
 import { DumpsterModal } from './Modals/DumpsterModal';
@@ -40,6 +40,7 @@ const Stock = ({ user, list, setList, scale, no }) => {
     const [CreateModalShow, setCreateModalShow] = useState(false);
     const [DeleteModalShow, setDeleteModalShow] = useState(false);
     const [InfoModalShow, setInfoModalShow] = useState(false);
+    const [SearchNPriceModalShow, setSearchNPriceModalShow] = useState(false);
     const [MyProList, setMyProList] = useState([])
     const [hasMore, setHasMore] = useState(true);
     const [SectorFilter, setSectorFilter] = useState(false);
@@ -265,6 +266,7 @@ const Stock = ({ user, list, setList, scale, no }) => {
                                 <button className="btn fs-3 p-2 fad fa-plus-octagon text-success border-left" onClick={(e) => setCreateModalShow(true)} />
                             )
                         }
+                        {/* <button className="btn fs-3 p-2 fad fa-search-plus text-success border-left" onClick={(e) => setSearchNPriceModalShow(true)} /> */}
                     </div>
                 </div>
                 {data.results && data.results.map && data.results.map.length ?
@@ -479,6 +481,19 @@ const Stock = ({ user, list, setList, scale, no }) => {
                         onReload={() => window.location.reload(false)()}
                         onClose={() => { setBarcodeModalShow(false) }}
                         onHide={() => { setBarcodeModalShow(false); }}
+                    />
+                    : null
+            }
+            {
+                SearchNPriceModalShow ?
+                    <SearchNPrice
+                        item={{ id: BarcodeItem.ItemID, Title: BarcodeItem.Title, Barcode: BarcodeItem.Barcode }}
+                        show={SearchNPriceModalShow}
+                        list={list}
+                        setList={setList}
+                        onReload={() => window.location.reload(false)()}
+                        onClose={() => { setSearchNPriceModalShow(false) }}
+                        onHide={() => { setSearchNPriceModalShow(false); }}
                     />
                     : null
             }

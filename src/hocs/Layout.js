@@ -10,7 +10,7 @@ import Overlay from "../components/Overlay";
 import Footer from './Footer';
 import Toast from './toast/Toast';
 
-const Layout = ({ logout, checkAuthenticated, load_user, user, scale, no, children, list, isActive, setActive }) => {
+const Layout = ({ logout, checkAuthenticated, load_user, user, scale, no, children, list, setList, isActive, setActive }) => {
 
 	const pathname = window.location.pathname //returns the current url minus the domain name
 
@@ -87,7 +87,7 @@ const Layout = ({ logout, checkAuthenticated, load_user, user, scale, no, childr
 				<div className="main">
 					{
 						scale && no ?
-							<Navbar setNavBar={setNavBar} NavBar={NavBar} isActive={`/${isActive}`} setActive={setActive} />
+							<Navbar setNavBar={setNavBar} NavBar={NavBar} isActive={`/${isActive}`} setActive={setActive} list={list} setList={setList} />
 							: null}
 					<main className="content mt-0 px-0">
 						{children}

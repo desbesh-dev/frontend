@@ -68,7 +68,14 @@ export const Receipt = async (e, item, status, type) => {
             cellPadding: 1,  // Set cellPadding to 0 to remove padding
             rowHeight: 5    // Set the rowHeight as desired to control the margin
         },
+        columnStyles: {
+            1: { cellWidth: 10, valign: 'middle', halign: 'center' },
+            2: { columnWidth: 'wrap', overflow: 'linebreak' },
+            3: { columnWidth: 'wrap', overflow: 'linebreak' },
+            4: { columnWidth: 'wrap', overflow: 'linebreak' }
+        },
         tableWidth: 68,
+        columnWidth: 'auto', // This option helps to automatically adjust the width of columns based on content
         didParseCell: function (cell, data) {
             alignCol(cell, data);
         },

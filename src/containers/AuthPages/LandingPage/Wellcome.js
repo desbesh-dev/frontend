@@ -48,7 +48,7 @@ const Wellcome = ({ data, cat, no, setList, list }) => {
     // } else if (scale === null || no === null) {
     //     return <Redirect to='/home' />
     // }
-    console.log("no: ", no);
+
     const [OpenModal, setOpenModal] = useState(false)
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">

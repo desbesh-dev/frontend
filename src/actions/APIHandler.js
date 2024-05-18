@@ -1346,7 +1346,7 @@ export const Invoice = async (CounterID, PartyID, OrderID, Date, VatRate, Vat, D
         formData.append(`SellMapData[${i}]Rate`, parseFloat(sell.Rate).toFixed(4));
         formData.append(`SellMapData[${i}]Remark`, sell.Remark);
         formData.append(`SellMapData[${i}]SubTotal`, parseFloat(sell.SubTotal).toFixed(2));
-        formData.append(`SellMapData[${i}]Available`, parseFloat(sell.Available).toFixed(2));
+        formData.append(`SellMapData[${i}]Available`, parseFloat(sell.Available || 0).toFixed(2));
         formData.append(`SellMapData[${i}]Status`, 1);
     }
 
@@ -1867,7 +1867,7 @@ export const CounterVoucherSave = async (Date, vla, No, PaidAmount, CounterID) =
     }
 }
 
-export const AllConsignee = async (type) => {
+export const AllConsignee = async (type, sector) => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -1877,7 +1877,7 @@ export const AllConsignee = async (type) => {
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/load_consignee/${type}`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/load_consignee/${type}/${sector}`, config);
         return res.data
     } catch (err) {
         return true;

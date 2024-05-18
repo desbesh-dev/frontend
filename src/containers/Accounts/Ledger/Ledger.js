@@ -4,7 +4,7 @@ import Datepicker from 'react-datepicker';
 import { connect, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
-import { FetchConcern, FetchLedger, FetchPartyOus, FetchSisterSector, FetchSupplierOus, LoadAccount, LoadCostAccount } from '../../../actions/APIHandler';
+import { FetchConcern, FetchLedger, FetchPartyOus, FetchSisterSector, FetchSupplierOus, LoadAccount } from '../../../actions/APIHandler';
 import { logout } from '../../../actions/auth';
 import { DISPLAY_OVERLAY } from '../../../actions/types';
 import { customHeader, locales } from "../../Suppliers/Class/datepicker";
@@ -84,7 +84,7 @@ const Ledger = ({ data, no }) => {
     }
     const LoadAccounts = async (e) => {
         setAccLists(null);
-        let result = no <= 7 ? await LoadAccount() : await LoadCostAccount();
+        let result = await LoadAccount();
         setAccLists(result.data);
     };
 

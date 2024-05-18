@@ -7,9 +7,10 @@ import { connect } from 'react-redux';
 import { LoadProfile } from '../actions/APIHandler';
 import { logout } from '../actions/auth';
 import logo from '../assets/logo.png';
+import { SearchNPrice } from '../containers/Suppliers/NationalSuppliers/Profiles/Modal/Package';
 // import { Container, Nav, NavDropdown } from 'react-bootstrap';
 
-const Navbar = ({ logout, user, scale, no, cat }) => {
+const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 	const [DropDown, setDropDown] = useState(false);
 	const [Expand, setExpand] = useState(false);
 	const [Grid, setGrid] = useState(false);
@@ -17,6 +18,7 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 	const history = useHistory();
 	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 	const [isFullscreen, setIsFullscreen] = useState(false);
+	const [SearchNPriceModalShow, setSearchNPriceModalShow] = useState(false);
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -197,7 +199,7 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 								<div className={`border ${Expand === "Accounts" ? "d-flex flex-column" : "d-none"}`}>
 									<div className='d-flex border'>
 										<Link className="row btn btn-outline-success m-0" id="grid_menu"><i className="fad fa-calculator"></i> A/C-Summary</Link>
-										<Link className="row btn btn-outline-success m-0" id="grid_menu" to='#'><i className="fad fa-project-diagram"></i> Voucher</Link>
+										<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/voucher'><i className="fad fa-project-diagram"></i> Voucher</Link>
 										<Link className="row btn btn-outline-success m-0" to='/ledger' id="grid_menu"><i className="fab fa-wpforms"></i> Ledger</Link>
 									</div>
 								</div>
@@ -367,6 +369,9 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 
 	const authLinks = () => (
 		<Fragment>
+			<li className='nav-item mx-2'>
+				<button title='Product Info' className='btn nav-link' onClick={(e) => setSearchNPriceModalShow(true)}><i className="fad fa-search-plus fs-3 fa-fw"></i></button>
+			</li>
 			{no <= 7 &&
 				<li className='nav-item'>
 					<Link title='Registration' className='nav-link' to='/Register'> <i className="fad fa-plus-circle fs-3 fa-fw"></i></Link>
@@ -408,6 +413,9 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 
 	const meriLinks = () => (
 		<Fragment>
+			<li className='nav-item mx-2'>
+				<button title='Product Info' className='btn nav-link' onClick={(e) => setSearchNPriceModalShow(true)}><i className="fad fa-search-plus fs-3 fa-fw"></i></button>
+			</li>
 			<li className='nav-item mx-2'>
 				<Link className='nav-link' to='home'><i className="fad fa-home-lg fs-3 fa-fw"></i></Link>
 			</li>
@@ -462,6 +470,19 @@ const Navbar = ({ logout, user, scale, no, cat }) => {
 						{parseInt(no) === 12 || parseInt(no) === 11 ? meriLinks() : authLinks()}
 					</ul>
 				</div>
+			}
+
+			{
+				SearchNPriceModalShow ?
+					<SearchNPrice
+						show={SearchNPriceModalShow}
+						list={list}
+						setList={setList}
+						onReload={() => window.location.reload(false)()}
+						onClose={() => { setSearchNPriceModalShow(false) }}
+						onHide={() => { setSearchNPriceModalShow(false); }}
+					/>
+					: null
 			}
 		</nav>
 	);

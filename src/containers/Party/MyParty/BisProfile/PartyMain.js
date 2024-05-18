@@ -22,9 +22,9 @@ const PartyMain = ({ UserID, PartyID, MyPartyID, list, setList, no }) => {
     }, [])
 
     const LoadParty = async () => {
-        if (no <= 7)
+        if (no <= 11)
             var result = await GetPartyAdmin(PartyID);
-        else if ([8, 9].includes(no))
+        else if ([8, 11].includes(no))
             var result = await GetParty(PartyID);
 
         if (result !== true) {
@@ -38,7 +38,7 @@ const PartyMain = ({ UserID, PartyID, MyPartyID, list, setList, no }) => {
 
     return (
         <>
-            <div className="header mb-0">
+            {/* <div className="header mb-0">
                 <div className="d-flex justify-content-start overflow-auto bg-white mx-0 mb-2">
                     <div className="col-md-2 text-md-center my-auto px-0 text-center border-right" style={{ minWidth: "40px" }}>
                         <p className="fs-4 fw-bolder text-center m-0">{"0"}</p>
@@ -70,7 +70,7 @@ const PartyMain = ({ UserID, PartyID, MyPartyID, list, setList, no }) => {
                         <p className="fs-5 fw-bold m-0 text-uppercase text-center text-success bg-light">{Data?.Balance !== undefined ? "Balance" : "Due"}</p>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             <div className="item grid-group-item list-group-item m-0 px-0" style={{ borderLeft: "5px solid #ffc107", borderRight: "5px solid #ffc107", borderRadius: "10px" }}>
                 <div className="d-flex justify-content-between align-items-center py-2 px-1">

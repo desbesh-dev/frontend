@@ -29,8 +29,8 @@ export const MoneyReciptPDF = async (item, data, user) => {
     const amountInWords = inWords(parseFloat(item.DR));
 
     const unit = "pt";
-    const orientation = "landscape"; // portrait or landscape
-    const size = [595.28, 280.63];
+    const orientation = "portrait"; // portrait or landscape
+    const size = 'A4';
     const doc = new jsPDF(orientation, unit, size);
     const marginLeft = 20;
     const marginTop = 20;

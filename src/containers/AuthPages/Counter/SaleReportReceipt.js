@@ -25,7 +25,8 @@ export const SaleReportReceipt = async (e, item, user, extra) => {
     const Vat = parseFloat(extra.Vat).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const Discount = parseFloat(extra.Discount).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const Shipping = parseFloat(extra.Shipping).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
-    const PaidAmount = parseFloat(extra.PaidAmount).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
+    const Payment = parseFloat(extra.Payment || 0.00).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
+    const PaidAmount = parseFloat(extra.PaidAmount + extra.Payment).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const Due = parseFloat(extra.Due).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const RefundAmount = parseFloat(extra.RefundAmount).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const Revenue = (parseFloat(extra.Revenue) - (parseFloat(extra.Discount) + parseFloat(extra.RefundAmount))).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
@@ -68,6 +69,7 @@ export const SaleReportReceipt = async (e, item, user, extra) => {
 
         ["CASH", " :", Cash],
         ["E-POS", " :", Bank],
+        ["PAYMENT", " :", Payment || 0.00],
         ["LIQUID", " :", PaidAmount],
     ];
 

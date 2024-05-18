@@ -31,7 +31,8 @@ export const SaleReportPDF = async (e, item, user, extra) => {
     const Vat = "VAT   " + parseFloat(extra.Vat).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const Discount = "DISCOUNT:  " + parseFloat(extra.Discount).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const Shipping = "SHIPPING:  " + parseFloat(extra.Shipping).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
-    const PaidAmount = "LIQUID:  " + parseFloat(extra.PaidAmount).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
+    const Payment = "Payment:  " + parseFloat(extra.Payment || 0.00).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
+    const PaidAmount = "LIQUID:  " + parseFloat(extra.PaidAmount + extra.Payment).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const Due = "DUE:  " + parseFloat(extra.Due).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const RefundAmount = "REFUND:  " + parseFloat(extra.RefundAmount).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
     const Bank = "E-POS:  " + parseFloat(extra.Bank).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 });
@@ -98,14 +99,16 @@ export const SaleReportPDF = async (e, item, user, extra) => {
 
     const ReportDescription = "* The counters range in " + extra.SearchKey.min + " to " + extra.SearchKey.max + " & report in " + extra.ModeFilter.label + " mode."
     // doc.setFillColor(255, 255, 255).rect(x - 40, 88, width, height, 'F');
-    doc.setFontSize(16).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text(ReportTitle, doc.internal.pageSize.getWidth() / 2, 102, { align: "center" });
+    doc.setFontSize(16).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text(ReportTitle, doc.internal.pageSize.getWidth() / 2, 91, { align: "center" });
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text(ReportDescription, doc.internal.pageSize.getWidth() / 2, 103, { align: "center" });
 
     doc.setFontSize(12).setTextColor(119, 136, 153).setFont('helvetica', 'bold').text("R   E   P   O   R   T           F   A   C   T", doc.internal.pageSize.getWidth() / 2, 125, { align: "center" })
 
     let tableBody = [
         [Counter, Count, GrandTotal],
         [Discount, RefundAmount, Due],
-        [Cash, Bank, PaidAmount],
+        [Cash, Bank, Payment],
+        ['', '', PaidAmount],
     ];
 
     if (No === 1 && Scale === 1) {
@@ -141,7 +144,6 @@ export const SaleReportPDF = async (e, item, user, extra) => {
         }
     })
     LastY = doc.lastAutoTable.finalY + 25;
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont('helvetica', 'normal').text(ReportDescription, 40, LastY);
 
     let INV_ProductItems = item.map((row) => {
         if (row.total_grand.Count) {
@@ -154,6 +156,7 @@ export const SaleReportPDF = async (e, item, user, extra) => {
                     { Title: "Discount", value: parseFloat(row.total_grand.Discount).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 }) },
                     { Title: "Cash", value: parseFloat(row.total_grand.Cash).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 }) },
                     { Title: "E-POS", value: parseFloat(row.total_grand.Bank).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 }) },
+                    { Title: "Payment", value: parseFloat(row.total_grand.Payment).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 }) },
                     { Title: "Liquid", value: parseFloat(row.total_grand.PaidAmount).toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 }) },
                 ],
             ];

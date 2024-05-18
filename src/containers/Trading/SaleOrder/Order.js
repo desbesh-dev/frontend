@@ -294,10 +294,10 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
             return;
         }
 
-        if (parseFloat(Quantity) > parseFloat(Available)) {
-            setInfoModalShow(true);
-            return;
-        }
+        // if (parseFloat(Quantity) > parseFloat(Available)) {
+        //     setInfoModalShow(true);
+        //     return;
+        // }
         const dataExistsIndex = OrderData.findIndex(item => item.Code === formData.Code && item.UnitName === formData.UnitName && item.Remark === formData.Remark);
 
         if (dataExistsIndex === -1) {
@@ -1184,7 +1184,7 @@ const Order = ({ PartyID, CompanyID, BranchID, user, list, setList }) => {
                                             className="btn btn-outline-success fs-3 text-center justify-content-center align-items-center w-auto px-3"
                                             // onKeyDown={(e) => handleKeyDown(e)}
                                             type="submit"
-                                            onClick={(e) => availability ? AddRow(e) : null}><i className="fs-3 fad fa-plus pr-2"></i>  ENTER </Link>
+                                            onClick={(e) => AddRow(e)}><i className="fs-3 fad fa-plus pr-2"></i>  ENTER </Link>
                                     </div>
                                 </div>
                             </div>

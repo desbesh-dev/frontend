@@ -58,11 +58,6 @@ export const OrderPrint = async (e, item, status) => {
     const heightRatio = pageHeight / canvas.height;
     const ratio = widthRatio > heightRatio ? heightRatio : widthRatio;
 
-    const canvasWidth = canvas.width * ratio;
-    const canvasHeight = canvas.height * ratio;
-
-    const marginX = (pageWidth - canvasWidth) / 1;
-    const marginY = (pageHeight - canvasHeight) / 2;
 
     doc.addImage(imgData, 'JPEG', marginLeft + 15, marginTop, 68, 70);
     doc.setFontSize(18).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
@@ -127,17 +122,17 @@ export const OrderPrint = async (e, item, status) => {
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(dd, 380, 175)
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(slsman, 380, 187)
 
-    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("courier", 'bold').text("ORDER BY: ", marginLeft + 35, 115)
-    var party_title = doc.splitTextToSize(item.PartyTitle, 250);
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(party_title, marginLeft + 35, 127)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text("Contact: " + item.PartyContact, marginLeft + 35, 139)
+    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("courier", 'normal').text("ORDER BY: ", marginLeft + 35, 115)
+    var party_title = doc.splitTextToSize(item.PartyTitle, 290);
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(party_title, marginLeft + 35, 127)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Contact: " + item.PartyContact, marginLeft + 35, 139)
 
     var party_address = item.PartyAddress.substring(0, 70) + (item.PartyAddress.length < 70 ? "" : "...");
     party_address = doc.splitTextToSize(party_address, 360);
     var ht = doc.getTextDimensions(party_address).h;
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(party_address, marginLeft + 35, 150)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(party_address, marginLeft + 35, 150)
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'bold').text("Payment: " + getPaymentShort(item.Payment, PaymentTerms), marginLeft + 35, 139 + ht + 11)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Payment: " + getPaymentShort(item.Payment, PaymentTerms), marginLeft + 35, 139 + ht + 11)
 
 
     const TotalQty = item.OrderMapData.reduce((TotalQt, myvalue) => TotalQt + parseInt(myvalue.Qty, 10), 0);
@@ -145,7 +140,7 @@ export const OrderPrint = async (e, item, status) => {
 
     let gpay = 0
     let pay = 0
-    const headers = [["S/N", "CODE", "ITEM DETAILS", "UOM", "ORDERED", "SHIPPED", "RATE", "SUB-TOTAL"]];
+    const headers = [["S/N", "CODE", "ITEM DETAILS", "UOM", "ORDERED", "SHP", "RATE", "SUB-TOTAL"]];
     var ProductItems = [
         ...item.OrderMapData.map((item, i) => [
             item.SLNo,
@@ -171,9 +166,9 @@ export const OrderPrint = async (e, item, status) => {
         body: ProductItems,
         theme: 'grid',
         margin: { left: marginLeft },
-        tableWidth: 555,
+        tableWidth: 535,
         bodyStyles: {
-            lineColor: [26, 189, 156],
+            lineColor: [0, 0, 0],
             textColor: [0, 0, 0],
             fontStyle: 'normal',
             fontSize: 10
@@ -207,7 +202,7 @@ export const OrderPrint = async (e, item, status) => {
                 halign: 'center',
             },
             5: {
-                cellWidth: 60,
+                cellWidth: 40,
                 valign: 'middle',
                 halign: 'right',
             },
@@ -217,7 +212,7 @@ export const OrderPrint = async (e, item, status) => {
                 halign: 'right',
             },
             7: {
-                cellWidth: 80,
+                cellWidth: 70,
                 valign: 'middle',
                 halign: 'right',
             },
@@ -304,14 +299,14 @@ export const OrderPrint = async (e, item, status) => {
         body: body,
         startY: LastY,
         bodyStyles: {
-            lineColor: [220, 220, 220],
+            lineColor: [0, 0, 0],
             textColor: [0, 0, 0],
             fontStyle: 'normal',
             fontSize: 10,
             minCellHeight: 13,
         },
         theme: "plain",
-        margin: { left: 340 },
+        margin: { left: 320 },
         tableWidth: 235,
         columnStyles: {
             0: { cellWidth: 147 },
@@ -328,7 +323,7 @@ export const OrderPrint = async (e, item, status) => {
             if (data.row.index === 1 || data.row.index === 4) {
                 doc.setDrawColor(0, 0, 0); // set the border color
                 doc.setLineWidth(0.1); // set the border with
-                doc.setLineDash([], 0); // set the border with
+                // doc.setLineDash([], 0); // set the border with
                 // draw bottom border
                 doc.line(
                     data.cell.x,
@@ -355,7 +350,8 @@ export const OrderPrint = async (e, item, status) => {
 
 
     let pageCount = doc.internal.getNumberOfPages()
-    // Add the image to each page
+
+
     for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         doc.addImage(watermarkData, 'PNG', 80, 320);

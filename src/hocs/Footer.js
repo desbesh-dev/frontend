@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.png';
 
 const Footer = () => {
     return (
@@ -12,7 +10,7 @@ const Footer = () => {
                             <h6 className='text-center text-uppercase pt-2'><i class="fas fa-link px-2"></i>Our Social Media</h6>
                             <div className='d-flex align-content-start flex-wrap justify-content-center'>
                                 <div class="social">
-                                    <a href='https://www.facebook.com/softapoul' target="_blank"> <i class="fab fa-facebook-square text-dark"></i></a>
+                                    <a href='#' target="_blank"> <i class="fab fa-facebook-square text-dark"></i></a>
                                     <a href="#"><i class="fab fa-linkedin text-dark"></i></a>
                                     <a href="#"><i class="fab fa-instagram text-dark" aria-hidden="true"></i></a>
                                     <a href="#"><i class="fab fa-youtube text-dark" aria-hidden="true"></i></a>
@@ -27,11 +25,6 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-
-
-
-
-
 
 
             <div class="copyright mt-3 bg-light">

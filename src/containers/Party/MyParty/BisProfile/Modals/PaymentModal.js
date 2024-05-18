@@ -13,6 +13,7 @@ import successIcon from '../../../../../assets/success.png';
 import warningIcon from '../../../../../assets/warning.gif';
 
 export const CreatePaymentModal = (props) => {
+    const net_due = parseFloat(props.item.Due) - parseFloat(props.item.CreditNote)
     const [Click, setClick] = useState(false)
     const [Bank, setBank] = useState(false)
     const [ACName, setACName] = useState('')
@@ -25,7 +26,7 @@ export const CreatePaymentModal = (props) => {
     const [IsCheque, setIsCheque] = useState(false)
     const [IsOnline, setIsOnline] = useState(false)
     const [Paid, setPaid] = useState(props.item.PaidAmount)
-    const [Due, setDue] = useState(props.item.Due)
+    const [Due, setDue] = useState(net_due || 0.00)
     const [Disc, setDisc] = useState(0.00)
     const [PaidAmount, setPaidAmount] = useState(0.00)
     const [Discount, setDiscount] = useState(0.00)
@@ -64,14 +65,14 @@ export const CreatePaymentModal = (props) => {
         const { name, value } = e.target;
         if (e.nativeEvent.inputType === "deleteContentBackward" && value === "") {
             if (name === "PaidAmount") {
-                const d = parseFloat(props.item.Due) - parseFloat(Discount);
+                const d = parseFloat(net_due) - parseFloat(Discount);
                 const p = parseFloat(props.item.PaidAmount) + parseFloat(Discount);
                 setDue(d);
                 setPaid(p);
                 setPaidAmount('');
                 return;
             } else if (name === "Discount") {
-                const d = parseFloat(props.item.Due) - parseFloat(PaidAmount);
+                const d = parseFloat(net_due) - parseFloat(PaidAmount);
                 const p = parseFloat(props.item.PaidAmount) + parseFloat(PaidAmount);
                 setDue(d);
                 setPaid(p);
@@ -89,7 +90,7 @@ export const CreatePaymentModal = (props) => {
 
         const newValue = value;
         const pre_pay = parseFloat(props.item.PaidAmount, 10);
-        const due = parseFloat(props.item.Due, 10);
+        const due = parseFloat(net_due, 10);
 
         if (name === "PaidAmount") {
             const newDue = parseFloat(due) - parseFloat(newValue) - parseFloat(Discount);
@@ -172,12 +173,12 @@ export const CreatePaymentModal = (props) => {
             return false;
         }
 
-        if (!isValidPaidAmount(paidAmount, parseFloat(props.item.Due, 10))) {
-            setError((prevState) => ({ ...prevState, PaidAmount: `Paid amount must be a number between 0 and ${parseFloat(props.item.Due, 10)}.` }));
+        if (!isValidPaidAmount(paidAmount, parseFloat(net_due, 10))) {
+            setError((prevState) => ({ ...prevState, PaidAmount: `Paid amount must be a number between 0 and ${parseFloat(net_due, 10)}.` }));
             return false;
         }
 
-        if (!isValidDue(parseFloat(props.item.Due, 10))) {
+        if (!isValidDue(parseFloat(net_due, 10))) {
             setError((prevState) => ({ ...prevState, Due: "Due must be a non-negative number." }));
             return false;
         }
@@ -189,7 +190,7 @@ export const CreatePaymentModal = (props) => {
         }
 
         // Check that PaidAmount + Discount is not greater than Due
-        if (paidAmount + discount > parseFloat(props.item.Due, 10)) {
+        if (paidAmount + discount > parseFloat(net_due, 10)) {
             setError((prevState) => ({ ...prevState, PaidAmount: "Payment cannot be greater than the due amount.", Discount: "Discount cannot be greater than the due amount." }));
             return false;
         }
@@ -244,6 +245,7 @@ export const CreatePaymentModal = (props) => {
             }
         }
     }
+
     const getBanks = async () => {
         const BList = await LoadBanks()
         setBankLists(BList)
@@ -338,7 +340,9 @@ export const CreatePaymentModal = (props) => {
                             <td className="fw-bolder text-right"><span>{parseFloat(Discount).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span></td>
                         </tr>
                         <tr className="border-bottom">
-                            <td colSpan="5" className="border-left-0 text-right">Due:</td>
+                            <td colSpan="3" className="border-left-0 text-right">Credit Note:</td>
+                            <td className="fw-bolder text-right"><span>{parseFloat(props.item.CreditNote).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span></td>
+                            <td className="border-left-0 text-right">Due:</td>
                             <td className="fw-bolder text-right"><span>{parseFloat(Due).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span></td>
                         </tr>
                     </tbody>

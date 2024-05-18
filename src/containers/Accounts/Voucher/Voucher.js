@@ -19,11 +19,11 @@ import { customHeader, locales } from "../../Suppliers/Class/datepicker";
 
 let today = new Date();
 
-const Voucher = ({ list, setList }) => {
+const Voucher = ({ list, setList, no, SisterValue, SectorValue }) => {
     const [InfoModalShow, setInfoModalShow] = useState(false);
     const [Error, setError] = useState({});
-    const [Sister, setSister] = useState(false);
-    const [Sector, setSector] = useState(false);
+    const [Sister, setSister] = useState(SisterValue);
+    const [Sector, setSector] = useState(SectorValue);
     const [ConsType, setConsType] = useState(false);
     const [Transact, setTransact] = useState(false);
 
@@ -96,8 +96,8 @@ const Voucher = ({ list, setList }) => {
     }
 
     const Clearfiled = () => {
-        setSister(false);
-        setSector(false);
+        setSister(SisterValue);
+        setSector(SectorValue);
         setConsType(false);
         setTransact(false);
         setReference('');
@@ -208,7 +208,7 @@ const Voucher = ({ list, setList }) => {
         if (e.value === 4)
             LoadAccounts();
         else
-            var result = await AllConsignee(e.value);
+            var result = await AllConsignee(e.value, Sector.value);
         setConsigneeList(result)
     }
 
@@ -311,11 +311,12 @@ const Voucher = ({ list, setList }) => {
                                         options={SisterList}
                                         name="Division"
                                         placeholder={"Select sister"}
-                                        styles={GeneralColourStyles}
+                                        // styles={GeneralColourStyles}
                                         value={Sister ? Sister : null}
                                         onChange={(e) => getSector(e)}
                                         required
                                         id="Sister"
+                                        isDisabled={no <= 7 ? false : true}
                                     />
                                 </div>
                                 <div className="col-sm-6 px-2">
@@ -328,12 +329,12 @@ const Voucher = ({ list, setList }) => {
                                         options={SectorList}
                                         name="Consignee Type"
                                         placeholder={"Select sector"}
-                                        styles={GeneralColourStyles}
+                                        // styles={GeneralColourStyles}
                                         value={Sector}
                                         onChange={(e) => setSector(e)}
                                         required
                                         id="Sector"
-                                        isDisabled={Sister ? false : true}
+                                        isDisabled={Sister && no <= 7 ? false : true}
                                     />
                                 </div>
                             </div>
@@ -350,7 +351,7 @@ const Voucher = ({ list, setList }) => {
                                         options={JournalList}
                                         name="Division"
                                         placeholder={"Select voucher type"}
-                                        styles={GeneralColourStyles}
+                                        // styles={GeneralColourStyles}
                                         value={VoucherType ? VoucherType : null}
                                         onChange={(e) => LoadJaurnal(e)}
                                         isDisabled={Sister && Sector ? false : true}
@@ -368,7 +369,7 @@ const Voucher = ({ list, setList }) => {
                                         options={ConsigneeTypes}
                                         name="Consignee Type"
                                         placeholder={"Select consignee type"}
-                                        styles={GeneralColourStyles}
+                                        // styles={GeneralColourStyles}
                                         value={ConsType}
                                         onChange={(e) => LoadConsignee(e)}
                                         required
@@ -473,23 +474,20 @@ const Voucher = ({ list, setList }) => {
                         <form className="row gx-3 bg-white justify-content-between align-items-center m-0 p-2 my-1">
                             <div className="col-sm-4">
                                 <p className="text-center text-dark fw-bold m-0 border-bottom">Bank</p>
-                                <div className="input-group fs-5 fw-bold">
-                                    {/* <input type="text" className="form-control p-0 text-center" id="specificSizeInputGroupUsername" placeholder="Username" /> */}
-                                    <Select
-                                        menuPlacement="auto"
-                                        menuPosition="fixed"
-                                        menuPortalTarget={document.body}
-                                        borderRadius={"0px"}
-                                        options={BankLists ? BankLists : null}
-                                        name="BankName"
-                                        placeholder={"Please select bank"}
-                                        styles={GeneralColourStyles}
-                                        value={Bank}
-                                        onChange={(e) => setBank(e)}
-                                        required
-                                        id="BankName"
-                                    />
-                                </div>
+                                <Select
+                                    menuPlacement="auto"
+                                    menuPosition="fixed"
+                                    menuPortalTarget={document.body}
+                                    borderRadius={"0px"}
+                                    options={BankLists ? BankLists : null}
+                                    name="BankName"
+                                    placeholder={"Please select bank"}
+                                    // styles={GeneralColourStyles}
+                                    value={Bank}
+                                    onChange={(e) => setBank(e)}
+                                    required
+                                    id="BankName"
+                                />
                             </div>
                             <div className="col-sm-2">
                                 <p className="text-center text-dark fw-bold m-0 border-bottom">A/C Name</p>
@@ -580,7 +578,7 @@ const Voucher = ({ list, setList }) => {
                                         options={AccLists ? AccLists : null}
                                         name="AccItems"
                                         placeholder={"Please select account"}
-                                        styles={GeneralColourStyles}
+                                        // styles={GeneralColourStyles}
                                         value={AccountTitle ? { label: AccountTitle, value: AccountID } : null}
                                         onChange={(e) => GenVoucheArr(e)}
                                         required
@@ -695,9 +693,18 @@ const Voucher = ({ list, setList }) => {
     )
 }
 
-const mapStateToProps = (state, props) => ({
-    display: state.OverlayDisplay,
-    BisID: props.match.params.id
-});
+const mapStateToProps = (state, props) => {
+    const no = state.auth.no;
+    const user = state.auth.user;
+    const collocation = user.Collocation;
+
+    return {
+        display: state.OverlayDisplay,
+        BisID: props.match.params.id,
+        no: no,
+        SisterValue: no === 8 ? { label: collocation.Title, value: collocation.SisterID } : false,
+        SectorValue: no === 8 ? { label: collocation.Sector, value: collocation.id } : false,
+    };
+};
 
 export default connect(mapStateToProps, { logout })(Voucher);
