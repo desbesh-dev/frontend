@@ -13,7 +13,7 @@ import successIcon from '../../../../../assets/success.png';
 import warningIcon from '../../../../../assets/warning.gif';
 
 export const CreatePaymentModal = (props) => {
-    const net_due = parseFloat(props.item.Due) - parseFloat(props.item.CreditNote)
+    const net_due = props.item.PaymentStatus === 1 ? parseFloat(props.item.Due) : parseFloat(props.item.Due) - parseFloat(props.item.CreditNote)
     const [Click, setClick] = useState(false)
     const [Bank, setBank] = useState(false)
     const [ACName, setACName] = useState('')

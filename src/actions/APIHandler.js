@@ -2090,6 +2090,23 @@ export const FetchLedger = async (COA_ID, date_from, date_to) => {
     }
 }
 
+export const FetchPaymentReceived = async (date_from, date_to) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/payment_received/${date_from}/${date_to}`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
 export const FetchTrialBalance = async (date_from, date_to, sis_id, sect_id) => {
     const config = {
         headers: {

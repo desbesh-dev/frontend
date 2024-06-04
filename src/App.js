@@ -82,6 +82,7 @@ import AccountJournal from './containers/Accounts/AccountJournal';
 import COA from './containers/Accounts/COA';
 import PaymentList from './containers/Accounts/Farmer Payment/PaymentList';
 import Ledger from './containers/Accounts/Ledger/Ledger';
+import PaymentReceived from './containers/Accounts/PaymentReceipt/PayemntReceived';
 import Voucher from './containers/Accounts/Voucher/Voucher';
 
 // Business Preference
@@ -253,6 +254,7 @@ const App = () => {
                         <AssistanceRoute path='/farmer_payment_list' render={(props) => <PaymentList list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/farmer_payment_release/:id' render={(props) => <PaymentProcedure list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/ledger' render={(props) => <Ledger list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/payments' render={(props) => <PaymentReceived list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Profiles */}
                         <AssistanceRoute exact path='/my_user_lists' component={MyUserLists} render={undefined} />

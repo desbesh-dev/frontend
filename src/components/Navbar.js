@@ -202,6 +202,9 @@ const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 										<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/voucher'><i className="fad fa-project-diagram"></i> Voucher</Link>
 										<Link className="row btn btn-outline-success m-0" to='/ledger' id="grid_menu"><i className="fab fa-wpforms"></i> Ledger</Link>
 									</div>
+									<div className='d-flex border'>
+										<Link className="row btn btn-outline-success m-0" to='/payments' id="grid_menu"><i className="fab fa-wpforms"></i> Payment Received</Link>
+									</div>
 								</div>
 							</>
 						}
