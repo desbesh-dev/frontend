@@ -5,6 +5,7 @@ import { convertImgToBase64URL } from "../.././hocs/Base64Uri";
 import { getPaymentShort } from '../../actions/ContractAPI';
 import { PaymentTerms } from '../../actions/InventoryAPI';
 import logo from '../../assets/logo.png';
+import no_delivery from '../../assets/no_delivery.png';
 import watermark from '../../assets/watermark.png';
 import { inWords } from '../../hocs/NumberToWord';
 // import { numberToWords } from '../../hocs/Class/InWord';
@@ -17,6 +18,7 @@ export const InvoicePrint = async (e, item, status) => {
     const Shop = "Shop: " + item.ShortCode + " (" + item.SectorName + ")";
     const imgData = await convertImgToBase64URL(logo)
     const watermarkData = await convertImgToBase64URL(watermark)
+    const delivery = await convertImgToBase64URL(no_delivery)
 
     const alignCol = (data) => {
         var col = data.column.index;
@@ -107,6 +109,9 @@ export const InvoicePrint = async (e, item, status) => {
     var order_bar = canvas.toDataURL('image/jpeg');
     doc.addImage(order_bar, 'JPEG', 45, 156, 70, 20, null, null, 90);
 
+    if (item.OrderStatus !== 2)
+        doc.addImage(delivery, 'PNG', 450, 10, 100, 100);
+    // doc.addImage(watermarkData, 'PNG', 80, 320);
 
     const tin = "TIN No: " + 500049832
     const gst = "GST: " + 5911

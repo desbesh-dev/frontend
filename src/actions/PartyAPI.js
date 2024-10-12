@@ -173,3 +173,28 @@ export const UpdateDlvStatus = async (id, Status) => {
         return true;
     }
 }
+
+export const FetchDueInvoices = async (date_from, date_to, sis_id, sect_id, sharpness, order_by) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        },
+        params: {
+            date_from: date_from,
+            date_to: date_to,
+            sis_id: sis_id?.value,
+            sect_id: sect_id?.value,
+            sharpness: sharpness?.value,
+            order_by: order_by?.value
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/due_invoice_list/`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}

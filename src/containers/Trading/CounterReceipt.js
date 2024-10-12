@@ -1,8 +1,10 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as moment from 'moment';
+import { convertImgToBase64URL } from "../.././hocs/Base64Uri";
 import { getLabel } from '../../actions/ContractAPI';
 import { PaymentTerms } from '../../actions/InventoryAPI';
+import duplicate from '../../assets/duplicate.png';
 
 export const Receipt = async (e, item, status, type) => {
     var JsBarcode = require('jsbarcode');
@@ -119,6 +121,8 @@ export const Receipt = async (e, item, status, type) => {
 
     doc.setFontSize(10).setFont(undefined, 'bold').text(ReceiptNo, pageWidth / 2, 23, { align: "center" })
 
+
+
     doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'bold').text(Dates, marginLeft, 28)
     doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(Time, 44, 28)
 
@@ -129,6 +133,10 @@ export const Receipt = async (e, item, status, type) => {
     const CustomerWrap = doc.splitTextToSize(customerText, 30);
     doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(CustomerWrap, marginLeft, 36)
     doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(agent, 44, 36)
+    const duplicate_png = await convertImgToBase64URL(duplicate)
+
+    if (type === 2)
+        doc.addImage(duplicate_png, 'PNG', 62 / 2, 24, 15, 13, { align: "center", baseline: 'middle' });
 
     doc.autoTable(options);
     LastY = doc.lastAutoTable.finalY + 2;

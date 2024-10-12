@@ -538,6 +538,7 @@ export const CreatePaymentModal = (props) => {
                         value={Discount.toLocaleString("en-BD", { minimumFractionDigits: 2 })}
                         onChange={e => ReduceDue(e)}
                         onFocus={(e) => e.target.select()}
+                        disabled
                     />
                     {Error.Discount && (
                         <p className="mx-auto d-table text-center text-warning m-0">

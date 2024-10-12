@@ -93,46 +93,86 @@ const Ladger = ({ user, PartyID, MyPartyID, list, setList, Title, Address }) => 
                     <table id='table' className={`table table-hover table-borderless bg-white`}>
                         <thead>
                             <tr className="text-center border-top">
-                                <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">Date</span></th>
-                                <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">Details</span></th>
+                                <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">DATE</span></th>
+                                <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">DETAILS</span></th>
                                 {/* <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">Details</span></th> */}
                                 {/* <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">J.P. No</span></th> */}
-                                <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">Debit</span></th>
+                                <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">DEBIT</span></th>
 
-                                <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">Credit</span></th>
-                                <th className="py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">Balance</span></th>
+                                <th className="border-right py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">CREDIT</span></th>
+                                <th className="py-1 align-middle"><span className="fs-6 fw-bolder text-dark text-uppercase">BALANCE</span></th>
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                Array.isArray(Data) && Data.length ? Data.map((item, i, Data) => (
+                                Array.isArray(Data) && Data.length ? (
                                     <>
-                                        {/* {
-                                                        PrvDate(i) !== item.Date ?
-                                                            <>
-                                                                <tr className="text-center bg-light" key={i}>
-                                                                    <td colSpan="5" className="py-0 px-1"><span className="d-block fs-5 fw-bolder text-left text-dark">{moment(item.Date).format("DD MMM YYYY")}</span></td>
-                                                                </tr>
-                                                            </>
-                                                            : null
-                                                    } */}
-                                        <tr className="border-bottom border-top">
-                                            <td className="border-right text-center py-0 pl-4"><span className="fs-6 fw-bold text-center text-dark">{moment(item.Date).format("DD MMM YYYY")}</span></td>
-                                            <td className="border-right py-0 pl-4"><span className="fs-6 fw-bold text-center text-dark">{item.Details}</span></td>
-                                            <td className="border-right py-0 px-2"><span className="d-block fs-6 fw-bold text-right text-dark">{parseFloat(item.Debit) === 0 ? "—" : (item.Debit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="border-right py-0 px-2"><span className="d-block fs-6 fw-bold text-right text-dark">{parseFloat(item.Credit) === 0 ? "—" : (item.Credit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
+                                        {Data.map((item, i) => (
+                                            <tr className="border-bottom border-top" key={i}>
+                                                <td className="border-right text-center py-0 pl-4">
+                                                    <span className="fs-6 fw-bold text-center text-dark">{moment(item.Date).format("DD MMM YYYY")}</span>
+                                                </td>
+                                                <td className="border-right py-0 pl-4">
+                                                    <span className="fs-6 fw-bold text-center text-dark">{item.Details}</span>
+                                                </td>
+                                                <td className="border-right py-0 px-2">
+                                                    <span className="d-block fs-6 fw-bold text-right text-dark">
+                                                        {parseFloat(item.Debit) === 0 ? "—" : parseFloat(item.Debit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                    </span>
+                                                </td>
+                                                <td className="border-right py-0 px-2">
+                                                    <span className="d-block fs-6 fw-bold text-right text-dark">
+                                                        {parseFloat(item.Credit) === 0 ? "—" : parseFloat(item.Credit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                    </span>
+                                                </td>
 
-                                            <td className="border-0 py-0 px-2">
-                                                {item.Balance < 0 ? (
-                                                    <span className="d-block fs-6 fw-bold text-right text-dark">({parseFloat(-item.Balance).toLocaleString("en-BD", { minimumFractionDigits: 2 })})</span>
-                                                ) : (
-                                                    <span className="d-block fs-6 fw-bold text-right text-dark">{parseFloat(item.Balance).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span>
-                                                )}
-                                            </td>
-                                        </tr>
+                                                <td className="border-0 py-0 px-2">
+                                                    {item.Balance < 0 ? (
+                                                        <span className="d-block fs-6 fw-bold text-right text-dark">
+                                                            ({parseFloat(-item.Balance).toLocaleString("en-BD", { minimumFractionDigits: 2 })})
+                                                        </span>
+                                                    ) : (
+                                                        <span className="d-block fs-6 fw-bold text-right text-dark">
+                                                            {parseFloat(item.Balance).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+
+                                        {/* Calculate Total Debit, Credit and display Last Balance */}
+                                        {(() => {
+                                            const totalDebit = Data.reduce((acc, item) => acc + parseFloat(item.Debit || 0), 0);
+                                            const totalCredit = Data.reduce((acc, item) => acc + parseFloat(item.Credit || 0), 0);
+                                            const lastBalance = Data[Data.length - 1].Balance;
+
+                                            return (
+                                                <tr className="border-top bg-light fw-bolder">
+                                                    <td className="border-right text-center py-0 pl-4" colSpan="2">
+                                                        <span className="fs-6 fw-bolder text-center text-dark">Closing Balance</span>
+                                                    </td>
+                                                    <td className="border-right py-0 px-2">
+                                                        <span className="d-block fs-6 fw-bolder text-right text-dark">
+                                                            {totalDebit.toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                    </td>
+                                                    <td className="border-right py-0 px-2">
+                                                        <span className="d-block fs-6 fw-bolder text-right text-dark">
+                                                            {totalCredit.toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                    </td>
+                                                    <td className="border-0 py-0 px-2">
+                                                        <span className="d-block fs-6 fw-bolder text-right text-dark">
+                                                            {lastBalance < 0
+                                                                ? `(${parseFloat(-lastBalance).toLocaleString("en-BD", { minimumFractionDigits: 2 })})`
+                                                                : parseFloat(lastBalance).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })()}
                                     </>
-                                ))
-                                    : null
+                                ) : null
                             }
                         </tbody>
 

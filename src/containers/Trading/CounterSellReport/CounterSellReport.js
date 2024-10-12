@@ -126,7 +126,7 @@ const CounterSellReport = ({ user, list, setList, no, counter_no, date_from = to
             if (item.PartyID)
                 InvoicePrint(e, result, false)
             else
-                Receipt(e, result, false, true);
+                Receipt(e, result, false, 2);
         }
     }
 
@@ -139,7 +139,7 @@ const CounterSellReport = ({ user, list, setList, no, counter_no, date_from = to
     }
 
     var h = window.innerHeight - 165;
-    
+
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">
             <div className="col-lg-12 h-100 px-0">

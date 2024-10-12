@@ -365,7 +365,7 @@ const Counters = ({ list, setList, user, scale, no }) => {
                                         className="justify-content-center align-items-center box thumbnail card p-0 shadow-none m-0 h-100 py-2">
                                         <div className="img-event d-flex justify-content-around align-items-center border border-info w-100 py-3">
                                             <img
-                                                src={item.avatar ? process.env.REACT_APP_API_URL + item.avatar : process.env.REACT_APP_API_URL + "/Media/no_logo.jpeg"}
+                                                src={process.env.REACT_APP_API_URL + "/Media/no_logo.jpeg"}
                                                 className="img-fluid rounded-circle" alt="avatar"
                                                 style={{ width: "7vh", height: "7vh" }} />
                                             <div className="cs_outer m-0" style={{ height: "100%" }}>

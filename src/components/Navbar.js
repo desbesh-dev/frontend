@@ -202,9 +202,6 @@ const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 										<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/voucher'><i className="fad fa-project-diagram"></i> Voucher</Link>
 										<Link className="row btn btn-outline-success m-0" to='/ledger' id="grid_menu"><i className="fab fa-wpforms"></i> Ledger</Link>
 									</div>
-									<div className='d-flex border'>
-										<Link className="row btn btn-outline-success m-0" to='/payments' id="grid_menu"><i className="fab fa-wpforms"></i> Payment Received</Link>
-									</div>
 								</div>
 							</>
 						}
@@ -246,6 +243,10 @@ const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 								<Link className="row btn btn-outline-success m-0" id="grid_menu" to="/"><i className="fad fa-abacus"></i> P-Summary</Link>
 								<Link className="row btn btn-outline-success m-0" id="grid_menu" to="/party_reg"><i className="fad fa-handshake"></i> New Party</Link>
 								<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/my_party_list'><i className="fad fa-address-book"></i> My Parties</Link>
+							</div>
+							<div className='d-flex border'>
+								<Link className="row btn btn-outline-success m-0" id="grid_menu" to="/due_invoices"><i className="fad fa-file-invoice-dollar"></i> Payment Due Report</Link>
+								<Link className="row btn btn-outline-success m-0" to='/payments' id="grid_menu"><i className="fab fa-wpforms"></i> Payment Received</Link>
 							</div>
 						</div>
 

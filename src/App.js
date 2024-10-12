@@ -55,6 +55,10 @@ import SupplierReg from './containers/Suppliers/Register';
 import MySupplierMain from './containers/Suppliers/MySuppliers/Profiles/SupplierMain';
 import MySupplierList from './containers/Suppliers/MySuppliers/SupplierLists';
 
+// My Party
+import PaymentReceived from './containers/Accounts/PaymentReceipt/PayemntReceived';
+import DueInvoices from './containers/Party/DueInvoices/DueInvoices';
+
 // Purchase
 import DocketPurchase from './containers/Inventory/Purchase/DocketPurchase';
 import PurchaseProduct from './containers/Inventory/Purchase/PurchaseProduct';
@@ -82,7 +86,6 @@ import AccountJournal from './containers/Accounts/AccountJournal';
 import COA from './containers/Accounts/COA';
 import PaymentList from './containers/Accounts/Farmer Payment/PaymentList';
 import Ledger from './containers/Accounts/Ledger/Ledger';
-import PaymentReceived from './containers/Accounts/PaymentReceipt/PayemntReceived';
 import Voucher from './containers/Accounts/Voucher/Voucher';
 
 // Business Preference
@@ -254,7 +257,6 @@ const App = () => {
                         <AssistanceRoute path='/farmer_payment_list' render={(props) => <PaymentList list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/farmer_payment_release/:id' render={(props) => <PaymentProcedure list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/ledger' render={(props) => <Ledger list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/payments' render={(props) => <PaymentReceived list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Profiles */}
                         <AssistanceRoute exact path='/my_user_lists' component={MyUserLists} render={undefined} />
@@ -284,6 +286,9 @@ const App = () => {
                         <AssistanceRoute exact path='/my_party_list' render={(props) => <PartyLists list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/my_party/:party_id/:my_party_id' render={(props) => <PartyMain list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute exact path='/party_reg' render={(props) => <PartyReg list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/payments' render={(props) => <PaymentReceived list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/due_invoices' render={(props) => <DueInvoices list={list} setList={setList} {...props} />} component={undefined} />
+
                         {/* Party AssistanceRoute */}
 
                         {/* Inventory */}

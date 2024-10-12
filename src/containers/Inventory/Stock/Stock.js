@@ -5,7 +5,7 @@ import { connect, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import 'react-virtualized-select/styles.css';
-import { DeleteStock } from '../../../actions/InventoryAPI';
+import { DeleteStock, StockProductList } from '../../../actions/InventoryAPI';
 import { logout } from '../../../actions/auth';
 import { DISPLAY_OVERLAY } from '../../../actions/types';
 import '../../../hocs/react-select/dist/react-select.css';
@@ -20,6 +20,7 @@ import { CategoryList } from '../../Suppliers/Class/Category';
 import { DumpsterModal } from './Modals/DumpsterModal';
 import { DeleteModal, InfoMessage, InitProductModal } from "./Modals/ModalForm.js";
 import { StockTrace } from './Modals/StockTraceModal';
+import { StockReportPDF } from './StockReportPDF';
 
 const Stock = ({ user, list, setList, scale, no }) => {
     const [InitItem, setInitItem] = useState(false);
@@ -84,6 +85,16 @@ const Stock = ({ user, list, setList, scale, no }) => {
         setCurrentPage(pageNumber);
     };
 
+    const LoadStockItems = async (e) => {
+        e.preventDefault();
+        dispatch({ type: DISPLAY_OVERLAY, payload: true });
+        var result = await StockProductList(SectorFilter, Category, SearchKey);
+
+        if (result !== true)
+            StockReportPDF(e, result.data, false, user, SectorFilter?.label || `${user.Collocation.Title} (${user.Collocation.Sector})`)
+        dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    }
+
     const StockDelete = async e => {
         if (parseInt(StockItem.Weight) !== 0.000) {
             setDeleteModalShow(false)
@@ -99,6 +110,7 @@ const Stock = ({ user, list, setList, scale, no }) => {
             dispatch({ type: DISPLAY_OVERLAY, payload: false });
         }
     };
+
     const CScolourStyles = {
         container: base => ({
             ...base,
@@ -266,7 +278,9 @@ const Stock = ({ user, list, setList, scale, no }) => {
                                 <button className="btn fs-3 p-2 fad fa-plus-octagon text-success border-left" onClick={(e) => setCreateModalShow(true)} />
                             )
                         }
-                        {/* <button className="btn fs-3 p-2 fad fa-search-plus text-success border-left" onClick={(e) => setSearchNPriceModalShow(true)} /> */}
+                        <button className="btn fs-3 px-2 ml-2 py-0 text-dark border-left"
+                            onClick={(e) => LoadStockItems(e)}
+                        ><i className="fad fa-file-pdf"></i></button>
                     </div>
                 </div>
                 {data.results && data.results.map && data.results.map.length ?

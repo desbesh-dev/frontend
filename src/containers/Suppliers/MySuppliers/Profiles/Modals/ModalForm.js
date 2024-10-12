@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { FetchBranch } from "../../../../../actions/APIHandler";
 import { DISPLAY_OVERLAY } from '../../../../../actions/types';
 import errorIcon from '../../../../../assets/error.png';
+import infoIcon from '../../../../../assets/info.png';
 import successIcon from '../../../../../assets/success.png';
 import warningIcon from '../../../../../assets/warning.gif';
 
@@ -414,30 +415,30 @@ export const UpdatePurchaseInvoice = (props) => {
                     }
                     props.setList([...props.list, toastProperties = {
                         id: 1,
-                        title: 'Invalid props.item',
+                        title: result.Title,
                         description: result.message,
                         backgroundColor: '#f0ad4e',
-                        icon: warningIcon
+                        icon: result.ico === 1 ? successIcon : result.ico === 2 ? infoIcon : result.ico === 3 ? warningIcon : result.ico === 4 ? errorIcon : null
                     }])
 
                 } else {
                     props.setList([...props.list, toastProperties = {
-                        id: 1,
-                        title: 'Success',
+                        id: 2,
+                        title: result.Title,
                         description: result.message,
                         backgroundColor: '#f0ad4e',
-                        icon: successIcon
+                        icon: result.ico === 1 ? successIcon : result.ico === 2 ? infoIcon : result.ico === 3 ? warningIcon : result.ico === 4 ? errorIcon : null
                     }])
                     props.onReload();
                     PropLoadSet();
                 }
             } else {
                 props.setList([...props.list, toastProperties = {
-                    id: 1,
-                    title: 'Error',
-                    description: "Invoice no update failed. Please try after some moment.",
+                    id: 3,
+                    title: result.Title,
+                    description: result.message,
                     backgroundColor: '#f0ad4e',
-                    icon: errorIcon
+                    icon: result.ico === 1 ? successIcon : result.ico === 2 ? infoIcon : result.ico === 3 ? warningIcon : result.ico === 4 ? errorIcon : null
                 }])
             }
         }

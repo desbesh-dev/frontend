@@ -1019,3 +1019,26 @@ export const UpdateInvoiceNo = async (id, InvoiceNo) => {
         return true;
     }
 }
+
+export const StockProductList = async (currentPage, itemsPerPage, SectorFilter, Category, SearchKey) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('access')}`,
+        },
+        params: {
+            page: 1,
+            page_size: 5000,
+            sector: SectorFilter?.value,
+            category: Category?.label,
+            code: SearchKey?.value,
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/my_stock_list/`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
