@@ -1,0 +1,136 @@
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import logo from '../../../assets/logo.png';
+import watermark from '../../../assets/watermark.png';
+import { convertImgToBase64URL } from "../../../hocs/Base64Uri";
+
+export const SalesPerformancePDF = async (e, table, type) => {
+    var date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: "2-digit", second: "2-digit", hour12: true }).replace(/ /g, ' ')
+    const imgData = await convertImgToBase64URL(logo)
+    const watermarkData = await convertImgToBase64URL(watermark)
+
+    const alignCol = (data) => {
+        var col = data.column.index;
+        if (data.row.index === 0) {
+            data.cell.styles.fontSize = 12;
+            data.cell.styles.fontStyle = 'bold';
+            data.cell.styles.fillColor = [211, 211, 211];
+            data.cell.styles.textColor = [0, 0, 0]
+        } else if (data.row.index === 1) {
+            data.cell.styles.fontSize = 11;
+            data.cell.styles.fontStyle = 'bold';
+            data.cell.styles.fillColor = [211, 211, 211];
+            data.cell.styles.textColor = [0, 0, 0]
+        } else if (data.row.index === 2) {
+            data.cell.styles.fontSize = 10;
+            data.cell.styles.fontStyle = 'bold';
+            data.cell.styles.halign = 'center';
+            data.cell.styles.textColor = [0, 0, 0]
+        }
+        const rowCount = data.table.body.length;
+        if (data.row.index === rowCount - 1) {
+            // Make the last row bold
+            data.cell.styles.fontStyle = 'bold';
+        }
+        if (col === 0 || col === 1) {
+            data.cell.styles.halign = 'center';
+        } else if (type === 0 && col === 2) {
+            data.cell.styles.halign = 'center';
+        } else {
+            data.cell.styles.halign = 'right';
+        }
+
+        if (data.cell.colSpan === 4 || data.cell.colSpan === 5) {
+            // Center text
+            data.cell.styles.halign = 'center';
+            // Set background color
+            data.cell.styles.fillColor = [220, 220, 220]; // Example: light gray background
+        }
+    }
+
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+    const marginLeft = 40;
+    const marginTop = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    let options = {
+        theme: "grid",
+        html: table,
+        startY: 40,
+        headStyles: {
+            valign: 'middle',
+            halign: 'center',
+            lineColor: [128, 128, 128]
+        },
+        bodyStyles: {
+            lineColor: [128, 128, 128],
+            textColor: [0, 0, 0],
+        },
+        didParseCell: function (cell, data) {
+            alignCol(cell, data);
+        },
+        didDrawPage: function (data) {
+            data.settings.margin.top = 60;
+            const pageCount = doc.internal.getNumberOfPages();
+
+            if (pageCount !== 1) {
+                // Header
+                doc.setFontSize(20);
+                doc.setTextColor(40);
+                doc.setFontSize(12).setFont(undefined, 'bold').text("Product Analysis", data.settings.margin.left, 40, { align: "left" })
+                doc.setFontSize(10).setTextColor(105, 105, 105).setFont(undefined, 'normal').text(Location, data.settings.margin.left, 50, { align: "left" })
+            }
+
+            // Footer
+            doc.setFontSize(10);
+            var pageSize = doc.internal.pageSize;
+            var pageHeight = pageSize.height
+                ? pageSize.height
+                : pageSize.getHeight();
+        }
+    };
+
+    doc.autoTable(options);
+
+    let pageCount = doc.internal.getNumberOfPages()
+    // Add the image to each page
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.addImage(watermarkData, 'PNG', 80, 320);
+
+        // Footer line
+        doc.setDrawColor(211, 211, 211);
+        doc.setLineWidth(5);
+        doc.setLineDash([], 0); // set the border with
+        doc.line(0, pageHeight - 35, pageWidth - 0, pageHeight - 35);
+        doc.setFillColor(128, 128, 128);
+
+        doc.setPage(i);
+
+        doc.setFontSize(10).setTextColor(128, 128, 128).setFont("helvetica", 'normal').text('DESH BESH ERP', 40, pageHeight - 20);
+        doc.setFontSize(10).setTextColor(128, 128, 128).setFont("helvetica", 'normal').text(date.toString(), doc.internal.pageSize.getWidth() / 2, pageHeight - 20, { align: "center" })
+        doc.setFontSize(10).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text('Page ' + String(i) + ' of ' + String(pageCount), 500, pageHeight - 20);
+    }
+
+    const fileName = "Sale Performance.pdf"
+
+    doc.setProperties({
+        title: fileName,
+        subject: 'Subscriber PDF Ladger',
+        author: JSON.parse(localStorage.getItem("user")).FullName,
+        keywords: 'generated by SoftaPoul v6.00 web-version beta',
+        creator: "SoftaPoul"
+    });
+
+    if (e.target.id === "print") {
+        doc.save("fileName");
+    }
+    else {
+        window.open(doc.output('bloburl'), { "filename": "fileName" });
+    }
+}

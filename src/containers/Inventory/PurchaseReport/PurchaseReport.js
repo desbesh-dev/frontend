@@ -1,8 +1,7 @@
-import axios from 'axios';
 import * as moment from 'moment';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import { DispatchInvoiceDelete, getLabel } from '../../../actions/ContractAPI';
 import { logout } from '../../../actions/auth';
@@ -16,19 +15,25 @@ import VirtualizedSelect from "react-virtualized-select";
 import 'react-virtualized-select/styles.css';
 // import 'react-virtualized/styles.css';
 
-import { PaymentTerms } from '../../../actions/InventoryAPI';
+import { FetchPurchaseReport, PaymentTerms } from '../../../actions/InventoryAPI';
 import { FetchPurchaseInvoice } from '../../../actions/SuppliersAPI';
 import '../../../hocs/react-select/dist/react-select.css';
 import { customHeader, locales } from "../../Suppliers/Class/datepicker";
 import { InvoicePrint } from '../../Suppliers/MySuppliers/Profiles/ViewInvoice/InvoicePrint';
 import { Pagination } from '../SellReport/SellReportPagination';
 import { DeleteModal, UpdateModal } from "./Modals/ModalForm.js";
+import { PurchaseReportPDF } from "./PurchaseReportPDF";
 
 let today = new Date();
-const PurchaseReport = ({ list, setList, no }) => {
+const oneMonthAgo = new Date();
+oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+const PurchaseReport = ({ list, setList, no, user }) => {
     const [UpdateModalShow, setUpdateModalShow] = useState(false);
     const [DeleteModalShow, setDeleteModalShow] = useState(false);
     const [Date, setDate] = useState(today)
+    const [DateTo, setDateTo] = useState(today);
+    const [DateFrom, setDateFrom] = useState(today);
     const [Data, setData] = useState(false)
     const [DeleteData, setDeleteData] = useState(false)
     const [StockItem, setStockItem] = useState(false)
@@ -41,38 +46,36 @@ const PurchaseReport = ({ list, setList, no }) => {
     const [PayTypeFilter, setPayTypeFilter] = useState(null);
     const [SisterFilter, setSisterFilter] = useState(null);
     const [SearchKey, setSearchKey] = useState(null)
-
-    const [locale, setLocale] = useState('en');
-
     let toastProperties = null;
+    const [locale, setLocale] = useState('en');
     const dispatch = useDispatch();
-    const history = useHistory();
-
-    const fetchData = useCallback(async (e) => {
-        let date = moment(e).format("YYYY-MM-DD");
-        setLoading(true);
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/purchase_report/`, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('access')}`,
-            },
-            params: {
-                date: date,
-                page: currentPage,
-                page_size: itemsPerPage,
-                sister: SisterFilter?.value,
-                sector: SectorFilter?.value,
-                pay_type: PayTypeFilter?.value,
-                no: SearchKey?.value,
-            },
-        });
-        setData(res.data);
-        setLoading(false);
-    }, [Date, currentPage, itemsPerPage, SectorFilter, PayTypeFilter, SearchKey]);
 
     useEffect(() => {
-        fetchData(Date);
-    }, [fetchData]);
+        if (DateTo) { // Ensure both are set
+            LoadPurchaseReport();
+        }
+    }, [currentPage, itemsPerPage, DateTo, SisterFilter, SectorFilter, PayTypeFilter, SearchKey]); // Dependency array to watch for changes
+
+    let date_from = moment(DateFrom).format("YYYY-MM-DD");
+    let date_to = moment(DateTo).format("YYYY-MM-DD");
+
+    const LoadPurchaseReport = async () => {
+        dispatch({ type: DISPLAY_OVERLAY, payload: true });
+        var result = await FetchPurchaseReport(itemsPerPage, date_from, date_to, SisterFilter, SectorFilter, PayTypeFilter, SearchKey, false);
+        if (result !== true)
+            setData(result.data);
+        dispatch({ type: DISPLAY_OVERLAY, payload: false });
+        setLoading(false)
+    }
+
+    const DateHandler = async (e) => {
+        if (e.getTime() >= DateFrom.getTime() && DateFrom.getTime() <= e.getTime()) {
+            setDateTo(e)
+        } else {
+            setDateFrom(e);
+            setDateTo(e);
+        }
+    }
 
     const DeleteInvoice = async (e, id) => {
         setDeleteModalShow(false)
@@ -96,7 +99,7 @@ const PurchaseReport = ({ list, setList, no }) => {
                     backgroundColor: '#f0ad4e',
                     icon: successIcon
                 }])
-                fetchData(Date);
+                // fetchData(Date);
             }
         } else {
             setList([...list, toastProperties = {
@@ -129,6 +132,15 @@ const PurchaseReport = ({ list, setList, no }) => {
             InvoicePrint(e, result, false)
     }
 
+    const getPurchaseReport = async (e) => {
+        e.preventDefault();
+        dispatch({ type: DISPLAY_OVERLAY, payload: true });
+        var result = await FetchPurchaseReport(itemsPerPage, date_from, date_to, SisterFilter, SectorFilter, PayTypeFilter, SearchKey, true)
+        if (result !== true)
+            PurchaseReportPDF(e, result.data, DateFrom, DateTo, user, SisterFilter?.label, SectorFilter?.label)
+        dispatch({ type: DISPLAY_OVERLAY, payload: false });
+    }
+
     var h = window.innerHeight - 215;
 
     return (
@@ -145,7 +157,7 @@ const PurchaseReport = ({ list, setList, no }) => {
                             <p className='text-dark fs-4 fw-bold m-0 border border-light px-2' style={{ borderRadius: "15px" }}>Due: {parseFloat(Data?.Due).toLocaleString("en-GB", { minimumFractionDigits: 2 })}</p>
                         </div>
                         <div className="d-flex justify-content-end mx-2">
-                            <Datepicker
+                            {/* <Datepicker
                                 selected={Date}
                                 className="form-control fw-bold round_radius50px text-center p-0 m-0"
                                 dateFormat="dd MMM yyyy"
@@ -153,9 +165,30 @@ const PurchaseReport = ({ list, setList, no }) => {
                                 renderCustomHeader={props => customHeader({ ...props, locale })}
                                 locale={locales[locale]}
                                 placeholderText="Date"
+                            /> */}
+                            <Datepicker
+                                selected={DateFrom}
+                                className="form-control fs-5 fw-bold round_radius50px text-center"
+                                dateFormat="dd MMM yyyy"
+                                onChange={(e) => setDateFrom(e)}
+                                renderCustomHeader={props => customHeader({ ...props, locale })}
+                                locale={locales[locale]}
+                                placeholderText="Date"
+                            />
+                            <p className='fw-bold text-success my-auto px-1 mx-1' title="Search" type='button'>To</p>
+                            <Datepicker
+                                selected={DateTo}
+                                className="form-control fs-5 fw-bold round_radius50px text-center"
+                                dateFormat="dd MMM yyyy"
+                                onChange={(e) => DateHandler(e)}
+                                renderCustomHeader={props => customHeader({ ...props, locale })}
+                                locale={locales[locale]}
+                                placeholderText="Date"
                             />
                         </div>
+                        <button className="btn fs-3 px-2 ml-2 py-0 text-dark border-left" onClick={(e) => getPurchaseReport(e)}><i className="fad fa-file-pdf"></i></button>
                     </div>
+
                 </div>
 
                 <div className="row d-flex bg-white mx-auto my-2 py-1 m-0">
@@ -331,7 +364,7 @@ const PurchaseReport = ({ list, setList, no }) => {
                         show={UpdateModalShow}
                         list={list}
                         setList={setList}
-                        onReload={() => fetchData(Date)}
+                        // onReload={() => fetchData(Date)}
                         onHide={() => { setStockItem(false); setUpdateModalShow(false) }}
                     />
                     : null

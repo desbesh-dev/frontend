@@ -1366,22 +1366,6 @@ export const FetchSellReport = async (Date) => {
     }
 }
 
-export const FetchPurchaseReport = async (Date) => {
-
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access')}`,
-            'Accept': 'application/json'
-        }
-    };
-    try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/purchase_report/${Date}`, config);
-        return res
-    } catch (err) {
-        return true;
-    }
-}
 
 export const FetchLiveStock = async () => {
 

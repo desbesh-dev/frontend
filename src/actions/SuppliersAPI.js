@@ -840,6 +840,23 @@ export const FetchSupplierInvoices = async (id, from, to) => {
     }
 }
 
+export const FetchDocketList = async (id, from, to) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/docket_list/${id}/${from}/${to}`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
 export const FetchPurchaseInvoice = async (id) => {
     const config = {
         headers: {
@@ -887,6 +904,40 @@ export const SupplierPayment = async (id, Payment, Discount, PaidAmount, Due, Is
     try {
         const res = await axios.put(`${process.env.REACT_APP_API_URL}/api/sup_payment_receipt/`, formData, config);
         return res.data
+    } catch (err) {
+        return true;
+    }
+}
+
+export const FetchSupplierAgedInvoicesList = async (date_from, date_to, sect_id) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/sup_aged_invoice_list/${date_from}/${date_to}/${sect_id}`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
+export const FetchSupplierAgedInvoices = async (id, from, to) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/sup_aged_invoices/${id}/${from}/${to}`, config);
+        return res
     } catch (err) {
         return true;
     }

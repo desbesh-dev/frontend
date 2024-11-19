@@ -6,7 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import { getLabel } from '../../../../actions/ContractAPI';
 import { PaymentTerms } from '../../../../actions/InventoryAPI';
-import { FetchPartyOrder, FetchPrintInvoice, FetchPrintOrder, UpdateDlvStatus } from '../../../../actions/PartyAPI';
+import { FetchPartyOrder, FetchPrintOrder, UpdateDlvStatus } from '../../../../actions/PartyAPI';
 import { logout } from '../../../../actions/auth';
 import { DISPLAY_OVERLAY } from '../../../../actions/types';
 import errorIcon from '../../../../assets/error.png';
@@ -14,7 +14,6 @@ import infoIcon from '../../../../assets/info.png';
 import successIcon from '../../../../assets/success.png';
 import warningIcon from '../../../../assets/warning.gif';
 import { customHeader, locales } from "../../../Suppliers/Class/datepicker";
-import { InvoicePrint } from '../../../Trading/InvoicePrint';
 import { OrderPrint } from '../../../Trading/SaleOrder/OrderPrint';
 
 let today = new Date();
@@ -105,18 +104,10 @@ const DeliveryOrder = ({ user, PartyID, MyPartyID, id, list, setList }) => {
     }
 
     const PrintPDF = async (e, item) => {
-        if (item.Status === 2) {
-            var result = await FetchPrintInvoice(item.SaleID);
-            if (result !== true)
-                InvoicePrint(e, result, false)
-            dispatch({ type: DISPLAY_OVERLAY, payload: false });
-        }
-        else {
-            var result = await FetchPrintOrder(item.id);
-            if (result !== true)
-                OrderPrint(e, result, false)
-            dispatch({ type: DISPLAY_OVERLAY, payload: false });
-        }
+        var result = await FetchPrintOrder(item.id);
+        if (result !== true)
+            OrderPrint(e, result, false)
+        dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
 
     const CScolourStyles = {

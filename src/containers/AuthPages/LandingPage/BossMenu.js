@@ -33,7 +33,7 @@ export const BossMenu = ({ setOpenModal, OpenModal }) => {
                     <div></div>
                     <div></div>
                 </div>
-                <Link className="hex-content" to='/counter_list'>
+                <Link className="hex-content" to='/z_reading'>
                     <span className="hex-content-inner"><span className="icon_dash"><i class="fad fa-calculator-alt"></i></span>
                         <span className="title">Sale</span>
                     </span>

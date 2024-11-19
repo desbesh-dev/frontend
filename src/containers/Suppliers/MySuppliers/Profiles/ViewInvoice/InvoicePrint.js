@@ -126,9 +126,9 @@ export const InvoicePrint = async (e, item, status) => {
     const pn = `Purchase No: ${item.PurchaseNo}`
 
     const slsman = "Receiver: " + item.Receiver
-    const no = item.PurchaseNo || item.InvoiceNo ?
+    const no = item.PurchaseNo && item.InvoiceNo?.trim() !== "" ?
         `Date: ${moment(item.RcvDate).format("DD MMM YYYY")}, ${pn}, Invoice No: ${item.InvoiceNo}`
-        : `Date: ${moment(item.RcvDate).format("DD MMM YYYY")}`;
+        : `Date: ${moment(item.RcvDate).format("DD MMM YYYY")}, ${pn}, Docket No: ${item.DocketNo}`;
 
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(tin, marginLeft + 35, 115)
     doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(gst, marginLeft + 35, 127)

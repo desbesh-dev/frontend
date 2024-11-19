@@ -244,7 +244,9 @@ const ViewPurchase = ({ user, list, setList, PurchaseID }) => {
                                         </div>
                                         <p className='fw-bold m-0'>{`Invoice Date: ${moment(Data.InvDate).format("DD MMM YYYY")}`}</p>
                                         <p className="fs-6 fw-bolder m-0">{`Payment Term: ${getLabel(Data?.Payment, PaymentTerms)}`}</p>
-                                        <p className='fw-bold m-0'>{`Invoice No: ${Data.InvoiceNo}`}</p>
+                                        <p className='fw-bold m-0'>
+                                            {`${Data.InvoiceNo?.trim() ? `Invoice No: ${Data.InvoiceNo}` : `Docket No: ${Data.DocketNo}`}`}
+                                        </p>
 
                                     </div>
                                     :
@@ -256,7 +258,9 @@ const ViewPurchase = ({ user, list, setList, PurchaseID }) => {
 
                     <div className="row pt-2">
                         <div className="col-md-12 text-center">
-                            <p className="fs-3 fw-bolder m-0">{`PURCHASE NO# ${Data.PurchaseNo},     INVOICE# ${Data?.InvoiceNo}`}</p>
+                            <p className="fs-3 fw-bolder m-0">
+                                {`PURCHASE NO# ${Data.PurchaseNo}, ${Data.InvoiceNo?.trim() ? `INVOICE# ${Data.InvoiceNo}` : `DOCKET# ${Data.DocketNo}`}`}
+                            </p>
                         </div>
                     </div> <br />
                     {Array.isArray(Data.PurchaseMapData) && Data.PurchaseMapData.length ?

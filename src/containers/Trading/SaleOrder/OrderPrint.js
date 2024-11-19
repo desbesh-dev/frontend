@@ -8,6 +8,9 @@ import logo from '../../../assets/logo.png';
 import watermark from '../../../assets/watermark.png';
 import { inWords } from '../../../hocs/NumberToWord';
 // import { numberToWords } from '../../hocs/Class/InWord';
+import no_delivery from '../../../assets/no_delivery.png';
+import shipment_png from '../../../assets/shipment.png';
+import warehouse_png from '../../../assets/warehouse.png';
 
 export const OrderPrint = async (e, item, status) => {
     var JsBarcode = require('jsbarcode');
@@ -17,6 +20,9 @@ export const OrderPrint = async (e, item, status) => {
     const Shop = "Shop: " + item.ShortCode + " (" + item.SectorName + ")";
     const imgData = await convertImgToBase64URL(logo)
     const watermarkData = await convertImgToBase64URL(watermark)
+    const warehouse = await convertImgToBase64URL(warehouse_png)
+    const shipment = await convertImgToBase64URL(shipment_png)
+    const delivery = await convertImgToBase64URL(no_delivery)
 
     const alignCol = (data) => {
         if (data.row.section === 'body') {
@@ -58,12 +64,11 @@ export const OrderPrint = async (e, item, status) => {
     const heightRatio = pageHeight / canvas.height;
     const ratio = widthRatio > heightRatio ? heightRatio : widthRatio;
 
-
     doc.addImage(imgData, 'JPEG', marginLeft + 15, marginTop, 68, 70);
-    doc.setFontSize(18).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
+    doc.setFontSize(18).setTextColor(40, 40, 40).setFont(undefined, 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
 
-    doc.setFontSize(14).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(sis_name, marginLeft + 94, marginTop + 28)
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 41)
+    doc.setFontSize(14).setTextColor(51, 51, 51).setFont(undefined, 'normal').text(sis_name, marginLeft + 94, marginTop + 28)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont(undefined, 'normal').text(cmpAd, marginLeft + 94, marginTop + 41)
 
     const contact = [
         item.Phone && `Phone: ${item.Phone}`,
@@ -73,13 +78,13 @@ export const OrderPrint = async (e, item, status) => {
         item.Imo && `Imo: ${item.Imo}`,
         item.Wechat && `Wechat: ${item.Wechat}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(contact, marginLeft + 94, marginTop + 51)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont(undefined, 'normal').text(contact, marginLeft + 94, marginTop + 51)
 
     const online_contact = [
         item.Email && `Email: ${item.Email}`,
         item.Website && `Website: ${item.Website}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(online_contact, marginLeft + 94, marginTop + 61)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont(undefined, 'normal').text(online_contact, marginLeft + 94, marginTop + 61)
 
     doc.setDrawColor(220, 220, 220);
     doc.setLineWidth(2);
@@ -93,6 +98,13 @@ export const OrderPrint = async (e, item, status) => {
     doc.setFillColor(255, 255, 255).rect(x - 40, 88, width, height, 'F');
     doc.setFontSize(16).setTextColor(0, 0, 0).setFont('helvetica', 'bold').text("ORDER", doc.internal.pageSize.getWidth() / 2, 102, { align: "center" });
 
+    if (item.Status === 1)
+        doc.addImage(warehouse, 'PNG', 450, 10, 100, 100);
+    if (item.Status === 2)
+        doc.addImage(shipment, 'PNG', 450, 10, 100, 100);
+    if (item.Status === 3)
+        doc.addImage(delivery, 'PNG', 450, 10, 100, 100);
+    
     JsBarcode(order, item.OrderNo, {
         font: "Arial",
         format: "code128",
@@ -114,25 +126,25 @@ export const OrderPrint = async (e, item, status) => {
     const dd = "Delivery Date: " + moment(item.DeliveryDate).format("DD MMM YYYY")
     const slsman = "Salesman: " + item.CounterMarry
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(Shop, 380, 115)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(tin, 380, 127)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(gst, 380, 139)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'bold').text("Order No: " + item.OrderNo, 380, 151)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(od, 380, 163)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(dd, 380, 175)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(slsman, 380, 187)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(Shop, 380, 115)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(tin, 380, 127)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(gst, 380, 139)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Order No: " + item.OrderNo, 380, 151)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(od, 380, 163)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(dd, 380, 175)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(slsman, 380, 187)
 
-    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("courier", 'normal').text("ORDER BY: ", marginLeft + 35, 115)
+    doc.setFontSize(12).setTextColor(0, 0, 0).setFont(undefined, 'normal').text("ORDER BY: ", marginLeft + 35, 115)
     var party_title = doc.splitTextToSize(item.PartyTitle, 290);
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(party_title, marginLeft + 35, 127)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Contact: " + item.PartyContact, marginLeft + 35, 139)
+    doc.setFontSize(12).setTextColor(0, 0, 0).setFont(undefined, 'bold').text(party_title, marginLeft + 35, 127)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text("Contact: " + item.PartyContact, marginLeft + 35, 141)
 
     var party_address = item.PartyAddress.substring(0, 70) + (item.PartyAddress.length < 70 ? "" : "...");
     party_address = doc.splitTextToSize(party_address, 360);
     var ht = doc.getTextDimensions(party_address).h;
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(party_address, marginLeft + 35, 150)
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(party_address, marginLeft + 35, 155)
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Payment: " + getPaymentShort(item.Payment, PaymentTerms), marginLeft + 35, 139 + ht + 11)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Payment: " + getPaymentShort(item.Payment, PaymentTerms), marginLeft + 35, 139 + ht + 20)
 
 
     const TotalQty = item.OrderMapData.reduce((TotalQt, myvalue) => TotalQt + parseInt(myvalue.Qty, 10), 0);
@@ -237,7 +249,7 @@ export const OrderPrint = async (e, item, status) => {
         didDrawCell: function (data) {
             if (data.column.index === 2 && data.cell.raw.includes("\n")) {
                 var parts = data.cell.raw.split("\n");
-                doc.setFontSize(8).setTextColor(105, 105, 105).setFont("helvetica", 'italic').text(parts[1], data.cell.x + 5, data.cell.y + 25);
+                doc.setFontSize(8).setTextColor(105, 105, 105).setFont(undefined, 'italic').text(parts[1], data.cell.x + 5, data.cell.y + 25);
             }
         },
 
@@ -248,8 +260,8 @@ export const OrderPrint = async (e, item, status) => {
                 // Header
                 doc.setFontSize(20);
                 doc.setTextColor(40);
-                doc.setFontSize(12).setFont("helvetica", 'bold').text(name, data.settings.margin.left, 40, { align: "left" })
-                doc.setFontSize(10).setTextColor(105, 105, 105).setFont("helvetica", 'normal').text(cmpAd, data.settings.margin.left, 50, { align: "left" })
+                doc.setFontSize(12).setFont(undefined, 'bold').text(name, data.settings.margin.left, 40, { align: "left" })
+                doc.setFontSize(10).setTextColor(105, 105, 105).setFont(undefined, 'normal').text(cmpAd, data.settings.margin.left, 50, { align: "left" })
             }
 
             // Footer
@@ -363,7 +375,7 @@ export const OrderPrint = async (e, item, status) => {
             doc.setLineDash([1, 1], 0);
             doc.line(40, pageHeight - 70, doc.internal.pageSize.getWidth() / 4, pageHeight - 70);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Prepared By", doc.internal.pageSize.getWidth() / 9, pageHeight - 60, { align: "left" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Prepared By", doc.internal.pageSize.getWidth() / 9, pageHeight - 60, { align: "left" })
 
             // Checked by
             doc.setDrawColor(97, 97, 97);
@@ -371,7 +383,7 @@ export const OrderPrint = async (e, item, status) => {
             doc.setLineDash([1, 1], 0);
             doc.line(165, pageHeight - 70, 260, pageHeight - 70);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Checked By", 215, pageHeight - 60, { align: "center" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Checked By", 215, pageHeight - 60, { align: "center" })
 
 
             // Authority
@@ -380,7 +392,7 @@ export const OrderPrint = async (e, item, status) => {
             doc.setLineDash([1, 1], 0);
             doc.line(280, pageHeight - 70, 395, pageHeight - 70);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Storekeeper", 340, pageHeight - 60, { align: "center" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Storekeeper", 340, pageHeight - 60, { align: "center" })
 
 
             // Recepient
@@ -389,7 +401,7 @@ export const OrderPrint = async (e, item, status) => {
             doc.setLineDash([1, 1], 0);
             doc.line(550, pageHeight - 70, doc.internal.pageSize.getWidth() - 165, pageHeight - 70);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Recipient", doc.internal.pageSize.getWidth() - 100, pageHeight - 60, { align: "center" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Recipient", doc.internal.pageSize.getWidth() - 100, pageHeight - 60, { align: "center" })
 
         }
 
@@ -403,9 +415,9 @@ export const OrderPrint = async (e, item, status) => {
         doc.setPage(i);
         var date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: "2-digit", second: "2-digit", hour12: true }).replace(/ /g, ' ')
 
-        doc.setFontSize(10).setTextColor(128, 128, 128).setFont("helvetica", 'normal').text('DESH BESH ERP', 40, pageHeight - 20);
-        doc.setFontSize(10).setTextColor(128, 128, 128).setFont("helvetica", 'normal').text(date.toString(), doc.internal.pageSize.getWidth() / 2, pageHeight - 20, { align: "center" })
-        doc.setFontSize(10).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text('Page ' + String(i) + ' of ' + String(pageCount), 500, pageHeight - 20);
+        doc.setFontSize(10).setTextColor(128, 128, 128).setFont(undefined, 'normal').text('DESH BESH ERP', 40, pageHeight - 20);
+        doc.setFontSize(10).setTextColor(128, 128, 128).setFont(undefined, 'normal').text(date.toString(), doc.internal.pageSize.getWidth() / 2, pageHeight - 20, { align: "center" })
+        doc.setFontSize(10).setTextColor(0, 0, 0).setFont(undefined, 'normal').text('Page ' + String(i) + ' of ' + String(pageCount), 500, pageHeight - 20);
     }
 
 

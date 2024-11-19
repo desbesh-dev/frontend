@@ -210,12 +210,12 @@ const PreviewInvoice = ({ user, list, setList, InvoiceID }) => {
                     {Data.PartyID ?
                         <>
                             <button title="Save PDF" className="btn fs-3 px-3 py-0 fad fa-file-pdf text-dark border-right" id="Save PDF" onClick={(e) => InvoicePrint(e, Data, true)} />
-                            <button title="Print" className="btn fs-3 px-3 py-0 fad fa-print text-dark" id="Print" onClick={(e) => InvoicePrint(e, Data, false)} />
+                            <button title="Print" className="btn fs-3 px-3 py-0 fad fa-print text-dark" id="Print" onClick={(e) => InvoicePrint(e, Data, false, 2)} />
                         </>
                         :
                         <>
-                            <button title="Save PDF" className="btn fs-3 px-3 py-0 fad fa-file-pdf text-dark border-right" id="Save PDF" onClick={(e) => Receipt(e, Data, true)} />
-                            <button title="Print" className="btn fs-3 px-3 py-0 fad fa-print text-dark" id="Print" onClick={(e) => Receipt(e, Data, false)} />
+                            <button title="Save PDF" className="btn fs-3 px-3 py-0 fad fa-file-pdf text-dark border-right" id="Save PDF" onClick={(e) => Receipt(e, Data, true, 2)} />
+                            <button title="Print" className="btn fs-3 px-3 py-0 fad fa-print text-dark" id="Print" onClick={(e) => Receipt(e, Data, false, 2)} />
                         </>
                     }
                 </div>

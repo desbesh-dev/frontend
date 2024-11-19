@@ -1,21 +1,12 @@
-import * as moment from 'moment'
-import { MyOrders, colourStyles, SendOrder, MyProductList } from '../../../../actions/SuppliersAPI';
-import React, { Fragment, useEffect, useState } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
-import { checkToken, logout } from '../../../../actions/auth';
+import { Fragment, useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { LoadProfile } from '../../../../actions/APIHandler';
-import { BusinessPro, BISTerminate } from '../../../../actions/ContractAPI';
+import { logout } from '../../../../actions/auth';
+import { BISTerminate, BusinessPro } from '../../../../actions/ContractAPI';
 
 import { DISPLAY_OVERLAY } from '../../../../actions/types';
-import Select from 'react-select';
-import axios from 'axios';
-import errorIcon from '../../../../assets/error.png';
-import infoIcon from '../../../../assets/info.png';
-import successIcon from '../../../../assets/success.png';
-import warningIcon from '../../../../assets/warning.gif';
-import { Accordion } from 'react-bootstrap';
-import { ContractUpdate } from '../../../Contract/ContractUpdate';
+// import { ContractUpdate } from '../../../Contract/ContractUpdate';
 import { DeleteMessage } from "./Modals/DeleteModal.js";
 
 const Details = ({ CompanyID, BranchID, SupplierID, user, UserID, BisID, list, setList }) => {
@@ -271,20 +262,6 @@ const Details = ({ CompanyID, BranchID, SupplierID, user, UserID, BisID, list, s
                     </div>
 
                 </div>
-                {
-                    Item ?
-                        <ContractUpdate
-                            CompanyID={CompanyID}
-                            BranchID={BranchID}
-                            UserID={UserID}
-                            item={Item}
-                            show={BUp}
-                            list={list}
-                            setList={setList}
-                            onReload={() => window.location.reload(false)()}
-                            onHide={() => { setBUp(false); setItem(false) }}
-                        /> : null
-                }
 
                 <DeleteMessage
                     FullName={`${Data ? Data.Title : null}`}

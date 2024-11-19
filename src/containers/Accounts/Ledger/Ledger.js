@@ -243,27 +243,40 @@ const Ledger = ({ data, no }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {
-                                    Array.isArray(Data?.ladger) && Data?.ladger.length ? Data?.ladger.map((item, i, Data) => (
-                                        <tr className="border-bottom text-center" title={item.SellsMan} tooltip={item.SalesMan} key={i}>
-                                            <td className="border-right py-1 px-2"><span className="fw-bold d-block text-center text-dark text-nowrap">{i + 1}</span> </td>
-                                            <td className="border-right py-1 px-2"><span className="fw-bold d-block text-center text-dark text-nowrap">{moment(item.Date).format("DD MMM YYYY")}</span> </td>
-                                            <td className="border-right py-1 px-2"><span className="d-block fs-6 fw-bold text-left text-dark">{item.Details}</span></td>
-                                            <td className="border-right py-1 px-2"><span className="d-block fs-6 fw-bold text-center text-dark px-2" >{item.RefNo}</span></td>
-                                            <td className="border-right py-1 px-2"><span className={`${item.Order === 1 ? "fs-5 fw-bolder text-right" : "fs-6 fw-bold text-right"} d-block text-dark`}>{parseFloat(item.Debit) === 0 ? "—" : (item.Debit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="border-right py-1 px-2"><span className={`${item.Order === 1 ? "fs-5 fw-bolder text-right" : "fs-6 fw-bold text-right"} d-block text-dark`}>{parseFloat(item.Credit) === 0 ? "—" : (item.Credit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="border-right py-1 px-2"><span className={`${item.Order === 1 ? "fs-5 fw-bolder text-right" : "fs-6 fw-bold text-right"} d-block text-dark`}>{(item.Balance).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
-                                            {/* <td className="border-right py-1 px-2"><span className={`${item.Order === 1 ? "fs-5 fw-bolder text-left" : "fs-6 fw-bold text-left"} d-block text-dark`}>{item.Details}</span> </td> */}
-                                            <td className="border-0 py-1 px-2"><span className={`d-block text-dark text-nowrap`}>{item.Site}</span> </td>
-                                        </tr>
-                                    ))
-                                        : null
-                                }
+                                {Array.isArray(Data?.ladger) && Data?.ladger.length ? Data?.ladger.map((item, i) => (
+                                    <tr className="border-bottom text-center" title={item.SellsMan} tooltip={item.SalesMan} key={i}>
+                                        <td className="border-right py-1 px-2"><span className="fw-bold d-block text-center text-dark text-nowrap">{i + 1}</span> </td>
+                                        <td className="border-right py-1 px-2"><span className="fw-bold d-block text-center text-dark text-nowrap">{moment(item.Date).format("DD MMM YYYY")}</span> </td>
+                                        <td className="border-right py-1 px-2"><span className="d-block fs-6 fw-bold text-left text-dark">{item.Details}</span></td>
+                                        <td className="border-right py-1 px-2"><span className="d-block fs-6 fw-bold text-center text-dark px-2">{item.RefNo}</span></td>
+                                        <td className="border-right py-1 px-2"><span className={`${item.Order === 1 ? "fs-5 fw-bolder text-right" : "fs-6 fw-bold text-right"} d-block text-dark`}>{parseFloat(item.Debit) === 0 ? "—" : (item.Debit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
+                                        <td className="border-right py-1 px-2"><span className={`${item.Order === 1 ? "fs-5 fw-bolder text-right" : "fs-6 fw-bold text-right"} d-block text-dark`}>{parseFloat(item.Credit) === 0 ? "—" : (item.Credit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
+                                        <td className="border-right py-1 px-2"><span className={`${item.Order === 1 ? "fs-5 fw-bolder text-right" : "fs-6 fw-bold text-right"} d-block text-dark`}>{(item.Balance).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
+                                        <td className="border-0 py-1 px-2"><span className={`d-block text-dark text-nowrap`}>{item.Site}</span> </td>
+                                    </tr>
+                                )) : null}
                             </tbody>
-
+                            <tfoot>
+                                <tr className="text-center border-top border-bottom">
+                                    <td colSpan="4" className="border-right py-1 px-2"><span className="fs-6 fw-bold text-dark text-uppercase">Total</span></td>
+                                    <td className="border-right py-1 px-2">
+                                        <span className="fs-6 fw-bold text-dark">
+                                            {Data?.ladger?.slice(1).reduce((total, item) => total + parseFloat(item.Debit || 0), 0).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                        </span>
+                                    </td>
+                                    <td className="border-right py-1 px-2">
+                                        <span className="fs-6 fw-bold text-dark">
+                                            {Data?.ladger?.slice(1).reduce((total, item) => total + parseFloat(item.Credit || 0), 0).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                        </span>
+                                    </td>
+                                    <td className="border-right py-1 px-2"></td>
+                                    <td className="py-1 px-2"></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 }
+
                 {LedgerType && LedgerType.value === 2 &&
                     <div className='tableFixHead w-100' style={{ height: h + "px" }}>
                         <table className={`table table-hover table-borderless bg-white`}>
@@ -281,24 +294,52 @@ const Ledger = ({ data, no }) => {
                             </thead>
                             <tbody>
                                 {
-                                    Array.isArray(Data) && Data.length ? Data.map((item, i) => (
-                                        <tr className="border-bottom text-center" title={item.SellsMan} key={i}>
-                                            <td className="border-right py-1 px-2"><span className="fw-bold d-block text-center text-dark text-nowrap">{i + 1}</span> </td>
-                                            <td className="border-right py-1 px-2"><span className="d-block fs-6 fw-bold text-left text-dark">{item.PartyID__PartyID__Title}</span></td>
-                                            <td className="border-right py-1 px-2"><span className="d-block fs-6 fw-bold text-left text-dark px-2" >{item.PartyID__Address}</span></td>
-                                            <td className="border-right py-1 px-2"><span className="d-block fs-6 fw-bold text-center text-dark px-2" >{item.PartyID__Limit}</span></td>
-                                            <td className="border-right py-1 px-2"><span className={`fs-6 fw-bold text-right d-block text-dark`}>{parseFloat(item.total_dr) === 0 ? "—" : parseFloat(item.total_dr).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="border-right py-1 px-2"><span className={`fs-6 fw-bold text-right d-block text-dark`}>{parseFloat(item.total_cr) === 0 ? "—" : parseFloat(item.total_cr).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
-                                            {no <= 7 ?
-                                                <>
-                                                    <td className="border-right py-1 px-2"><span className={`fs-6 fw-bold text-right d-block text-dark`}>{parseFloat(item.balance).toLocaleString("en-BD", { minimumFractionDigits: 2 })}</span> </td>
-                                                    <td className="border-0 py-1 px-2"><span className={`d-block text-dark text-nowrap`}>{item.Site}</span> </td>
-                                                </>
-                                                :
-                                                <td className="border-0 py-1 px-2"><span className={`d-block text-dark text-nowrap`}>{item.balance}</span> </td>
-                                            }
-                                        </tr>
-                                    ))
+                                    Array.isArray(Data) && Data.length ? Data
+                                        .filter(item => parseFloat(item.balance) !== 0)  // Filter out rows with balance 0
+                                        .map((item, i) => (
+                                            <tr className="border-bottom text-center" title={item.SellsMan} key={i}>
+                                                <td className="border-right py-1 px-2">
+                                                    <span className="fw-bold d-block text-center text-dark text-nowrap">{i + 1}</span>
+                                                </td>
+                                                <td className="border-right py-1 px-2">
+                                                    <span className="d-block fs-6 fw-bold text-left text-dark">{item.PartyID__PartyID__Title}</span>
+                                                </td>
+                                                <td className="border-right py-1 px-2">
+                                                    <span className="d-block fs-6 fw-bold text-left text-dark px-2">{item.PartyID__Address}</span>
+                                                </td>
+                                                <td className="border-right py-1 px-2">
+                                                    <span className="d-block fs-6 fw-bold text-center text-dark px-2">{item.PartyID__Limit}</span>
+                                                </td>
+                                                <td className="border-right py-1 px-2">
+                                                    <span className={`fs-6 fw-bold text-right d-block text-dark`}>
+                                                        {parseFloat(item.total_cr) === 0 ? "—" : parseFloat(item.total_cr).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                    </span>
+                                                </td>
+                                                <td className="border-right py-1 px-2">
+                                                    <span className={`fs-6 fw-bold text-right d-block text-dark`}>
+                                                        {parseFloat(item.total_dr) === 0 ? "—" : parseFloat(item.total_dr).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                    </span>
+                                                </td>
+                                                {no <= 7 ? (
+                                                    <>
+                                                        <td className="border-right py-1 px-2">
+                                                            <span className={`fs-6 fw-bold text-right d-block text-dark`}>
+                                                                {parseFloat(item.balance).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                            </span>
+                                                        </td>
+                                                        <td className="border-0 py-1 px-2">
+                                                            <span className={`d-block text-dark text-nowrap`}>{item.Site}</span>
+                                                        </td>
+                                                    </>
+                                                ) : (
+                                                    <td className="border-0 py-1 px-2">
+                                                        <span className={`fs-6 fw-bold text-right d-block text-dark text-nowrap`}>
+                                                            {parseFloat(item.balance).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                        </span>
+                                                    </td>
+                                                )}
+                                            </tr>
+                                        ))
                                         : null
                                 }
                                 {/* Add a row for the total */}

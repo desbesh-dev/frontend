@@ -70,6 +70,7 @@
     "semantic-ui-react": "^2.0.3",
     "web-vitals": "^1.1.1",
     "webpack": "^5.69.1",
+    "xlsx": "^0.18.5",
     "yarn": "^1.22.19"
   },
   "scripts": {

@@ -2,7 +2,6 @@ import * as moment from 'moment';
 import { useEffect, useState } from 'react';
 import Datepicker from 'react-datepicker';
 import { connect, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { FetchBisLadger } from '../../../../../actions/APIHandler';
 import { logout } from '../../../../../actions/auth';
 import { DISPLAY_OVERLAY } from '../../../../../actions/types';
@@ -10,17 +9,12 @@ import { customHeader, locales } from "../../../../Suppliers/Class/datepicker";
 import { PartyLadgerPDF } from './LadgerPDF';
 let today = new Date();
 
-const Ladger = ({ user, PartyID, MyPartyID, list, setList, Title, Address }) => {
-    const initialValue = { value: 0, label: "" };
+const Ladger = ({ user, MyPartyID, Title, Name, Contact, Address, Limit }) => {
     const [Data, setData] = useState(false);
     const [DateTo, setDateTo] = useState(today);
     const [DateFrom, setDateFrom] = useState(today);
-    const [SearchKey, setSearchKey] = useState(false)
     const [locale, setLocale] = useState('en');
-    let toastProperties = null;
     const dispatch = useDispatch();
-    const history = useHistory();
-    let Tarikh = DateFrom.getTime() === DateTo.getTime() ? moment(today).format("DD MMM YYYY") : " (" + moment(DateFrom).format("DD MMM YYYY") + " to " + moment(DateTo).format("DD MMM YYYY") + ") "
 
     useEffect(() => {
         BisLadger();
@@ -39,8 +33,6 @@ const Ladger = ({ user, PartyID, MyPartyID, list, setList, Title, Address }) => 
         setDateFrom(oneWeekAgo);
     }
 
-    const PrvDate = (i) => Array.isArray(Data) && Data.length ? typeof (Data[i - 1]) !== 'undefined' && Data[i - 1] != null ? Data[i - 1].Date : 0 : 0
-
     const DateHandler = async (e) => {
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
         let date_from = moment(DateFrom).format("YYYY-MM-DD");
@@ -57,6 +49,43 @@ const Ladger = ({ user, PartyID, MyPartyID, list, setList, Title, Address }) => 
             setData(result.data);
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
+
+    const groupedTotals = {
+        Bank: { totalDebit: 0, totalCredit: 0 },
+        Cash: { totalDebit: 0, totalCredit: 0 },
+        'Credit Note': { totalDebit: 0, totalCredit: 0 }
+    };
+
+    let overallTotalDebit = 0;
+    let overallTotalCredit = 0;
+
+    if (Array.isArray(Data) && Data.length > 0) {
+        Data.forEach(item => {
+            const detail = item.Details;  // Assuming 'Details' is the field name
+            const debit = parseFloat(item.Debit || 0); // Get debit value
+            const credit = parseFloat(item.Credit || 0); // Get credit value
+
+            // Add to group totals if it matches Bank, Cash, or Credit Note
+            if (groupedTotals[detail]) {
+                groupedTotals[detail].totalDebit += debit; // Update totalDebit for the group
+                groupedTotals[detail].totalCredit += credit; // Update totalCredit for the group
+            }
+
+            // Add to overall totals
+            overallTotalDebit += debit; // Update overall total debit
+            overallTotalCredit += credit; // Update overall total credit
+        });
+    }
+
+    const summary = {
+        totalCash: groupedTotals.Cash.totalCredit,
+        totalBank: groupedTotals.Bank.totalCredit,
+        totalCreditNote: groupedTotals['Credit Note'].totalCredit,
+        totalDebit: overallTotalDebit,
+        totalCredit: overallTotalCredit,
+        balance: overallTotalCredit - overallTotalDebit
+    };
+
     var h = window.innerHeight - 290;
     return (
         <div className="row justify-content-center align-items-center bg-white m-0 p-0" style={{ zIndex: 999 }}>
@@ -84,8 +113,7 @@ const Ladger = ({ user, PartyID, MyPartyID, list, setList, Title, Address }) => 
                             locale={locales[locale]}
                             placeholderText="Date"
                         />
-
-                        <button className="btn fs-3 px-2 ml-2 py-0 text-dark border-left" onClick={(e) => PartyLadgerPDF(e, '#table', { Title, Address }, user, { DateFrom, DateTo })}><i className="fad fa-file-pdf"></i></button>
+                        <button className="btn fs-3 px-2 ml-2 py-0 text-dark border-left" onClick={(e) => PartyLadgerPDF(e, '#table', { Title, Name, Contact, Address, Limit }, user, { DateFrom, DateTo }, summary)}><i className="fad fa-file-pdf"></i></button>
                     </div>
                 </div>
 
@@ -117,12 +145,12 @@ const Ladger = ({ user, PartyID, MyPartyID, list, setList, Title, Address }) => 
                                                 </td>
                                                 <td className="border-right py-0 px-2">
                                                     <span className="d-block fs-6 fw-bold text-right text-dark">
-                                                        {parseFloat(item.Debit) === 0 ? "—" : parseFloat(item.Debit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                        {parseFloat(item.Debit) === 0 ? null : parseFloat(item.Debit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
                                                     </span>
                                                 </td>
                                                 <td className="border-right py-0 px-2">
                                                     <span className="d-block fs-6 fw-bold text-right text-dark">
-                                                        {parseFloat(item.Credit) === 0 ? "—" : parseFloat(item.Credit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
+                                                        {parseFloat(item.Credit) === 0 ? null : parseFloat(item.Credit).toLocaleString("en-BD", { minimumFractionDigits: 2 })}
                                                     </span>
                                                 </td>
 

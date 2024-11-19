@@ -148,16 +148,9 @@ export const CreatePaymentModal = (props) => {
             if (
                 !ACNumber ||
                 (typeof ACNumber !== "string" && typeof ACNumber !== "number") || // check if ACNumber is a string or number
-                (ACNumber.toString().length >= 8 && ACNumber.toString().length <= 20 && /^\d+$|N\/A/i.test(ACNumber.toString()))
+                (ACNumber.toString().length <= 6 && ACNumber.toString().length >= 20 && /^\d+$|N\/A/i.test(ACNumber.toString()))
             ) {
                 setError((prevState) => ({ ...prevState, FrmAccNumber: "Please enter a valid account number" }));
-                return false;
-            }
-        }
-
-        if (payment === 16) {
-            if (!ChequeNo || ChequeNo.length < 6 || ChequeNo.length > 20) {
-                setError((prevState) => ({ ...prevState, FrmChequeNo: "Cheque number must be between 6 and 20 characters" }));
                 return false;
             }
         }

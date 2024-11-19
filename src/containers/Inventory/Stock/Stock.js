@@ -89,7 +89,6 @@ const Stock = ({ user, list, setList, scale, no }) => {
         e.preventDefault();
         dispatch({ type: DISPLAY_OVERLAY, payload: true });
         var result = await StockProductList(SectorFilter, Category, SearchKey);
-
         if (result !== true)
             StockReportPDF(e, result.data, false, user, SectorFilter?.label || `${user.Collocation.Title} (${user.Collocation.Sector})`)
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
@@ -587,7 +586,6 @@ const Pagination = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
         </ul>
     );
 };
-
 
 const mapStateToProps = (state, props) => ({
     display: state.OverlayDisplay,

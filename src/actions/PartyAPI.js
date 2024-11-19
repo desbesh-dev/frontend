@@ -114,6 +114,42 @@ export const FetchPartyInvoices = async (id, from, to) => {
     }
 }
 
+export const FetchPartyReports = async (id, from, to) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/crm_party_reports/${id}/${from}/${to}`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
+
+export const FetchPartyAgedInvoices = async (id, from, to) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/party_aged_invoices/${id}/${from}/${to}`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
+
 export const PaymentRecipt = async (id, Payment, Discount, PaidAmount, Due, IsBank, IsCheque, IsCard, IsOnline, Bank, ACName, ACNumber, ChequeNo, TrxNo) => {
     const config = {
         headers: {
@@ -152,7 +188,6 @@ export const PaymentRecipt = async (id, Payment, Discount, PaidAmount, Due, IsBa
     }
 }
 
-
 export const UpdateDlvStatus = async (id, Status) => {
     const config = {
         headers: {
@@ -174,25 +209,17 @@ export const UpdateDlvStatus = async (id, Status) => {
     }
 }
 
-export const FetchDueInvoices = async (date_from, date_to, sis_id, sect_id, sharpness, order_by) => {
+export const FetchPartyAgedInvoicesList = async (date_from, date_to, sect_id) => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('access')}`
             // 'Accept': 'application/json'
-        },
-        params: {
-            date_from: date_from,
-            date_to: date_to,
-            sis_id: sis_id?.value,
-            sect_id: sect_id?.value,
-            sharpness: sharpness?.value,
-            order_by: order_by?.value
-        },
+        }
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/due_invoice_list/`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/party_aged_invoice_list/${date_from}/${date_to}/${sect_id}`, config);
         return res
     } catch (err) {
         return true;

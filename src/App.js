@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Provider } from 'react-redux';
-import { Redirect, Route, BrowserRouter as Router, Switch, useHistory } from 'react-router-dom';
+import { Redirect, Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import store from './store';
 
 import { AssistanceRoute } from "./hocs/AssistanceRoute";
@@ -57,7 +57,6 @@ import MySupplierList from './containers/Suppliers/MySuppliers/SupplierLists';
 
 // My Party
 import PaymentReceived from './containers/Accounts/PaymentReceipt/PayemntReceived';
-import DueInvoices from './containers/Party/DueInvoices/DueInvoices';
 
 // Purchase
 import DocketPurchase from './containers/Inventory/Purchase/DocketPurchase';
@@ -71,62 +70,23 @@ import { default as RetailSell, default as Sells } from './containers/Trading/Re
 import CounterStock from './containers/AuthPages/Counter/CounterStock';
 import Stock from './containers/Inventory/Stock/Stock';
 
-//Contract Farm Management
-import ContractDispatchReport from './containers/Contract/DispatchReport/ContractDispatchReport';
-import PrvConInvoice from './containers/Contract/DispatchReport/ViewInvoice/PrvConInvoice';
-import FarmLists from './containers/Contract/FarmLists';
-import FarmMain from './containers/Contract/FarmManagement/FarmMain';
-import LiveStock from './containers/Contract/LiveStock/LiveStock';
-import MonitoringCell from './containers/Contract/MonitoringCell';
-import SendProduct from './containers/Contract/Products/SendProduct';
-import Return from './containers/Contract/Return/Return';
 
 // Accounts
 import AccountJournal from './containers/Accounts/AccountJournal';
 import COA from './containers/Accounts/COA';
-import PaymentList from './containers/Accounts/Farmer Payment/PaymentList';
 import Ledger from './containers/Accounts/Ledger/Ledger';
 import Voucher from './containers/Accounts/Voucher/Voucher';
 
-// Business Preference
-import AccountSettings from './containers/Accounts/AccountSetup/AccountSettings';
-import Policy from './containers/BusinessPreference/Policy/Policy';
-import ProfitMargin from './containers/BusinessPreference/ProfitMargin/ProfitMargin';
-
-// Field Works
-import BirdSell from './containers/FieldWork/BirdSell/BirdSell';
-import Fieldboard from './containers/FieldWork/Dashboard';
-import FarmFields from './containers/FieldWork/FarmFields';
-import FarmLadger from './containers/FieldWork/FarmLadger';
-import FieldWorkerMenu from './containers/FieldWork/FieldWorkerMenu';
-import LightEntry from './containers/FieldWork/LightEntry';
-import SellReportField from './containers/FieldWork/SellReport/SellReport';
-
-
-import PaymentProcedure from './containers/Accounts/Farmer Payment/PaymentRelease';
 import Backup from './containers/AuthPages/Admin/Backup';
 import BisList from './containers/AuthPages/Admin/BisList';
 import UserLists from './containers/AuthPages/Admin/UserLists';
 import Counters from './containers/AuthPages/Counter/Counters';
+import ZReading from './containers/AuthPages/Counter/ZReading';
 import Wellcome from './containers/AuthPages/LandingPage/Wellcome';
 import UpdateUser from './containers/AuthPages/Profiles/UpdateUser';
 import ResetPass from './containers/AuthPages/ResetPass';
 import CashLadger from './containers/CashFlow/CashLadger';
-import BirdSellHistory from './containers/Contract/BirdSellReport/BirdSellHistory';
-import Controlboard from './containers/Contract/Control/Controlboard';
-import FCR_Rank from './containers/Contract/Control/FCR_Rank';
-import LucryRank from './containers/Contract/Control/LucyRank';
-import Summary from './containers/Contract/Control/Summary';
-import CostMapping from './containers/Contract/Costing/CostMapping';
-import GDLadger from './containers/Contract/GoodsNBirds/GDLadger';
-import GoodsNBirdMain from './containers/Contract/GoodsNBirds/GoodsNBird';
-import GDInvoice from './containers/Contract/GoodsNBirds/Products/GDInvoice';
-import BatchAccounts from './containers/FieldWork/BatchAccount/BatchAccounts';
-import BatchPayFields from './containers/FieldWork/BatchPayFields';
-import BirdSellGodown from './containers/FieldWork/BirdSell/BirdSellGodown';
-import BirdSellReturn from './containers/FieldWork/BirdSell/BirdSellReturn';
-import FarmRecord from './containers/FieldWork/DailyRecord/FarmRecord';
-import Parking from './containers/FieldWork/Parking/Parking';
+
 import PurchaseReport from './containers/Inventory/PurchaseReport/PurchaseReport';
 import ProductRequisition from './containers/Inventory/Requisitions/ProductRequisition';
 import ReqExecute from './containers/Inventory/Requisitions/ReqExecute';
@@ -138,6 +98,7 @@ import PartyMain from './containers/Party/MyParty/BisProfile/PartyMain';
 import PartyLists from './containers/Party/MyParty/PartyLists';
 import PartyReg from './containers/Party/PartyReg';
 import Disable from './containers/PublicPages/Disable';
+
 import ViewPurchase from './containers/Suppliers/MySuppliers/Profiles/ViewInvoice/ViewPurchase';
 import CounterSellReport from './containers/Trading/CounterSellReport/CounterSellReport';
 import Parties from './containers/Trading/Parties';
@@ -181,45 +142,37 @@ import BalanceSheet from './containers/Statements/BalanceSheet';
 import IncomeStatement from './containers/Statements/IncomeStatement';
 import TrialBalance from './containers/Statements/TrialBalance';
 
+//Reports
+import OrderedItems from './containers/Reports/OrderSummery/OrderedItems';
+import PartyAgedInvoiceList from './containers/Reports/PartyAged/PartyAgedInvoiceList';
+import ProductItemsAnalysis from './containers/Reports/ProductAnalysis/ProductItemsAnalysis';
+import SalesPerformanceReport from './containers/Reports/SalesPerformance/SalesPerformanceReport';
+import SoldOutItems from './containers/Reports/SoldOutSummery/SoldOutItems';
+import SupplierAgedInvoiceList from './containers/Reports/SupplierAged/SupplierAgedInvoiceList';
+
+//Reports
+import UCSPartyInvoiceList from './containers/Reports/UCSPartyInvoice/UCSPartyInvoiceList';
+import UCSReport from './containers/Reports/UnderCostSaleReport/UCSReport';
+
+
 const App = () => {
     const pathname = window.location.pathname
     const [list, setList] = useState([]);
     // const [ProductPro, setProductPro] = useState();
     const [SupplierID, setSupplierID] = useState();
     const [isActive, setActive] = useState(pathname === "/dashboard" ? 1 : "")
-    const history = useHistory();
+
     return (
-        // <Switch>
-        //     <RouteWithLayout layout={PublicLayout} path="/" component={HomePage} />
-        //     <RouteWithLayout layout={FieldWorkerRoute} path="/profile" component={ProfilePage} />
-        //     <RouteWithLayout layout={Layout} path="/dashboard" component={DashboardPage} />
-        // </Switch>
-
-        // !localStorage.getItem("user") ?
-        //     <Provider store={store}>
-        //         <Router path='/' history={history}>
-        //             <PublicLayout list={list} setList={setList}>
-        //                 <Switch>
-
-        //                 </Switch>
-        //             </PublicLayout>
-        //         </Router>
-        //     </Provider>
-        //     :
-        //     JSON.parse(localStorage.getItem("accounts")) ?
-
         <Provider store={store}>
             <Router>
                 <Layout list={list} setList={setList} setActive={setActive} isActive={isActive}>
                     <Switch>
-                        {/* <Route path='/login' render={(props) => <Layout list={list} setList={setList} setActive={setActive} isActive={isActive} {...props} />}></Route> */}
                         <PublicRoute exact path='/' component={Home} render={undefined} />
                         <PublicRoute exact path='/home' component={Home} render={undefined} />
                         <PublicRoute exact path='/login' component={Login} render={undefined} />
                         <PublicRoute exact path='/block' component={Block} render={undefined} />
                         <PublicRoute exact path='/disable' component={Disable} render={undefined} />
                         <PublicRoute exact path='/disable' component={Disable} render={undefined} />
-                        {/* <PublicRoute exact path='/Register' render={(props) => <Register list={list} setList={setList} {...props} />} /> */}
 
                         <AuthRoute exact path='/wellcome' render={(props) => <Wellcome list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute exact path='/waiting' component={WaitingUsers} render={undefined} />
@@ -238,24 +191,17 @@ const App = () => {
                         <SalesRepresentativeRoute exact path='/counter_sell' render={(props) => <RetailSell setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
                         <SalesRepresentativeRoute exact path='/counter_stock' render={(props) => <CounterStock setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
                         <SalesRepresentativeRoute path='/counter_sale_report/:ctr_no/:date_from/:date_to' render={(props) => <CounterSellReport list={list} setList={setList} {...props} />} component={undefined} />
+                        <PrivateRoute exact path='/sale_performance_report' render={(props) => <SalesPerformanceReport setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <PrivateRoute exact path='/z_reading' render={(props) => <ZReading list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Cash Flow */}
                         <PrivateRoute path='/cash_flow' render={(props) => <CashLadger list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/transactions' render={(props) => <Transaction list={list} setList={setList} {...props} />} component={undefined} />
 
-                        {/* Field Works */}
-                        <AssistanceRoute path='/fields' render={(props) => <FarmFields list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/light_record/:bis_id/:id' render={(props) => <LightEntry list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/bird_sell/:bis_id/:id/:inv_no/:inv_id' render={(props) => <BirdSell list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/sell_report/:bis_id/:id/:inv_no/:inv_id' render={(props) => <SellReportField list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/field_worker' render={(props) => <FieldWorkerMenu list={list} setList={setList} {...props} />} component={undefined} />
-
                         {/* Accounts */}
                         <AssistanceRoute path='/voucher' render={(props) => <Voucher list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/coa' render={(props) => <COA list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/acc_journal' render={(props) => <AccountJournal list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/farmer_payment_list' render={(props) => <PaymentList list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/farmer_payment_release/:id' render={(props) => <PaymentProcedure list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/ledger' render={(props) => <Ledger list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Profiles */}
@@ -279,6 +225,7 @@ const App = () => {
                         <AssistanceRoute exact path='/my_supplier_list' render={(props) => <MySupplierList list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/my_supplier/:sup_id' render={(props) => <MySupplierMain list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute exact path='/supplier_reg' render={(props) => <SupplierReg list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/sup_aged_invoice_list' render={(props) => <SupplierAgedInvoiceList list={list} setList={setList} {...props} />} component={undefined} />
                         {/* Supplier AssistanceRoute */}
 
                         {/* Party AssistanceRoute */}
@@ -287,7 +234,7 @@ const App = () => {
                         <AssistanceRoute path='/my_party/:party_id/:my_party_id' render={(props) => <PartyMain list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute exact path='/party_reg' render={(props) => <PartyReg list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/payments' render={(props) => <PaymentReceived list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/due_invoices' render={(props) => <DueInvoices list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute path='/party_aged_invoice_list' render={(props) => <PartyAgedInvoiceList list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Party AssistanceRoute */}
 
@@ -307,6 +254,8 @@ const App = () => {
                         <AssistanceRoute exact path='/order/:party_id' render={(props) => <Order list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute exact path='/order_exc/:order_id' render={(props) => <OrderExecute list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute exact path='/order_list' render={(props) => <OrderList list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/ordered_items_list' render={(props) => <OrderedItems list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/sold_items_list' render={(props) => <SoldOutItems list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Quotation */}
                         <AssistanceRoute exact path='/parties' render={(props) => <Parties setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
@@ -327,29 +276,10 @@ const App = () => {
 
                         {/* Stock */}
                         <AssistanceRoute exact path='/stock' render={(props) => <Stock setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
+                        <AssistanceRoute exact path='/item_analysis' render={(props) => <ProductItemsAnalysis setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Bis Profile */}
                         <AssistanceRoute path='/business_pro/:id/:bis_id' render={(props) => <BusinessPro list={list} setList={setList} {...props} />} component={undefined} />
-
-                        {/* Cotract */}
-                        {/* Farm */}
-                        <AssistanceRoute path='/control_board' render={(props) => <Controlboard list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/contract_summery' render={(props) => <Summary list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/fcr_rank' render={(props) => <FCR_Rank list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/lucy_rank' render={(props) => <LucryRank list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/farm_mng/:id/:bis_id/:batch_id' render={(props) => <FarmMain list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/farm_lists' render={(props) => <FarmLists list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/send_products/:id' render={(props) => <SendProduct list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/live_stock' render={(props) => <LiveStock list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/cost_mapping' render={(props) => <CostMapping list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/bird_sell_history' render={(props) => <BirdSellHistory list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/con_dispatch_report' render={(props) => <ContractDispatchReport list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/prv_dispatch_invoice/:inv_no' render={(props) => <PrvConInvoice list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute exact path='/field_monitoring' render={(props) => <MonitoringCell list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute exact path='/recall_products' render={(props) => <Return list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute exact path='/goods_n_bird' render={(props) => <GoodsNBirdMain list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/gd_invoice/:id' render={(props) => <GDInvoice list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/gd_ladger/:id' render={(props) => <GDLadger list={list} setList={setList} {...props} />} component={undefined} />
 
                         {/* Yard */}
                         <AssistanceRoute path='/ctr_list' render={(props) => <ContainerList list={list} setList={setList} {...props} />} component={undefined} />
@@ -366,11 +296,6 @@ const App = () => {
                         <AssistanceRoute path='/bal_sheet' render={(props) => <BalanceSheet list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute path='/trial_balance' render={(props) => <TrialBalance list={list} setList={setList} {...props} />} component={undefined} />
 
-                        {/* Business Preference */}
-                        <AssistanceRoute path='/acc_settings' render={(props) => <AccountSettings list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute path='/profit_margin' render={(props) => <ProfitMargin list={list} setList={setList} {...props} />} component={undefined} />
-                        <AssistanceRoute exact path='/policy' render={(props) => <Policy list={list} setList={setList} {...props} />} component={undefined} />
-
                         <AssistanceRoute exact path='/req_list' render={(props) => <RequisitionList list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute exact path='/req_execute/:req_no' render={(props) => <ReqExecute list={list} setList={setList} {...props} />} component={undefined} />
                         <AssistanceRoute exact path='/pvt_reset_pass' render={(props) => <ResetPass list={list} setList={setList} {...props} />} component={undefined} />
@@ -382,29 +307,11 @@ const App = () => {
                         <BranchManagerRoute exact path='/br_reset_pass' render={(props) => <ResetPass list={list} setList={setList} {...props} />} component={undefined} />
 
                         <FieldWorkerRoute exact path='/' component={Dashboard} render={undefined} />
-                        <FieldWorkerRoute exact path='/' render={(props) => <FieldWorkerMenu list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/field_work' render={(props) => <FieldWorkerMenu list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/field_board' render={(props) => <Fieldboard list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_fields' render={(props) => <FarmFields list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_parked' render={(props) => <Parking list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_batch_pay_fields' render={(props) => <BatchPayFields list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_light_record/:bis_id/:id' render={(props) => <LightEntry list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_farm_ladger/:bis_id/:id' render={(props) => <FarmLadger list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_farm_record/:bis_id/:id' render={(props) => <FarmRecord list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_batch_account/:bis_id' render={(props) => <BatchAccounts list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_bird_sell/:bis_id/:id/:inv_no/:inv_id' render={(props) => <BirdSell list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_bird_sell_gd/:gd_id/:inv_no/:inv_id' render={(props) => <BirdSellGodown list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_bird_sell_return/:bis_id/:id/:inv_no/:inv_id' render={(props) => <BirdSellReturn list={list} setList={setList} {...props} />} component={undefined} />
-                        <FieldWorkerRoute exact path='/fwr_sell_report/:bis_id/:id/:inv_no/:inv_id' render={(props) => <SellReportField list={list} setList={setList} {...props} />} component={undefined} />
                         <FieldWorkerRoute exact path='/fwr_reset_pass' render={(props) => <ResetPass list={list} setList={setList} {...props} />} component={undefined} />
 
                         <SalesRepresentativeRoute exact path='/' component={Dashboard} render={undefined} />
                         <SalesRepresentativeRoute exact path='/sr_sells' render={(props) => <Sells setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
                         <SalesRepresentativeRoute exact path='/sr_sell_reports' render={(props) => <SellReport list={list} setList={setList} {...props} />} component={undefined} />
-                        <SalesRepresentativeRoute path='/sr_farm_lists' render={(props) => <FarmLists list={list} setList={setList} {...props} />} component={undefined} />
-                        <SalesRepresentativeRoute path='/sr_send_products/:id' render={(props) => <SendProduct list={list} setList={setList} {...props} />} component={undefined} />
-                        <SalesRepresentativeRoute path='/sr_con_dispatch_report' render={(props) => <ContractDispatchReport list={list} setList={setList} {...props} />} component={undefined} />
-                        <SalesRepresentativeRoute path='/sr_prv_dispatch_invoice/:inv_no' render={(props) => <PrvConInvoice list={list} setList={setList} {...props} />} component={undefined} />
                         <SalesRepresentativeRoute exact path='/sr_stock' render={(props) => <Stock setSupplierID={setSupplierID} SupplierID={SupplierID} list={list} setList={setList} {...props} />} component={undefined} />
                         <SalesRepresentativeRoute exact path='/sr_reset_pass' render={(props) => <ResetPass list={list} setList={setList} {...props} />} component={undefined} />
 
@@ -422,6 +329,10 @@ const App = () => {
                         <AdminRoute path='/adm_supplier_pro/:sup_id' render={(props) => <SupplierPro list={list} setList={setList} {...props} />} component={undefined} />
                         <AdminRoute exact path='/adm_product_item/:sup_id/:id' render={(props) => <ProductItems list={list} setList={setList} {...props} />} component={undefined} />
                         <AdminRoute exact path='/adm_reset_pass' render={(props) => <ResetPass list={list} setList={setList} {...props} />} component={undefined} />
+
+                        {/* Reports */}
+                        <PrivateRoute path='/ucs_report' render={(props) => <UCSReport list={list} setList={setList} {...props} />} component={undefined} />
+                        <PrivateRoute path='/ucs_party_report' render={(props) => <UCSPartyInvoiceList list={list} setList={setList} {...props} />} component={undefined} />
 
                         <Route path='/not_found' component={NotFound} />
                         <Route component={NotFound} />

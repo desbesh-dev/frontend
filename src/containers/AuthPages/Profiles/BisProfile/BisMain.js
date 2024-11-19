@@ -5,7 +5,7 @@ import { LoadProfile } from '../../../../actions/APIHandler';
 import { logout } from '../../../../actions/auth';
 import { BusinessPro } from '../../../../actions/ContractAPI';
 import { DISPLAY_OVERLAY } from '../../../../actions/types';
-import { ContractUpdate } from '../../../Contract/ContractUpdate';
+// import { ContractUpdate } from '../../../Contract/ContractUpdate';
 // import { BatchIssuance } from './BatchIssuance';
 
 import Bank from './Bank';
@@ -178,7 +178,7 @@ const BisMain = ({ display, CompanyID, BranchID, UserID, BisID, list, setList })
                         onClick={(e) => setActive(5)} id="5" title="Bank" type='button' to={`${url}/bank`}>Bank</Link>
 
                 </div>
-                {
+                {/* {
                     Item ?
                         <ContractUpdate
                             CompanyID={CompanyID}
@@ -191,7 +191,7 @@ const BisMain = ({ display, CompanyID, BranchID, UserID, BisID, list, setList })
                             onReload={() => window.location.reload(false)()}
                             onHide={() => { setBUp(false); setItem(false) }}
                         /> : null
-                }
+                } */}
             </div>
 
             <Switch>

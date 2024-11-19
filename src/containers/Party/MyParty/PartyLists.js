@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import { findUnique, LoadParty, PartyStatusList } from '../../../actions/APIHandler';
 import { load_user, logout } from '../../../actions/auth';
@@ -34,14 +34,48 @@ const PartyLists = ({ display, user, no }) => {
         dispatch({ type: DISPLAY_OVERLAY, payload: false });
     }
 
-    const history = useHistory();
-
     const CScolourStyles = {
         control: styles => ({ ...styles, backgroundColor: "#F4F7FC", border: "2px solid #FFFFFF", boxShadow: 'none', fontWeight: "bold", minHeight: "fit-content", borderRadius: '20px' }),
         container: base => ({
             ...base,
             flex: 1,
         }),
+        option: (provided, state) => {
+            let backgroundColor = state.isSelected ? '#6495ED' : 'transparent';
+            let color = state.isSelected ? 'whitesmoke' : '#333';
+            let scale = state.isSelected ? 'scale(1)' : 'scale(1.01)';
+
+            if (state.isFocused) {
+                backgroundColor = '#6495ED';
+                color = 'whitesmoke';
+                scale = 'scale(1.01)';
+            }
+
+            return {
+                ...provided,
+                color,
+                backgroundColor,
+                padding: "5px 5px",
+                cursor: 'pointer',
+                lineHeight: '1',
+                whiteSpace: 'nowrap',
+                height: '40px',
+                ':focus': {
+                    backgroundColor: '#6495ED',
+                    color: '#fff',
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                    whiteSpace: 'wrap',
+                },
+                ':hover': {
+                    backgroundColor: '#6495ED',
+                    color: '#fff',
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                    whiteSpace: 'wrap',
+                },
+            };
+        },
     }
     // let unique_search = Array.isArray(Data) && Data.length ? findUnique(Data, d => d.Title) : null;
 
@@ -58,7 +92,16 @@ const PartyLists = ({ display, user, no }) => {
         })) : null;
 
     let unique_status = Array.isArray(FilterParties) && FilterParties.length ? findUnique(FilterParties, d => getLabel(d.Status, PartyStatusList)) : null;
-    let unique_search = Array.isArray(FilterParties) && FilterParties.length ? findUnique(FilterParties, d => d.Title) : null;
+    // let unique_search = Array.isArray(FilterParties) && FilterParties.length ? findUnique(FilterParties, d => d.Address) : null;
+
+    const formatOptionLabel = ({ label, Address }) => {
+        return (
+            <div style={{ lineHeight: '1' }}>
+                <div className='p-0 m-0' style={{ lineHeight: '1' }}>{label}</div>
+                <small className='p-0 m-0 text-dark' style={{ lineHeight: '1' }}>{Address}</small>
+            </div>
+        );
+    }
 
     return (
         <div className="row h-100 m-0 d-flex justify-content-center">
@@ -127,7 +170,7 @@ const PartyLists = ({ display, user, no }) => {
                                 menuPosition="fixed"
                                 menuPortalTarget={document.body}
                                 borderRadius={"0px"}
-                                options={Array.isArray(unique_search) && unique_search.length ? unique_search.map((item) => ({ label: item.Title, value: item.id })) : []}
+                                options={Array.isArray(FilterParties) && FilterParties.length ? FilterParties.map((item) => ({ label: item.Title, value: item.id, Address: item.Address })) : []}
                                 defaultValue={{ label: "Select Dept", value: 0 }}
                                 name="Division"
                                 placeholder={"Search"}
@@ -139,6 +182,7 @@ const PartyLists = ({ display, user, no }) => {
                                 isClearable={true}
                                 isSearchable={true}
                                 components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
+                                formatOptionLabel={formatOptionLabel}
                             />
                         </div>
 

@@ -1,7 +1,5 @@
-import { DISPLAY_OVERLAY } from './types';
 import axios from 'axios';
 import { checkToken } from './auth';
-import { useDispatch } from 'react-redux';
 
 export const FetchBis = async () => {
     const config = {

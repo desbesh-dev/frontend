@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment, useEffect, useState } from 'react';
 
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
+import axios from 'axios';
 import { connect } from 'react-redux';
 import { LoadProfile } from '../actions/APIHandler';
 import { logout } from '../actions/auth';
@@ -76,52 +77,51 @@ const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 		}
 	}
 
-	const FetchUser = async (id) => {
+	const RepStatus = async (e) => {
+		e.preventDefault()
+
+		if (no >= 7) {
+			return history.push('/');
+		}
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${localStorage.getItem('access')}`,
+				'Accept': 'application/json'
+			}
+		};
+		try {
+			const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/replication-status/`, config);
+			if (response.status !== 200) {
+				throw new Error('Network response was not ok');
+			}
+			const data = await response;
+
+			// Create a message to display in the alert
+			let message = 'Replication Status:\n';
+			if (data.Master_Status) {
+				message += `Master Status:\nFile: ${data.Master_Status.File}\nPosition: ${data.Master_Status.Position}\n`;
+			} else {
+				message += 'No Master Status available.\n';
+			}
+
+			if (data.Slave_Status) {
+				message += `Slave Status:\nIO State: ${data.Slave_Status.Slave_IO_State}\nSeconds Behind Master: ${data.Slave_Status.Seconds_Behind_Master}\n`;
+			} else {
+				message += 'No Slave Status available.\n';
+			}
+
+			alert(message); // Show the alert with the status message
+		} catch (error) {
+			alert('Error fetching replication status: ' + error.message);
+		}
+	};
+
+	const FetchUser = async (e, id) => {
+		e.preventDefault();
 		var User_Data = await LoadProfile(id);
 		history.push('/update_user', { UserData: User_Data });
 	}
-
-	const guestLinks = () => (
-		<Fragment>
-			<li className='nav-item active'>
-				<Link className='nav-link' to='/'>Home <span className='sr-only'>(current)</span></Link>
-			</li>
-			<li className='nav-item'>
-				<Link className='nav-link' to='/login'>Login</Link>
-			</li>
-			{/* <li className='nav-item'>
-				<Link className='nav-link' to='/signup'>Sign Up</Link>
-			</li>
-			<li className='nav-item'>
-				<Link className='nav-link' to='/company_register'>Create A Business</Link>
-			</li> */}
-			{/* <Redirect to='/wellcome' /> */}
-		</Fragment>
-	);
-
-	const WaitingView = () => (
-		<Fragment>
-			<li className='nav-item'>
-				<a className='nav-link' href='#'>{!user ? "Loading" : user.FullName}</a>
-			</li>
-			<li className='nav-item'>
-				<Link className='nav-link' to='#' onClick={logout_user}>Logout</Link>
-			</li>
-			<Redirect to='/disable' />
-		</Fragment>
-	);
-
-	const BlockView = () => (
-		<Fragment>
-			<li className='nav-item'>
-				<a className='nav-link' href='#'>{!user ? "Loading" : user.FullName}</a>
-			</li>
-			<li className='nav-item'>
-				<Link className='nav-link' to='#' onClick={logout_user}>Logout</Link>
-			</li>
-			<Redirect to='/block' />
-		</Fragment>
-	);
 
 	const dropdown_toggle = (toggle) => {
 		return (
@@ -159,8 +159,8 @@ const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 							<i className={`fad ${Expand === "Dashboard" ? "fa-minus" : "fa-plus"}  text-right mr-2`}></i>
 						</div>
 						<div className={`border ${Expand === "Dashboard" ? "d-flex" : "d-none"}`}>
-							<Link className="row btn btn-outline-success m-0" id="grid_menu" onClick={(e) => FetchUser(user.id.replace(/-/gi, ''))}><i className="fad fa-chart-network"></i> Dashboard</Link>
-							<Link className="row btn btn-outline-success m-0" id="grid_menu" onClick=""><i className="fad fa-chart-network"></i> LINK 1</Link>
+							<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/'><i className="fad fa-chart-network"></i> Dashboard</Link>
+							<Link className="row btn btn-outline-success m-0" id="grid_menu" onClick={(e) => RepStatus(e)}><i className="fad fa-chart-network"></i>Home</Link>
 							<Link className="row btn btn-outline-success m-0" id="grid_menu" onClick={logout_user}><i className="fad fa-chart-network"></i> Logout</Link>
 						</div>
 
@@ -182,11 +182,22 @@ const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 								<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/order_list'><i className="fad fa-th-list"></i> Order List</Link>
 								<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/quote_list'><i className="fad fa-list"></i> Quote List</Link>
 							</div>
+							<div className='d-flex border'>
+								<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/ordered_items_list'><i className="fad fa-list-alt"></i>Ordered Items</Link>
+								<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/sold_items_list'><i className="fad fa-th-list"></i>Sold Items</Link>
+								<Link title='Under Cost Sale Reports' className="row btn btn-outline-success m-0" id="grid_menu" to='/ucs_report'><i className="fad fa-th-list"></i>UCS Report</Link>
+							</div>
+							<div className='d-flex border'>
+								<Link title='Counter Reports' className="row btn btn-outline-success m-0" id="grid_menu" to='/counter_list'><i className="fad fa-tv-alt"></i>Counters</Link>
+							</div>
 						</div>
 
 						<div className='d-flex align-items-center py-1'>
-							<Link className="fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" to="/counter_list"><i className="fs-5 fal fa-desktop fa-fw pr-1"></i> Counters </Link>
+							<Link className="fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" to="/z_reading"><i className="fs-5 fad fa-book-reader fa-fw pr-1"></i> Z-Reading </Link>
 						</div>
+						{/* <div className='d-flex align-items-center py-1'>
+							<Link className="fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" to="/counter_list"><i className="fs-5 fal fa-desktop fa-fw pr-1"></i> Counters </Link>
+						</div> */}
 						{[8, 9].includes(no) &&
 							<>
 								<div className='d-flex align-items-center py-1'>
@@ -245,7 +256,6 @@ const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 								<Link className="row btn btn-outline-success m-0" id="grid_menu" to='/my_party_list'><i className="fad fa-address-book"></i> My Parties</Link>
 							</div>
 							<div className='d-flex border'>
-								<Link className="row btn btn-outline-success m-0" id="grid_menu" to="/due_invoices"><i className="fad fa-file-invoice-dollar"></i> Payment Due Report</Link>
 								<Link className="row btn btn-outline-success m-0" to='/payments' id="grid_menu"><i className="fab fa-wpforms"></i> Payment Received</Link>
 							</div>
 						</div>
@@ -339,6 +349,33 @@ const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 							</>
 						}
 
+						{
+							// no <= 7 &&
+							<>
+								<div className='d-flex align-items-center py-1'>
+									<button className="btn fs-5 fw-bold text-dark text-left m-0 px-2 w-100" style={{ textDecoration: 'none' }} id="grid_menu" onClick={(e) => setExpand(Expand === "Reports" ? false : "Reports")}><i className="fad fa-file-chart-pie pr-1 fa-fw"></i> Reports </button>
+									<i className={`fad ${Expand === "Reports" ? "fa-minus" : "fa-plus"}  text-right mr-2`}></i>
+								</div>
+								<div className={`border ${Expand === "Reports" ? "d-flex flex-column" : "d-none"}`}>
+									{/* <div className='d-flex border'> */}
+									<Link className="row btn btn-outline-success m-0 p-0" id="grid_menu" to='/sale_performance_report'> Sale Report</Link>
+									<Link className="row btn btn-outline-success m-0 p-0" id="grid_menu" to="/party_aged_invoice_list"> Party Ageing</Link>
+									<Link className="row btn btn-outline-success m-0 p-0" id="grid_menu" to='/sup_aged_invoice_list'> Supplier Ageing</Link>
+									{/* </div>
+									<div className='d-flex border'> */}
+									<Link className="row btn btn-outline-success m-0 p-0" id="grid_menu" to='#'> Stock Report</Link>
+									<Link className="row btn btn-outline-success m-0 p-0" id="grid_menu" to='/item_analysis'> Product Analysis</Link>
+									<Link className="row btn btn-outline-success m-0 p-0" id="grid_menu" to='#'> Damage Report</Link>
+									{/* </div>
+									<div className='d-flex border'> */}
+									<Link className="row btn btn-outline-success m-0 p-0" id="grid_menu" to='/ucs_party_report'> UCS Party Invoice</Link>
+									{/* <Link className="row btn btn-outline-success m-0" id="grid_menu" to='/item_analysis'><i className="fad fa-user-chart"></i> Product Analysis</Link>
+										<Link className="row btn btn-outline-success m-0" id="grid_menu" to='#'><i className="fad fa-claw-marks"></i> Damage Report</Link> */}
+									{/* </div> */}
+								</div>
+							</>
+						}
+
 					</li>
 				}
 			</ul>
@@ -397,7 +434,7 @@ const Navbar = ({ logout, user, scale, no, cat, list, setList }) => {
 				<button title='User Dropdown' className="nav-link dropdown-toggle show border-0 bg-white" id="drop_menu" data-bs-toggle="dropdown" aria-expanded="true" onClick={() => setDropDown(DropDown ? false : true)}>{user.username}</button>
 				<ul className={`dropdown-menu ${DropDown ? "show" : null}`} aria-labelledby="drop_menu" style={{ width: "80%" }}>
 					<li><Link className="dropdown-item" id="drop_menu" to={`/user_profile/${user.id}`}>My Profile</Link></li>
-					<li><Link className="dropdown-item" id="drop_menu" onClick={(e) => FetchUser(user.id.replace(/-/gi, ''))}>Profile Update</Link></li>
+					<li><Link className="dropdown-item" id="drop_menu" onClick={(e) => FetchUser(e, user.id.replace(/-/gi, ''))}>Profile Update</Link></li>
 					<li><Link className="dropdown-item" id="drop_menu" to="/pvt_reset_pass">Change Password</Link></li>
 					<li><Link className="dropdown-item" id="drop_menu" to='#' onClick={logout_user}>Logout</Link></li>
 				</ul>

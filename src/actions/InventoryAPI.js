@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 
 export const PackageList = [
     { label: "Ctn", value: 1 },
@@ -1038,6 +1039,170 @@ export const StockProductList = async (currentPage, itemsPerPage, SectorFilter, 
     try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/my_stock_list/`, config);
         return res
+    } catch (err) {
+        return true;
+    }
+}
+
+
+export const FetchProductAnalysis = async (id, DateFrom, DateTo) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product_item_analysis/${id}/${DateFrom}/${DateTo}`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
+export const FetchSalePerformance = async (type, sect_id, DateFrom, DateTo) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/sale_performance_report/${type}/${sect_id}/${DateFrom}/${DateTo}`, config);
+        return res
+    } catch (err) {
+        return true;
+    }
+}
+
+
+export const FetchOrderedItemPDF = async (itemsPerPage, DateFrom, DateTo, SectorFilter, searchKey) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+        },
+        params: {
+            page: 1,
+            page_size: itemsPerPage,
+            date_from: moment(DateFrom).format("YYYY-MM-DD"),
+            date_to: moment(DateTo).format("YYYY-MM-DD"),
+            sect_id: SectorFilter?.value,
+            code: searchKey?.value,
+            print_mode: true
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/ordered_items_list/`, config);
+        return res;
+    } catch (err) {
+        return true;
+    }
+}
+
+
+export const FetchSoldOutItemPDF = async (itemsPerPage, DateTo, SectorFilter, searchKey) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+        },
+        params: {
+            page: 1,
+            page_size: itemsPerPage,
+            date_to: moment(DateTo).format("YYYY-MM-DD"),
+            sect_id: SectorFilter?.value,
+            code: searchKey?.value,
+            print_mode: true
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/sold_items_list/`, config);
+        return res;
+    } catch (err) {
+        return true;
+    }
+}
+
+
+export const FetchUCSReportPDF = async (itemsPerPage, DateTo, SectorFilter, searchKey) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+        },
+        params: {
+            page: 1,
+            page_size: itemsPerPage,
+            date_to: moment(DateTo).format("YYYY-MM-DD"),
+            sect_id: SectorFilter?.value,
+            code: searchKey?.value,
+            print_mode: true
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/ucs_reports/`, config);
+        return res;
+    } catch (err) {
+        return true;
+    }
+}
+
+export const FetchUCSPartyInvoicePDF = async (currentPage, itemsPerPage, DateFrom, DateTo, SectorFilter, searchKey) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+        },
+        params: {
+            page: currentPage,
+            page_size: itemsPerPage,
+            date_from: moment(DateFrom).format("YYYY-MM-DD"),
+            date_to: moment(DateTo).format("YYYY-MM-DD"),
+            sect_id: SectorFilter?.value,
+            code: searchKey?.value,
+            print_mode: 0
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/ucs_party_invoices/`, config);
+        return res;
+    } catch (err) {
+        return true;
+    }
+}
+
+
+export const FetchPurchaseReport = async (itemsPerPage, DateFrom, DateTo, SisterFilter, SectorFilter, PayTypeFilter, searchKey, PrintMode) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+        },
+        params: {
+            page: 1,
+            page_size: itemsPerPage,
+            date_from: DateFrom,
+            date_to: DateTo,
+            sis_id: SisterFilter?.value,
+            sect_id: SectorFilter?.value,
+            pay_type: PayTypeFilter?.value,
+            no: searchKey?.value,
+            print_mode: PrintMode
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/purchase_report/`, config);
+        return res;
     } catch (err) {
         return true;
     }

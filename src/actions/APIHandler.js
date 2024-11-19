@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 
 export const getStaffLabel = (value, arr) => {
     for (var i = 0; i < arr.length; i++) {
@@ -681,6 +682,29 @@ export const LoadCounter = async (date_from, date_to, ModeFilter) => {
 
     try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/counter_list/?date_from=${date_from}&date_to=${date_to}&mode=${ModeFilter}`, config);
+        return res.data
+    } catch (err) {
+        return true;
+    }
+}
+
+export const FetchZReading = async (DateFrom, DateTo, ModeFilter, SectorFilter) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+            // 'Accept': 'application/json'
+        },
+        params: {
+            date_from: moment(DateFrom).format("YYYY-MM-DD"),
+            date_to: moment(DateTo).format("YYYY-MM-DD"),
+            sect_id: SectorFilter?.value,
+            mode: ModeFilter
+        },
+    };
+
+    try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/z_reading/`, config);
         return res.data
     } catch (err) {
         return true;

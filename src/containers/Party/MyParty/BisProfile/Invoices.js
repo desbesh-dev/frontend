@@ -225,61 +225,181 @@ const Invoices = ({ PartyID, list, setList, no }) => {
 
             </div>
             {
-                Array.isArray(FilterInvoice) && FilterInvoice.length ?
-                    <div className='tableFixHead w-100' style={{ height: h + "px" }}>
-                        <table className={`table table-hover table-borderless bg-white`}>
-                            <thead className='bg-white'>
-                                <tr className="text-center">
-                                    <th className="py-1 border-right"><span>S/N</span></th>
-                                    <th className="py-1 border-right"><span>Date</span></th>
-                                    <th className="py-1 border-right"><span>Invoice No</span></th>
-                                    <th className="py-1 border-right">Items</th>
-                                    <th className="py-1 border-right">Discount</th>
-                                    <th className="py-1 border-right">Shipping</th>
-                                    <th className="py-1 border-right">Total</th>
-                                    <th className="py-1 border-right">Cash</th>
-                                    <th className="py-1 border-right">Bank</th>
-                                    <th className="py-1 border-right">Paid</th>
-                                    <th className="py-1 border-right">Due</th>
-                                    <th className="py-1 border-right">Payment Term</th>
-                                    <th className="py-1 border-right">Status</th>
-                                    <th className="py-1 text-center"><span>Action</span></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    FilterInvoice.map((item, i) => (
-                                        <tr className="border-bottom text-center fw-bold" key={i}>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold">{i + 1}</span></td>
-                                            <td className="py-0 px-1 border-right text-nowrap">{moment(item.Date).format("DD MMM YY")}</td>
-                                            <td className="py-0 px-1 border-right">{item.InvoiceNo}</td>
-                                            <td className="py-0 px-1 border-right">{item.ItemCount}</td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Discount).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Shipping).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.GrandTotal).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Cash).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Bank).toLocaleString("en", { minimumFractionDigits: 2 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.PaidAmount).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold text-right">{parseFloat(item.Due).toLocaleString("en", { minimumFractionDigits: 3 })}</span> </td>
-                                            <td className="py-0 border-right"><small className="d-block fw-bold">{getLabel(item.Payment, PaymentTerms)}</small> </td>
-                                            <td className="py-0 border-right"><span className="d-block fw-bold ">{item.Status === 1 ? "Delivered" : item.Status === 2 ? "Modified" : item.Status === 3 ? "Deleted" : item.Status === 4 ? "Postpond" : "N/A"}</span> </td>
-                                            <td className="p-0 text-nowrap text-left">
-                                                <Link className="btn fs-3 px-2 py-0 text-danger" to={`/sell_invoice_preview/${item.id}`}><i className="fad fa-eye"></i></Link>
-                                                {PaymentButton(item, no)}
-                                                <button className="btn fs-3 px-2 py-0 text-danger" onClick={(e) => PrintPDF(e, item.id)}><i className="fad fa-print"></i></button>
-                                            </td>
-                                        </tr>
+                Array.isArray(FilterInvoice) && FilterInvoice.length ? (
+                    // Initial calculation of totals in a single iteration over the array
+                    (() => {
+                        let totalDiscount = 0,
+                            totalShipping = 0,
+                            totalGrandTotal = 0,
+                            totalCash = 0,
+                            totalBank = 0,
+                            totalPaidAmount = 0,
+                            totalDue = 0,
+                            totalItemCount = 0;
 
-                                    ))
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    :
+                        FilterInvoice.forEach((item) => {
+                            totalDiscount += parseFloat(item.Discount || 0);
+                            totalShipping += parseFloat(item.Shipping || 0);
+                            totalGrandTotal += parseFloat(item.GrandTotal || 0);
+                            totalCash += parseFloat(item.Cash || 0);
+                            totalBank += parseFloat(item.Bank || 0);
+                            totalPaidAmount += parseFloat(item.PaidAmount || 0);
+                            totalDue += parseFloat(item.Due || 0);
+                            totalItemCount += parseInt(item.ItemCount || 0, 10);
+                        });
+
+                        return (
+                            <div className="tableFixHead w-100" style={{ height: h + "px" }}>
+                                <table className={`table table-hover table-borderless bg-white`}>
+                                    <thead className="bg-white">
+                                        <tr className="text-center">
+                                            <th className="py-1 border-right">
+                                                <span>S/N</span>
+                                            </th>
+                                            <th className="py-1 border-right">
+                                                <span>Date</span>
+                                            </th>
+                                            <th className="py-1 border-right">
+                                                <span>Invoice No</span>
+                                            </th>
+                                            <th className="py-1 border-right">Items</th>
+                                            <th className="py-1 border-right">Discount</th>
+                                            <th className="py-1 border-right">Shipping</th>
+                                            <th className="py-1 border-right">Total</th>
+                                            <th className="py-1 border-right">Cash</th>
+                                            <th className="py-1 border-right">Bank</th>
+                                            <th className="py-1 border-right">Paid</th>
+                                            <th className="py-1 border-right">Due</th>
+                                            <th className="py-1 border-right">Payment Term</th>
+                                            <th className="py-1 border-right">Status</th>
+                                            <th className="py-1 text-center">
+                                                <span>Action</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {FilterInvoice.map((item, i) => (
+                                            <tr className="border-bottom text-center fw-bold" key={i}>
+                                                <td className="py-0 border-right">
+                                                    <span className="d-block fw-bold">{i + 1}</span>
+                                                </td>
+                                                <td className="py-0 px-1 border-right text-nowrap">
+                                                    {moment(item.Date).format("DD MMM YY")}
+                                                </td>
+                                                <td className="py-0 px-1 border-right">{item.InvoiceNo}</td>
+                                                <td className="py-0 px-1 border-right">{item.ItemCount}</td>
+                                                <td className="py-0 border-right">
+                                                    <span className="d-block fw-bold text-right">
+                                                        {parseFloat(item.Discount).toLocaleString("en", {minimumFractionDigits: 2})}
+                                                    </span>{" "}
+                                                </td>
+                                                <td className="py-0 border-right">
+                                                    <span className="d-block fw-bold text-right">
+                                                        {parseFloat(item.Shipping).toLocaleString("en", {
+                                                            minimumFractionDigits: 2,
+                                                        })}
+                                                    </span>{" "}
+                                                </td>
+                                                <td className="py-0 border-right">
+                                                    <span className="d-block fw-bold text-right">
+                                                        {parseFloat(item.GrandTotal).toLocaleString("en", {
+                                                            minimumFractionDigits: 3,
+                                                        })}
+                                                    </span>{" "}
+                                                </td>
+                                                <td className="py-0 border-right">
+                                                    <span className="d-block fw-bold text-right">
+                                                        {parseFloat(item.Cash).toLocaleString("en", {
+                                                            minimumFractionDigits: 2,
+                                                        })}
+                                                    </span>{" "}
+                                                </td>
+                                                <td className="py-0 border-right">
+                                                    <span className="d-block fw-bold text-right">
+                                                        {parseFloat(item.Bank).toLocaleString("en", {
+                                                            minimumFractionDigits: 2,
+                                                        })}
+                                                    </span>{" "}
+                                                </td>
+                                                <td className="py-0 border-right">
+                                                    <span className="d-block fw-bold text-right">
+                                                        {parseFloat(item.PaidAmount).toLocaleString("en", {
+                                                            minimumFractionDigits: 3,
+                                                        })}
+                                                    </span>{" "}
+                                                </td>
+                                                <td className="py-0 border-right">
+                                                    <span className="d-block fw-bold text-right">
+                                                        {parseFloat(item.Due).toLocaleString("en", {
+                                                            minimumFractionDigits: 3,
+                                                        })}
+                                                    </span>{" "}
+                                                </td>
+                                                <td className="py-0 border-right">
+                                                    <small className="d-block fw-bold">
+                                                        {getLabel(item.Payment, PaymentTerms)}
+                                                    </small>{" "}
+                                                </td>
+                                                <td className="py-0 border-right">
+                                                    <span className="d-block fw-bold ">
+                                                        {item.Status === 1
+                                                            ? "Delivered"
+                                                            : item.Status === 2
+                                                                ? "Modified"
+                                                                : item.Status === 3
+                                                                    ? "Deleted"
+                                                                    : item.Status === 4
+                                                                        ? "Postponed"
+                                                                        : "N/A"}
+                                                    </span>{" "}
+                                                </td>
+                                                <td className="p-0 text-nowrap text-left">
+                                                    <Link
+                                                        className="btn fs-3 px-2 py-0 text-danger"
+                                                        to={`/sell_invoice_preview/${item.id}`}
+                                                    >
+                                                        <i className="fad fa-eye"></i>
+                                                    </Link>
+                                                    {PaymentButton(item, no)}
+                                                    <button
+                                                        className="btn fs-3 px-2 py-0 text-danger"
+                                                        onClick={(e) => PrintPDF(e, item.id)}
+                                                    >
+                                                        <i className="fad fa-print"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+
+                                    {/* Footer */}
+                                    <tfoot>
+                                        <tr className="fw-bold text-right bg-light fw-bolder">
+                                            <td colSpan="3" className="py-1 border-right text-center"> Totals</td>
+                                            <td className="py-1 border-right">{totalItemCount}</td>
+                                            <td className="py-1 border-right">{totalDiscount.toLocaleString("en", { minimumFractionDigits: 2 })}</td>
+                                            <td className="py-1 border-right">{totalShipping.toLocaleString("en", { minimumFractionDigits: 2 })} </td>
+                                            <td className="py-1 border-right">{totalGrandTotal.toLocaleString("en", { minimumFractionDigits: 3 })}</td>
+                                            <td className="py-1 border-right">{totalCash.toLocaleString("en", { minimumFractionDigits: 2 })}</td>
+                                            <td className="py-1 border-right">{totalBank.toLocaleString("en", { minimumFractionDigits: 2 })} </td>
+                                            <td className="py-1 border-right">{totalPaidAmount.toLocaleString("en", { minimumFractionDigits: 3 })} </td>
+                                            <td className="py-1 border-right">{totalDue.toLocaleString("en", { minimumFractionDigits: 3 })}</td>
+                                            <td colSpan="3"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        );
+                    })()
+                ) :
                     <div className={`d-flex justify-content-center align-items-center bg-white`}>
-                        <p className='fs-2 fw-bold text-center text-success m-0'>No invoice has issued!</p>
+                        <p className="fs-2 fw-bold text-center text-success m-0">
+                            No invoice has been issued!
+                        </p>
                     </div>
+
             }
+
             {
                 PaymentModalShow ?
                     <CreatePaymentModal

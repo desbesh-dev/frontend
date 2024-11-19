@@ -41,12 +41,12 @@ export const GeneralLedgerPrint = async (e, item, status, date_from, date_to, Ti
                 data.row.cells[key].styles.textColor = [0, 0, 255];
             }
         }
-        else if (data.row.index !== 0 && data.column.index === 5 && parseFloat(data.cell.raw) === 0.00) {
-            for (let key in data.row.cells) {
-                data.row.cells[key].styles.fillColor = [240, 240, 240];
-                data.row.cells[key].styles.textColor = [0, 0, 0];
-            }
-        }
+        // else if (data.row.index !== 0 && data.column.index === 5 && parseFloat(data.cell.raw) === 0.00) {
+        //     for (let key in data.row.cells) {
+        //         data.row.cells[key].styles.fillColor = [240, 240, 240];
+        //         data.row.cells[key].styles.textColor = [0, 0, 0];
+        //     }
+        // }
 
     }
 
@@ -125,8 +125,51 @@ export const GeneralLedgerPrint = async (e, item, status, date_from, date_to, Ti
             })
         ]),
     ].sort((a, b) => a[0] - b[0]);
+    // Sum Debit and Credit for the footer (excluding the first row)
+    const totalDebit = item.ladger.slice(1).reduce((sum, item) => sum + parseFloat(item.Debit || 0), 0);
+    const totalCredit = item.ladger.slice(1).reduce((sum, item) => sum + parseFloat(item.Credit || 0), 0);
 
-    let options = {
+    // Group by Week and Month and calculate totals (excluding the first row)
+    const groupByWeek = {};
+    const groupByMonth = {};
+
+    item.ladger.slice(1).forEach(item => {  // Exclude the first row
+        const week = moment(item.Date).isoWeek();
+        const month = moment(item.Date).format('MMM YYYY');
+
+        if (!groupByWeek[week]) groupByWeek[week] = { Debit: 0, Credit: 0 };
+        if (!groupByMonth[month]) groupByMonth[month] = { Debit: 0, Credit: 0 };
+
+        groupByWeek[week].Debit += parseFloat(item.Debit || 0);
+        groupByWeek[week].Credit += parseFloat(item.Credit || 0);
+
+        groupByMonth[month].Debit += parseFloat(item.Debit || 0);
+        groupByMonth[month].Credit += parseFloat(item.Credit || 0);
+    });
+
+    // Calculate percentage change of Debit (week-over-week and month-over-month)
+    const calculatePercentageChange = (current, previous) => {
+        if (previous === 0) return 'N/A'; // Prevent division by zero
+        return (((current - previous) / previous) * 100).toFixed(2) + '%';
+    };
+
+    const weekEntries = Object.entries(groupByWeek);
+    const monthEntries = Object.entries(groupByMonth);
+
+    const weeklyPercentageChanges = weekEntries.map(([, current], index) => {
+        if (index === 0) return 'N/A';
+        const [, previous] = weekEntries[index - 1];
+        return calculatePercentageChange(current.Debit, previous.Debit);
+    });
+
+    const monthlyPercentageChanges = monthEntries.map(([, current], index) => {
+        if (index === 0) return 'N/A';
+        const [, previous] = monthEntries[index - 1];
+        return calculatePercentageChange(current.Debit, previous.Debit);
+    });
+
+    // First Table: Ledger Data (excluding first row in totals)
+    let options1 = {
         startY: 200,
         head: headers,
         body: ProductItems,
@@ -143,65 +186,32 @@ export const GeneralLedgerPrint = async (e, item, status, date_from, date_to, Ti
             valign: 'middle',
             halign: 'center',
             textColor: [0, 0, 0],
-            lineColor: [26, 189, 156], // Setting line color to black
+            lineColor: [26, 189, 156],
         },
         columnStyles: {
-            0: {
-                cellWidth: 35,
-                valign: 'middle',
-                halign: 'center',
-            },
-            1: {
-                cellWidth: 68,
-                valign: 'middle',
-                halign: 'left',
-            },
-            2: {
-                cellWidth: 'auto',
-                valign: 'middle',
-                halign: 'left',
-            },
-            3: {
-                cellWidth: '80',
-                valign: 'left',
-                halign: 'left',
-            },
-            4: {
-                cellWidth: 73,
-                valign: 'middle',
-                halign: 'right',
-            },
-            5: {
-                cellWidth: 73,
-                valign: 'middle',
-                halign: 'right',
-            },
-            6: {
-                cellWidth: 78,
-                valign: 'middle',
-                halign: 'right',
-            },
-            // etc
+            0: { cellWidth: 35, valign: 'middle', halign: 'center' },
+            1: { cellWidth: 68, valign: 'middle', halign: 'left' },
+            2: { cellWidth: 'auto', valign: 'middle', halign: 'left' },
+            3: { cellWidth: '80', valign: 'left', halign: 'left' },
+            4: { cellWidth: 73, valign: 'middle', halign: 'right' },
+            5: { cellWidth: 73, valign: 'middle', halign: 'right' },
+            6: { cellWidth: 78, valign: 'middle', halign: 'right' },
         },
         rowStyles: {
-            minCellHeight: 10 // Adjust this value to change the row height
+            minCellHeight: 10
         },
         didParseCell: function (data) {
             alignCol(data);
         },
-
         didDrawPage: function (data) {
             data.settings.margin.top = 60;
             const pageCount = doc.internal.getNumberOfPages();
             if (pageCount !== 1) {
-                // Header
                 doc.setFontSize(20);
                 doc.setTextColor(40);
-                doc.setFontSize(12).setFont("helvetica", 'bold').text(name, data.settings.margin.left, 40, { align: "left" })
-                doc.setFontSize(10).setTextColor(105, 105, 105).setFont("helvetica", 'normal').text(cmpAd, data.settings.margin.left, 50, { align: "left" })
+                doc.setFontSize(12).setFont("helvetica", 'bold').text(name, data.settings.margin.left, 40, { align: "left" });
+                doc.setFontSize(10).setTextColor(105, 105, 105).setFont("helvetica", 'normal').text(cmpAd, data.settings.margin.left, 50, { align: "left" });
             }
-
-            // Footer
             doc.setFontSize(10);
             var pageSize = doc.internal.pageSize;
             var pageHeight = pageSize.height
@@ -210,8 +220,56 @@ export const GeneralLedgerPrint = async (e, item, status, date_from, date_to, Ti
         }
     };
 
-    doc.autoTable(options);
+    // Add footer row with total Debit and Credit
+    options1.body.push([
+        '', '', '', 'Total',
+        totalDebit.toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 }),
+        totalCredit.toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 }),
+        ''
+    ]);
+    doc.autoTable(options1);
 
+    // Create a new table for the summary data
+    let options2 = {
+        startY: doc.previousAutoTable.finalY + 10,  // Start just after the first table
+        head: [["SUMMARY", "Cost", "Changing Ratio"]],
+        body: [
+            ["Weekly Summary", "", "", ""],
+            ...weekEntries.map(([week, values], index) => [
+                `Week ${week}`,
+                values.Debit.toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 }),
+                weeklyPercentageChanges[index]
+            ]),
+            ["Monthly Summary", "", "", ""],
+            ...monthEntries.map(([month, values], index) => [
+                month,
+                values.Debit.toLocaleString('en', { useGrouping: true, minimumFractionDigits: 2 }),
+                monthlyPercentageChanges[index]
+            ]),
+        ],
+        tableWidth: 555,
+        theme: 'grid',
+        margin: { left: marginLeft },
+        bodyStyles: {
+            lineColor: [26, 189, 156],
+            textColor: [0, 0, 0],
+            fontStyle: 'normal',
+            fontSize: 10
+        },
+        headStyles: {
+            valign: 'middle',
+            halign: 'center',
+            textColor: [0, 0, 0],
+            lineColor: [26, 189, 156],
+        },
+        columnStyles: {
+            0: { valign: 'middle', halign: 'left' },
+            1: { valign: 'middle', halign: 'right' },
+            2: { valign: 'middle', halign: 'right' },
+        }
+    };
+
+    doc.autoTable(options2);
 
     let pageCount = doc.internal.getNumberOfPages()
     // Add the image to each page
@@ -349,28 +407,31 @@ export const PartyOusLedgerPrint = async (e, item, status, date_from, date_to, T
 
     const headers = [["S/N", "PARTY TITLE", "LIMIT", "DEBIT", "CREDIT", "BALANCE"]];
 
+    // Filter and prepare ProductItems, excluding rows where balance is 0
     var ProductItems = [
-        ...item.Data.map((value, i) => [
-            i + 1,
-            value.PartyID__PartyID__Title + "\n" + value.PartyID__Address,
-            parseFloat(value.PartyID__Limit).toLocaleString('en', {
-                useGrouping: true,
-                minimumFractionDigits: 2
-            }),
-            parseFloat(value.total_dr).toLocaleString('en', {
-                useGrouping: true,
-                minimumFractionDigits: 2
-            }),
-            parseFloat(value.total_cr).toLocaleString('en', {
-                useGrouping: true,
-                minimumFractionDigits: 2
-            }),
-            parseFloat(value.balance).toLocaleString('en', {
-                useGrouping: true,
-                minimumFractionDigits: 2
-            })
-        ]),
-    ].sort((a, b) => a[0] - b[0]);
+        ...item.Data
+            .filter(value => parseFloat(value.balance) !== 0) // Filter out rows where balance is 0
+            .map((value, i) => [
+                i + 1, // S/N
+                value.PartyID__PartyID__Title + "\n" + value.PartyID__Address, // Party and Address
+                parseFloat(value.PartyID__Limit).toLocaleString('en', {
+                    useGrouping: true,
+                    minimumFractionDigits: 2
+                }), // Limit
+                parseFloat(value.total_cr).toLocaleString('en', {
+                    useGrouping: true,
+                    minimumFractionDigits: 2
+                }), // Total Credit
+                parseFloat(value.total_dr).toLocaleString('en', {
+                    useGrouping: true,
+                    minimumFractionDigits: 2
+                }), // Total Debit
+                parseFloat(value.balance).toLocaleString('en', {
+                    useGrouping: true,
+                    minimumFractionDigits: 2
+                }) // Balance
+            ]),
+    ].sort((a, b) => a[0] - b[0]); // Sort by S/N
     // Calculate the total balance
     var totalBalance = ProductItems.reduce((total, row) => {
         return total + parseFloat(row[5].replace(/,/g, '')); // Remove commas and sum
@@ -395,14 +456,14 @@ export const PartyOusLedgerPrint = async (e, item, status, date_from, date_to, T
             lineColor: [26, 189, 156],
             textColor: [0, 0, 0],
             fontStyle: 'normal',
-            fontSize: 12
+            fontSize: 10
         },
         headStyles: {
             valign: 'middle',
             halign: 'center',
             textColor: [0, 0, 0],
             lineColor: [26, 189, 156], // Setting line color to black
-            fontSize: 12
+            fontSize: 11
         },
         columnStyles: {
             0: {
@@ -431,7 +492,7 @@ export const PartyOusLedgerPrint = async (e, item, status, date_from, date_to, T
                 halign: 'right',
             },
             5: {
-                cellWidth: 78,
+                cellWidth: 80,
                 valign: 'middle',
                 halign: 'right',
             },
@@ -449,7 +510,7 @@ export const PartyOusLedgerPrint = async (e, item, status, date_from, date_to, T
         didDrawCell: function (data) {
             if (data.column.index === 1 && data.cell.raw.includes("\n")) {
                 var parts = data.cell.raw.split("\n");
-                doc.setFontSize(9).setTextColor(105, 105, 105).setFont("helvetica", 'italic').text(parts[1], data.cell.x + 5, data.cell.y + 27);
+                doc.setFontSize(8).setTextColor(105, 105, 105).setFont("helvetica", 'italic').text(parts[1], data.cell.x + 5, data.cell.y + 27);
             }
         },
 
@@ -497,7 +558,7 @@ export const PartyOusLedgerPrint = async (e, item, status, date_from, date_to, T
         doc.setFontSize(10).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text('Page ' + String(i) + ' of ' + String(pageCount), 500, pageHeight - 20);
     }
 
-    const fileName = "Cash Flow Date-" + moment(item.Date).format("DD MMM YYYY")
+    const fileName = "Ladger Date-" + moment(item.Date).format("DD MMM YYYY")
 
     doc.setProperties({
         title: fileName,
@@ -628,14 +689,14 @@ export const SupplierOusLedgerPrint = async (e, item, status, date_from, date_to
             lineColor: [26, 189, 156],
             textColor: [0, 0, 0],
             fontStyle: 'normal',
-            fontSize: 12
+            fontSize: 10
         },
         headStyles: {
             valign: 'middle',
             halign: 'center',
             textColor: [0, 0, 0],
             lineColor: [26, 189, 156], // Setting line color to black
-            fontSize: 12
+            fontSize: 11
         },
         columnStyles: {
             0: {

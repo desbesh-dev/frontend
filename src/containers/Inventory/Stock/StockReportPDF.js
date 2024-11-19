@@ -5,7 +5,7 @@ import { convertImgToBase64URL } from "../../../hocs/Base64Uri";
 import logo from './../../../assets/logo.png';
 import watermark from './../../../assets/watermark.png';
 
-export const StockReportPDF = async (e, item, status, user, SectorFilter, sharpnessValue, OrderBy) => {
+export const StockReportPDF = async (e, item, status, user, SectorFilter) => {
     const name = "DESH BESH GROUP OF COMPANY LTD.";
     var cmpAd = 'PO Box: 262, Boroko, National Capital District, S#93, L#31, Vani Place, Gordons';
     const imgData = await convertImgToBase64URL(logo)
@@ -17,24 +17,9 @@ export const StockReportPDF = async (e, item, status, user, SectorFilter, sharpn
         } else if (data.row.section === 'head') {
             data.cell.height = 20; // Adjust this value to change the row height in the head section
         }
-        var col = data.column.index;
-        if (col === 2 && data.cell.raw.includes("\n")) {
-            data.cell.styles.valign = 'top';
-            var parts = data.cell.raw.split("\n");
-            data.cell.text = parts[0];
-            data.row.height = 20;
-        }
-        if (data.row.section === 'body' && data.column.index === 1) {
-            const cellValue5 = data.cell.raw; // Get value of column index 5
-            const cellValue6 = data.row.raw[2]; // Get value of column index 6
-
-            if (cellValue5 === cellValue6) {
-                for (let key in data.row.cells) {
-                    data.row.cells[key].styles.fillColor = [240, 240, 240];
-                    data.row.cells[key].styles.textColor = [0, 0, 0];
-                    data.row.cells[key].styles.fontStyle = 'bold';
-                }
-            }
+        if (data.row.index === body.length - 1) {
+            data.cell.styles.fontStyle = 'bold';
+            data.cell.styles.fillColor = [183, 212, 231];
         }
     }
 
@@ -78,15 +63,14 @@ export const StockReportPDF = async (e, item, status, user, SectorFilter, sharpn
     // Format the total sum
     const formattedTotalSum = totalSum.toLocaleString("en-BD", { minimumFractionDigits: 2 });
 
-    const headers = [["S/N", "CODE", "ITEMS NAME", "UNIT PRICE", "QTY", "AMOUNT"]];
-
+    const headers = [["S/N", "CODE", "ITEMS NAME", "CTN/BALE/BAG", "PRICE", "AMOUNT"]];
     const body = item.results.map((item, i) => [
         (i + 1), // S/N
         item.Code,
         item.Title,
-        parseInt(item.Qty).toLocaleString("en-BD", { minimumFractionDigits: 0 }),
-        parseFloat(item.Cost).toLocaleString("en-BD", { minimumFractionDigits: 2 }),
-        parseFloat((item.Cost * item.Qty).toFixed(2)).toLocaleString("en-BD", { minimumFractionDigits: 2 }),
+        parseFloat(item.Ctn).toLocaleString("en-BD", { minimumFractionDigits: 2 }),
+        parseFloat(item.CtnPrice).toLocaleString("en-BD", { minimumFractionDigits: 2 }),
+        parseFloat((item.Ctn * item.CtnPrice).toFixed(2)).toLocaleString("en-BD", { minimumFractionDigits: 2 }),
     ]);
 
     // Add the total sum to the end of the body (or in the footer if needed)
@@ -103,53 +87,50 @@ export const StockReportPDF = async (e, item, status, user, SectorFilter, sharpn
         startY: 160,
         head: headers,
         body: body,
-        theme: 'grid',
+        // theme: 'striped', // or 'grid' or 'plain'
         margin: { left: marginLeft },
         tableWidth: 555,
         bodyStyles: {
             lineColor: [26, 189, 156],
             textColor: [0, 0, 0],
             fontStyle: 'normal',
-            fontSize: 9
+            fontSize: 9,
+            halign: 'right'
         },
         headStyles: {
             valign: 'middle',
             halign: 'center',
-            textColor: [0, 0, 0],
-            lineColor: [26, 189, 156], // Setting line color to black
+            lineWidth: 1,
+            lineColor: [255, 255, 255],
+            fillColor: [41, 127, 185],
+            textColor: [255, 255, 255],
             fontSize: 10
         },
         columnStyles: {
             0: {
-                cellWidth: 30,
                 valign: 'middle',
                 halign: 'center',
             },
             1: {
-                cellWidth: 50,
                 valign: 'middle',
                 halign: 'center',
             },
             2: {
-                cellWidth: 'auto',
                 valign: 'middle',
                 halign: 'left',
                 fontSize: 9
             },
             3: {
-                cellWidth: 70,
                 valign: 'middle',
                 halign: 'right',
                 fontSize: 9
             },
             4: {
-                cellWidth: 70,
                 valign: 'middle',
                 halign: 'right',
                 fontSize: 9
             },
             5: {
-                cellWidth: 95,
                 valign: 'middle',
                 halign: 'right',
             },

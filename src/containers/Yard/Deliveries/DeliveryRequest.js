@@ -576,6 +576,7 @@ const DeliveryRequest = ({ SectorID, user, list, setList }) => {
         const input = e.toString()
         const paddedValue = input.length <= 7 ? input.padStart(7, '0') : input;
         const value = await FetchProductYard(paddedValue, sect.current, sect_to);
+
         if (isValidProduct(value)) {
             let cond_rate = 0
             if (RequestForID.value === (user.Collocation.id).replace(/-/g, ''))

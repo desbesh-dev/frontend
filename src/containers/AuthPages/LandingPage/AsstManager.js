@@ -50,13 +50,8 @@ export const AsstMang = ({ setOpenModal, OpenModal }) => {
                     <div></div>
                     <div></div>
                 </div>
-                <Link className="hex-content" to='/counter_list'>
-                    <span className="hex-content-inner">
-                        <span className="icon_dash">
-                            <i className="fad fa-tv-alt"></i>
-                        </span>
-                        <span className="title">Counters</span>
-                    </span>
+                <Link className="hex-content" to='/z_reading'>
+                    <span className="hex-content-inner"><span className="icon_dash"><i className="fad fa-book-reader"></i></span><span text-nowrap className="title" style={{ whiteSpace: 'nowrap' }}>Z-Reading</span></span>
                     <svg viewBox="0 0 173.20508075688772 200" height="200" width="174" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M86.60254037844386 0L173.20508075688772 50L173.20508075688772 150L86.60254037844386 200L0 150L0 50Z" fill="#32CD32"></path></svg>
                 </Link>
             </div>

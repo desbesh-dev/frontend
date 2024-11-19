@@ -61,10 +61,10 @@ export const InvoicePrint = async (e, item, status) => {
     const marginY = (pageHeight - canvasHeight) / 2;
 
     doc.addImage(imgData, 'JPEG', marginLeft + 15, marginTop, 68, 70);
-    doc.setFontSize(18).setTextColor(40, 40, 40).setFont("helvetica", 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
+    doc.setFontSize(18).setTextColor(40, 40, 40).setFont(undefined, 'bold').text(name.toUpperCase(), marginLeft + 94, marginTop + 15)
 
-    doc.setFontSize(14).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(sis_name, marginLeft + 94, marginTop + 28)
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(cmpAd, marginLeft + 94, marginTop + 41)
+    doc.setFontSize(14).setTextColor(51, 51, 51).setFont(undefined, 'normal').text(sis_name, marginLeft + 94, marginTop + 28)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont(undefined, 'normal').text(cmpAd, marginLeft + 94, marginTop + 41)
 
     const contact = [
         item.Phone && `Phone: ${item.Phone}`,
@@ -74,13 +74,13 @@ export const InvoicePrint = async (e, item, status) => {
         // item.Imo && `Imo: ${item.Imo}`,
         // item.Wechat && `Wechat: ${item.Wechat}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(contact, marginLeft + 94, marginTop + 51)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont(undefined, 'normal').text(contact, marginLeft + 94, marginTop + 51)
 
     const online_contact = [
         item.Email && `Email: ${item.Email}`,
         item.Website && `Website: ${item.Website}`
     ].filter(Boolean).join(", ") || "";
-    doc.setFontSize(10).setTextColor(51, 51, 51).setFont("helvetica", 'normal').text(online_contact, marginLeft + 94, marginTop + 61)
+    doc.setFontSize(10).setTextColor(51, 51, 51).setFont(undefined, 'normal').text(online_contact, marginLeft + 94, marginTop + 61)
 
     doc.setDrawColor(220, 220, 220);
     doc.setLineWidth(2);
@@ -119,33 +119,40 @@ export const InvoicePrint = async (e, item, status) => {
     const dd = "Delivery Date: " + moment(item.DeliveryDate).format("DD MMM YYYY")
 
     const slsman = "Salesman: " + item.CounterMarry
-    const no = item.OrderNo || item.InvoiceNo ?
-        `Date: ${moment(item.Date).format("DD MMM YYYY")}, ${item.OrderNo ? `Order No: ${item.OrderNo}` : ""}${item.InvoiceNo ? `${item.OrderNo ? ", " : ""}Invoice No: ${item.InvoiceNo}` : ""}`
+    const no = item.OrderNo || item.InvoiceNo
+        ? `Date: ${moment(item.Date).format("DD MMM YYYY")}, ${item.OrderNo ? `Order No: ${item.OrderNo}` : ""}${item.InvoiceNo
+            ? `${item.OrderNo ? ", " : ""}Invoice No: ${item.InvoiceNo.length === 15
+                ? `${item.InvoiceNo.slice(0, 6)}${item.InvoiceNo.slice(-4)}`
+                : item.InvoiceNo
+            }`
+            : ""
+        }`
         : `Date: ${moment(item.Date).format("DD MMM YYYY")}`;
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(tin, marginLeft + 35, 115)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(gst, marginLeft + 35, 127)
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(Shop, marginLeft + 35, 139)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(tin, marginLeft + 35, 115)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(gst, marginLeft + 35, 127)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(Shop, marginLeft + 35, 139)
 
     if (item.OrderNo) {
-        doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(od, marginLeft + 35, 151)
-        doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(dd, marginLeft + 35, 163)
+        doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(od, marginLeft + 35, 151)
+        doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(dd, marginLeft + 35, 163)
     }
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'normal').text(slsman, marginLeft + 35, item.OrderNo ? 175 : 151)
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(slsman, marginLeft + 35, item.OrderNo ? 175 : 151)
 
-    doc.setFontSize(12).setTextColor(0, 0, 0).setFont("courier", 'bold').text("Invoice to: ", 350, 115)
+    doc.setFontSize(12).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Invoice to: ", 350, 115)
     var party_title = doc.splitTextToSize(item.PartyTitle, 290);
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text(party_title, 350, 127);
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text("Contact: " + item.PartyContact, 350, 139);
+    doc.setFontSize(12).setTextColor(0, 0, 0).setFont(undefined, 'bold').text(party_title, 350, 127);
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'normal').text("Contact: " + item.PartyContact, 350, 140);
 
     var party_address = item.PartyAddress.substring(0, 70) + (item.PartyAddress.length < 70 ? "" : "...");
-    party_address = doc.splitTextToSize(party_address, 190);
+    party_address = doc.splitTextToSize(party_address, 230);
     var ht = doc.getTextDimensions(party_address).h;
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text(party_address, 350, 150);
+    doc.setFontSize(9).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(party_address, 350, 151);
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Payment: " + getPaymentShort(item.Payment, PaymentTerms), 350, 139 + ht + 11);
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Payment: " + getPaymentShort(item.Payment, PaymentTerms), 350, 139 + ht + 11);
+    doc.setFontSize(10).setTextColor(0, 0, 0).setFont(undefined, 'normal').text(`FIN: ${item.InvoiceNo}`, 350, 139 + ht + 24);
 
-    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'bold').text(no, doc.internal.pageSize.getWidth() / 2, 200, { align: "center" });
+    doc.setFontSize(11).setTextColor(0, 0, 0).setFont("courier", 'bold').text(no, doc.internal.pageSize.getWidth() / 2, 202, { align: "center" });
 
     const TotalQty = item.SellMapData.reduce((TotalQt, myvalue) => TotalQt + parseInt(myvalue.Qty, 10), 0);
     const TotalWt = item.SellMapData.reduce((TotalWt, myvalue) => TotalWt + parseInt(myvalue.Weight, 10), 0);
@@ -243,7 +250,7 @@ export const InvoicePrint = async (e, item, status) => {
         didDrawCell: function (data) {
             if (data.column.index === 2 && data.cell.raw.includes("\n")) {
                 var parts = data.cell.raw.split("\n");
-                doc.setFontSize(8).setTextColor(105, 105, 105).setFont("helvetica", 'italic').text(parts[1], data.cell.x + 5, data.cell.y + 25);
+                doc.setFontSize(8).setTextColor(105, 105, 105).setFont(undefined, 'italic').text(parts[1], data.cell.x + 5, data.cell.y + 25);
             }
         }
     };
@@ -361,7 +368,7 @@ export const InvoicePrint = async (e, item, status) => {
     doc.setFontSize(11)
         .setTextColor(0, 0, 0)
         .setFont('helvetica', 'normal')
-        .text(`Contact- ${contactDetails}`, marginLeft, summery_table_y + 140);
+        .text(`Contact: ${item.Contact} (Whatsapp/Imo/Wechat)`, marginLeft, summery_table_y + 140);
 
     pageCount = doc.internal.getNumberOfPages()
 
@@ -373,8 +380,8 @@ export const InvoicePrint = async (e, item, status) => {
             // Header
             doc.setFontSize(20);
             doc.setTextColor(40);
-            doc.setFontSize(12).setFont("helvetica", 'bold').text(name + ' (' + item.ShortCode + "-" + item.SectorName + ")", 20, 25, { align: "left" })
-            doc.setFontSize(10).setTextColor(105, 105, 105).setFont("helvetica", 'normal').text(cmpAd, 20, 35, { align: "left" })
+            doc.setFontSize(12).setFont(undefined, 'bold').text(name + ' (' + item.ShortCode + "-" + item.SectorName + ")", 20, 25, { align: "left" })
+            doc.setFontSize(10).setTextColor(105, 105, 105).setFont(undefined, 'normal').text(cmpAd, 20, 35, { align: "left" })
         }
 
         if (i === pageCount) {
@@ -384,7 +391,7 @@ export const InvoicePrint = async (e, item, status) => {
             doc.setLineDash([1, 1], 0);
             doc.line(40, pageHeight - 55, doc.internal.pageSize.getWidth() / 4, pageHeight - 55);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Prepared By", doc.internal.pageSize.getWidth() / 9, pageHeight - 45, { align: "left" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Prepared By", doc.internal.pageSize.getWidth() / 9, pageHeight - 45, { align: "left" })
 
             // Checked by
             doc.setDrawColor(97, 97, 97);
@@ -392,8 +399,7 @@ export const InvoicePrint = async (e, item, status) => {
             doc.setLineDash([1, 1], 0);
             doc.line(165, pageHeight - 55, 260, pageHeight - 55);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Checked By", 215, pageHeight - 45, { align: "center" })
-
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Checked By", 215, pageHeight - 45, { align: "center" })
 
             // Authority
             doc.setDrawColor(97, 97, 97);
@@ -401,8 +407,7 @@ export const InvoicePrint = async (e, item, status) => {
             doc.setLineDash([1, 1], 0);
             doc.line(280, pageHeight - 55, 395, pageHeight - 55);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Authority", 340, pageHeight - 45, { align: "center" })
-
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Authority", 340, pageHeight - 45, { align: "center" })
 
             // Recepient
             doc.setDrawColor(97, 97, 97);
@@ -410,7 +415,7 @@ export const InvoicePrint = async (e, item, status) => {
             doc.setLineDash([1, 1], 0);
             doc.line(550, pageHeight - 55, doc.internal.pageSize.getWidth() - 165, pageHeight - 55);
             doc.setFillColor(97, 97, 97);
-            doc.setFontSize(11).setTextColor(0, 0, 0).setFont("helvetica", 'bold').text("Recipient", doc.internal.pageSize.getWidth() - 100, pageHeight - 45, { align: "center" })
+            doc.setFontSize(11).setTextColor(0, 0, 0).setFont(undefined, 'bold').text("Recipient", doc.internal.pageSize.getWidth() - 100, pageHeight - 45, { align: "center" })
         }
 
         // Footer line
@@ -423,9 +428,9 @@ export const InvoicePrint = async (e, item, status) => {
         doc.setPage(i);
         var date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: "2-digit", second: "2-digit", hour12: true }).replace(/ /g, ' ')
 
-        doc.setFontSize(10).setTextColor(128, 128, 128).setFont("helvetica", 'normal').text('DESH BESH ERP', 40, pageHeight - 20);
-        doc.setFontSize(10).setTextColor(128, 128, 128).setFont("helvetica", 'normal').text(date.toString(), doc.internal.pageSize.getWidth() / 2, pageHeight - 20, { align: "center" })
-        doc.setFontSize(10).setTextColor(0, 0, 0).setFont("helvetica", 'normal').text('Page ' + String(i) + ' of ' + String(pageCount), 500, pageHeight - 20);
+        doc.setFontSize(10).setTextColor(128, 128, 128).setFont(undefined, 'normal').text('DESH BESH ERP', 40, pageHeight - 20);
+        doc.setFontSize(10).setTextColor(128, 128, 128).setFont(undefined, 'normal').text(`${date.toString()} | ${item.InvoiceNo}`, doc.internal.pageSize.getWidth() / 2, pageHeight - 20, { align: "center" })
+        doc.setFontSize(10).setTextColor(0, 0, 0).setFont(undefined, 'normal').text('Page ' + String(i) + ' of ' + String(pageCount), 500, pageHeight - 20);
     }
 
     const fileName = "Invoice No-" + item.InvoiceNo + " " + item.PartyTitle + " Date-" + moment(item.Date).format("DD MMM YYYY") + ".pdf"
@@ -438,12 +443,11 @@ export const InvoicePrint = async (e, item, status) => {
         creator: "DESH BESH ERP"
     });
 
-
     if (status === true) {
+        window.open(doc.output('bloburl'), { "filename": fileName });
         doc.save(fileName);
     }
     else {
         window.open(doc.output('bloburl'), { "filename": fileName });
     }
-
 }
